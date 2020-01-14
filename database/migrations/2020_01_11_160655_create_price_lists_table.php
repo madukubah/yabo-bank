@@ -13,12 +13,13 @@ class CreatePriceListsTable extends Migration
      */
     public function up()
     {
+        return;
+
         Schema::create('price_lists', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255);
             $table->double('price');
             $table->string('unit', 255);
-
 
             $table->timestamps();
         });

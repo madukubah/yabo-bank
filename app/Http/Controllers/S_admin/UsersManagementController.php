@@ -11,6 +11,9 @@ use App\User;
 use App\Model\Role;
 use App\Alert;
 use Auth;
+use App\Model\Customer;
+use App\Model\Driver;
+
 
 
 
@@ -20,7 +23,6 @@ class UsersManagementController extends UadminController
     {
         parent::__construct();
         $this->data[ 'menu_id' ] = "users";
-
     }
     /**
      * Display a listing of the resource.
@@ -39,7 +41,8 @@ class UsersManagementController extends UadminController
         $users = User::select([ 'role_name','name', 'email', 'users.id as id' ])
                                     ->join('role_user', 'role_user.user_id', '=', 'users.id')
                                     ->join('roles', 'roles.id', '=', 'role_user.role_id')
-                                    ->where('users.id',"!=", Auth::user()->id );
+                                    ->where('users.id',"!=", Auth::user()->id )
+                                    ->orderBy('roles.id',"asc" );
         if( Auth::user()->roles()->first()->role_name != 'admin' )
         {
             $users = $users->where('roles.role_name',"!=", 'admin' );
@@ -83,7 +86,7 @@ class UsersManagementController extends UadminController
 
         $this->data[ 'contents' ]            = $table;
 
-        $this->data[ 'message_alert' ]       = Session::get('message');
+        $this->data[ 'message_alert' ]       = '';//Session::get('message');
         $this->data[ 'page_title' ]          = 'User management';
         $this->data[ 'header' ]              = 'List';
         $this->data[ 'sub_header' ]          = '';
@@ -128,19 +131,44 @@ class UsersManagementController extends UadminController
         $validationConfig = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+
         ];
         
         $request->validate( $validationConfig );
         $user = User::create([
-            'name'      =>  $request->input('name'),
-            'email'     =>  $request->input('email'),
-            'username'  =>  $request->input('email'),
-            'password'  =>  Hash::make( substr( $request->input('email'), 0, strpos( $request->input('email') , "@" ) ) ) 
+            'name'          =>  $request->input('name'),
+            'email'         =>  $request->input('email'),
+            'username'      =>  $request->input('email'),
+            'password'      =>  Hash::make( substr( $request->input('email'), 0, strpos( $request->input('email') , "@" ) ) ) ,
+            'phone'         =>  $request->input('phone'),
+            'address'       =>  $request->input('address'),
+            'photo'         =>  'default.jpg',
+            'identity_photo'=>  'default.jpg',
+            'map_point'     =>  '0,0',
         ]);
-        $user->putRole( Role::find( $request->input('role') ) );
+
+        $role = Role::find( $request->input('role') );
+        $user->putRole( $role );
+        // dd( Role::findOrFail( $request->input('role') ) );die;
+        $previlege = NULL;
+        if( $role->role_name == 'customer' )
+        {
+            $previlege = Customer::create( [
+                'code' => 'Customer_'.time()
+            ] );
+        }
+        else if( $role->role_name == 'driver' )
+        {
+            $previlege = Driver::create( [
+            ] );
+        }
+
+        if( $previlege != NULL )
+            $previlege->user()->save( $user );
         
         return redirect()->route('users.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di buat, PASSWORD PERTAMA adalah nama email sampai '@' " ) ]);
-
     }
 
     /**
@@ -187,6 +215,7 @@ class UsersManagementController extends UadminController
         $form[ 'formMethod' ]   = 'post';
         $form[ 'blank' ]        = 'blank';
         $formFields = User::getFormData(  );
+        $formFields["role"]['type'] = 'hidden';
         $formFields["_method"] = [
             'type' => 'hidden',
             'value' => "PUT"
@@ -216,6 +245,8 @@ class UsersManagementController extends UadminController
         $validationConfig = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ];
        
         $user       = User::findOrFail( $id );
@@ -224,14 +255,18 @@ class UsersManagementController extends UadminController
 
         if( $request->input('_password') != NULL )
         {
-            $validationConfig[ '_password' ] = ['required', 'string', 'min:8', 'confirmed'];
+            $validationConfig[ '_password' ] = ['required', 'string', 'min:4', 'confirmed'];
         }
         
         $request->validate( $validationConfig );
         
         $data = [
-            'name' =>  $request->input('name'),
-            'email' =>  $request->input('email'),
+            'name'          =>  $request->input('name'),
+            'email'         =>  $request->input('email'),
+            'phone'         =>  $request->input('phone'),
+            'address'       =>  $request->input('address'),
+            'photo'         =>  'default.jpg',
+            'identity_photo'=>  'default.jpg',
         ];
         if( $request->input('_password') != NULL )
             $data['password'] = Hash::make( $request->input('_password') );

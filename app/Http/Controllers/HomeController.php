@@ -27,7 +27,7 @@ class HomeController extends UserController
      */
     public function index()
     {
-        // dd( UserRole );die;
+        // dd( ${Auth::user()->userable_type} );die;
         return $this->render(  );
     }
 }

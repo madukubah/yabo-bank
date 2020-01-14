@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UadminController;
 use Auth;
 use App\Model\Role;
 use App\Model\PriceList;
@@ -12,7 +12,7 @@ use App\Alert;
 use App\User;
 use Session;
 
-class PriceListController extends UserController
+class PriceListController extends UadminController
 {
     public function __construct()
     {

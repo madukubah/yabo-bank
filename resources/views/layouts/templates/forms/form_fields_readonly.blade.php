@@ -1,3 +1,4 @@
+<div class="row">
 <?php foreach( $formFields as $form_name => $attr ): ?>
     
     <?php
@@ -9,6 +10,8 @@
         $label          = ( isset( $attr['label'] )  ) ? $attr['label'] : $name;
         $placeholder    = ( isset( $attr['placeholder'] )  ) ? $attr['placeholder'] : $label;
         $readonly       = "readonly" ;
+        $weight       = ( isset( $attr['weight'] )  ) ? $attr['weight'] : 'col-md-12';
+
 
         if( $attr['type'] == 'hidden' )
         {
@@ -28,8 +31,7 @@
             continue;
         }
     ?>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="<?= $weight?>">
             <label for="{{$name}}">{{$label}}</label>
         <?php
 
@@ -135,5 +137,5 @@
             }
         ?>
         </div>
-    </div>
 <?php endforeach; ?>
+</div>

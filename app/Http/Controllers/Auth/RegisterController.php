@@ -77,7 +77,7 @@ class RegisterController extends Controller
         //     'user_id' =>  $user->id,
         //     'role_id' => 2,
         // ]);
-        $user->putRole('member');
+        $user->putRole('customer');
         return $user;
     }
 }

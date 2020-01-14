@@ -20,7 +20,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password',  'role_name',
+        'name', 
+        'username', 
+        'email', 
+        'phone', 
+        'address', 
+        'password',  
+        'photo',  
+        'identity_photo',  
+        'map_point',  
+        'role_name',
     ];
 
     /**
@@ -41,6 +50,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function userable()
+    {
+        return $this->morphTo();
+    }
+
+    public function getHasDriverAttribute()
+    {
+      return $this->userable_type == 'App\Model\Driver';
+    }
+    public function getHasCustomerAttribute()
+    {
+      return $this->userable_type == 'App\Model\Customer';
+    }
     /*
     * Method untuk yang mendefinisikan relasi antara model user dan model Role
     */ 
@@ -111,6 +133,15 @@ class User extends Authenticatable
             'email' => [
                 'type' => 'text',
                 'label' => 'Email',
+
+            ],
+            'phone' => [
+                'type' => 'number',
+                'label' => 'No. HP',
+            ],
+            'address' => [
+                'type' => 'text',
+                'label' => 'Alamat',
             ],
             'role_name' => [
                 'type' => 'text',
@@ -133,6 +164,7 @@ class User extends Authenticatable
 
         if( $isEditMode )
         {
+            // $form["role"]['type'] = 'hidden';
             // unset( 'role_name', $form );
             unset( $form["role_name"] );
         }else{

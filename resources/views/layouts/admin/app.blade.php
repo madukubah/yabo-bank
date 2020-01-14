@@ -10,7 +10,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }}</title>
 
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{url('adminlte/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Ionicons -->
@@ -19,8 +18,10 @@
     <link rel="stylesheet" href="{{url('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{url('adminlte/dist/css/adminlte.min.css')}}">
-    <!-- overlayScrollbars -->
+    <!-- table css -->
     <link rel="stylesheet" href="{{url('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{url('adminlte/plugins/table-css/style.css')}}">
     @section('css')
     @show
     <!-- Google Font: Source Sans Pro -->

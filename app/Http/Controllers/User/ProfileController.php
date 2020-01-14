@@ -137,6 +137,8 @@ class ProfileController extends UserController
         $validationConfig = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ];
        
         $user       = Auth::user() ;
@@ -153,7 +155,10 @@ class ProfileController extends UserController
         $data = [
             'name' =>  $request->input('name'),
             'email' =>  $request->input('email'),
+            'phone'  =>  $request->input('phone'),
+            'address'  =>  $request->input('address'),
         ];
+        // dd( $data );die;
         if( $request->input('_password') != NULL )
         {
             Auth::logout();

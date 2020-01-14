@@ -1,3 +1,4 @@
+<div class="row">
 <?php foreach( $formFields as $form_name => $attr ): ?>
     
     <?php
@@ -10,6 +11,8 @@
         $placeholder    = ( isset( $attr['placeholder'] )  ) ? $attr['placeholder'] : $label;
         $readonly       = ( isset( $attr['readonly'] )  ) ? "readonly" : '';
 
+        $weight       = ( isset( $attr['weight'] )  ) ? $attr['weight'] : 'col-md-12';
+
         if( $attr['type'] == 'hidden' )
         {
             // echo Form::hidden( $form_name, $value );
@@ -20,7 +23,6 @@
                 class="form-control @error('{{$name}}') is-invalid @enderror" 
                 name="{{$name}}" 
                 value="{{ $value}}" 
-                 
                 <?= $readonly ?>
                 autocomplete="{{$name}}" 
                 placeholder="{{$placeholder}}" >
@@ -28,8 +30,7 @@
             continue;
         }
     ?>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="<?= $weight?>">
             <label for="{{$name}}">{{$label}}</label>
         <?php
 
@@ -75,7 +76,7 @@
                         class="form-control @error('{{$name}}') is-invalid @enderror" 
                         name="{{$name}}" 
                         value="{{$value}}" 
-                         
+                         rows='5'
                         <?= $readonly ?>
                         autocomplete="{{$name}}" 
                         placeholder="{{$placeholder}}" ><?= $value?></textarea>
@@ -137,5 +138,5 @@
             }
         ?>
         </div>
-    </div>
 <?php endforeach; ?>
+</div>

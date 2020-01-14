@@ -30,3 +30,7 @@ Route::resource('/menus', 'S_admin\MenuController');
 Route::resource('/users', 'S_admin\UsersManagementController');
 Route::resource('/profiles', 'User\ProfileController');
 Route::resource('/pricelists', 'User\PriceListController');
+
+Route::resource('/invoices', 'User\InvoiceController');
+Route::resource('/requests', 'User\RequestController');
+Route::resource('/pickups', 'User\PickUpController');

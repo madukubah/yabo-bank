@@ -23,7 +23,7 @@
                             <img src="{{url('adminlte/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="{{ route('profiles.show', Auth::user()->id ) }}" class="d-block"><?= Auth::user()->name ?></a>
+                            <a href="{{ route('profiles.show', Auth::user()->id ) }}" class="d-block"><?= Auth::user()->name.' ('.Auth::user()->roles[0]->role_name.') '; ?></a>
                         </div>
                     </div>
                     <!-- Sidebar Menu -->
@@ -37,6 +37,13 @@
                                         foreach( $datas as $data )
                                         {
                                             if( ( !$data->status )  ) continue;
+
+                                            if( ( strtolower( $data->link ) == 'header' )  ) :
+                                            ?>
+                                                <li class="nav-header"><?= $data->name?></li>
+                                            <?php
+                                                continue;
+                                            endif;
 
                                             if( isset( $data->branch[0] )  )
                                             {
