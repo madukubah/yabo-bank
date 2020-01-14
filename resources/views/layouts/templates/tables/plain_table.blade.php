@@ -26,9 +26,21 @@
                                         $attr = number_format($row->$key);
                                     else
                                         $attr = $row->$key;
-                                    if ($key == 'date' || $key == 'create_date' || $key == 'time')
-                                        $attr =  date("d/m/Y", $row->$key);
-
+                                    
+                                    if( strpos( $key , '->' ) )
+                                    {
+                                        $output = $row;
+                                        $keys = explode('->', $key );
+                                        foreach( $keys as $key )
+                                        {
+                                            if( strpos( $key , '()' ) )
+                                                $output = $output->{$key}();
+                                            else
+                                                $output = $output->{$key};
+                                        }
+                                        $attr = $output;
+                                    }
+                                    
                                     echo $attr;
                                     ?>
                         </td>
@@ -65,7 +77,8 @@
                                                         case "modal_form" :
                                                                 $value["modalId"] = $value["modalId"].$row->{ $value["dataParam"] };
                                                                 $value["formUrl"] = $value["formUrl"]."/".$row->{ $value["dataParam"] };
-                                                                $value["modalBody"] = view('layouts.templates.forms.form_fields', [ "formFields" => $value["formFields"], "data" => $row ] );
+                                                                $additional_dialog = ( isset( $value["additional_dialog"] ) ) ? $value["additional_dialog"] : ""  ;
+                                                                $value["modalBody"] = $additional_dialog.view('layouts.templates.forms.form_fields', [ "formFields" => $value["formFields"], "data" => $row ] );
                                                                
                                                                 echo view('layouts.templates.modals.modal', $value);
                                                             break;
