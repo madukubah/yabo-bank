@@ -11,6 +11,10 @@
         $placeholder    = ( isset( $attr['placeholder'] )  ) ? $attr['placeholder'] : $label;
         $readonly       = ( isset( $attr['readonly'] )  ) ? "readonly" : '';
 
+        $labeled       = ( isset( $attr['labeled'] )  ) ? $attr['labeled'] : true ;
+
+        $labelHtml      = ( $labeled  ) ? '<label for="'.$name.'">'.$label.'</label>' : '';
+
         $weight       = ( isset( $attr['weight'] )  ) ? $attr['weight'] : 'col-md-12';
 
         if( $attr['type'] == 'hidden' )
@@ -31,7 +35,7 @@
         }
     ?>
         <div class="<?= $weight?>">
-            <label for="{{$name}}">{{$label}}</label>
+            <?= $labelHtml?>
         <?php
 
             switch(  $attr['type'] )

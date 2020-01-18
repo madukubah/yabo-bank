@@ -57,8 +57,7 @@ class RequestController extends UserController
                     "isCreateMode"  => true,
                     "buttonColor"   => "success",
                     "additional_dialog" => "<div class='alert alert-success alert-dismissible'>
-                                            <h5>Yakin mengambil request ini ?</h5></div>
-                                            ",
+                                            <h5>Yakin mengambil request ini ?</h5></div>",
                     "formFields"    => [
                         'request_id' => [
                             'type' => 'hidden',

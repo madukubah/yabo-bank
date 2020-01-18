@@ -11,6 +11,7 @@ use App\Model\PickUp;
 use App\Model\Request as RequestModel ;
 
 use Session;
+use DB;
 use Illuminate\Support\Facades\Hash;
 
 class PickUpController extends UserController
@@ -18,9 +19,11 @@ class PickUpController extends UserController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:customer|driver' ], ['only' => ['index']] );
-        $this->middleware( [ 'role:driver' ], ['only' => ['store']] );
+        $this->middleware( [ 'role:customer|driver' ], ['only' => ['index'], ] );
+        $this->middleware( [ 'role:driver' ], ['only' => ['store', 'process'] ] );
         $this->data[ 'page_title' ]          = 'Penjemputan';
+        $this->data[ 'menu_id' ] = "pickups";
+
     }
     /**
      * Display a listing of the resource.
@@ -32,12 +35,21 @@ class PickUpController extends UserController
         if( Auth::user()->hasRole( 'driver' )  )
         {
             $table[ 'header' ]  = [ 
+                // 'id'                            => 'ID',
                 'request->code'                 => 'Kode Request',
                 'request->customer->user->name' => 'Nama Customer',
                 'request->info'                 => 'Keterangan',
              ];
             $table[ 'number' ]  = 1;
-            $table[ 'rows' ]    = Auth::user()->userable->pickUps;
+            $table[ 'rows' ]    = Auth::user()->userable->pickUps->where( 'status',  0 );
+            $table[ 'action' ]  = [
+                "link" => [
+                    "dataParam"     => "id",
+                    "linkName"      => "Proses",
+                    "url"           => url('pickup/process/'),
+                    "buttonColor"   => "success",
+                ],//link
+            ];
         }
         else
         {
@@ -69,6 +81,38 @@ class PickUpController extends UserController
     public function create()
     {
         //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function process($id)
+    {
+        $pickup = Auth::user()->userable->pickUps->find( $id );
+        $request = $pickup->request;
+        $this->data[ 'request' ]            = $request;
+        $formProduct = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                'product[]' => [
+                    'type' => 'select',
+                    'label' => 'Role Name',
+                    'labeled' => false,
+                    'options' => DB::table('price_lists')->pluck( 'name', 'id' ) ,
+                    'value' => '',
+                ],
+        ]] );
+        $this->data[ 'formProduct' ]            = $formProduct;
+        $this->data[ 'products' ]               = DB::table('price_lists')->pluck( 'price', 'id' );
+        $this->data[ 'units' ]                  = DB::table('price_lists')->pluck( 'unit', 'id' );
+        // dd( $this->data[ 'products' ] );die;
+
+        $this->data[ 'message_alert' ]       = Session::get('message');
+        $this->data[ 'page_title' ]          = 'Proses Penjemputan';
+        $this->data[ 'header' ]              = '';//$pickup->request->code;
+        $this->data[ 'sub_header' ]          = '';
+        
+        return $this->render( 'pickup.process' );
     }
 
     /**

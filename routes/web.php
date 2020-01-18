@@ -32,5 +32,9 @@ Route::resource('/profiles', 'User\ProfileController');
 Route::resource('/pricelists', 'User\PriceListController');
 
 Route::resource('/invoices', 'User\InvoiceController');
+Route::post('/invoices/create', 'User\InvoiceController@create')->name( 'invoices.create' );
+
 Route::resource('/requests', 'User\RequestController');
 Route::resource('/pickups', 'User\PickUpController');
+
+Route::get('/pickup/process/{role}', 'User\PickUpController@process')->name("menu_role");

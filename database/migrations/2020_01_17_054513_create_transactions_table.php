@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePickUpsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreatePickUpsTable extends Migration
      */
     public function up()
     {
-        return;
-        Schema::create('pick_ups', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('request_id');
+            $table->unsignedInteger('customer_id');
             $table->unsignedInteger('driver_id');
-            $table->boolean('status');
+            $table->string('product');
+            $table->string('unit');
+            $table->string('quantity');
+            $table->double('price');
+
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class CreatePickUpsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pick_ups');
+        Schema::dropIfExists('transactions');
     }
 }

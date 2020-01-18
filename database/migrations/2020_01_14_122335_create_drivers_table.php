@@ -13,6 +13,7 @@ class CreateDriversTable extends Migration
      */
     public function up()
     {
+        return;
         Schema::create('drivers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
