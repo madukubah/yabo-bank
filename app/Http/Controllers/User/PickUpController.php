@@ -12,7 +12,6 @@ use App\Model\Request as RequestModel ;
 
 use Session;
 use DB;
-use Illuminate\Support\Facades\Hash;
 
 class PickUpController extends UserController
 {
@@ -34,6 +33,7 @@ class PickUpController extends UserController
     {
         if( Auth::user()->hasRole( 'driver' )  )
         {
+            $this->data[ 'page_title' ]          = 'Transaksi';
             $table[ 'header' ]  = [ 
                 // 'id'                            => 'ID',
                 'request->code'                 => 'Kode Request',
@@ -41,6 +41,7 @@ class PickUpController extends UserController
                 'request->info'                 => 'Keterangan',
              ];
             $table[ 'number' ]  = 1;
+            // DRIVer
             $table[ 'rows' ]    = Auth::user()->userable->pickUps->where( 'status',  0 );
             $table[ 'action' ]  = [
                 "link" => [
@@ -60,6 +61,7 @@ class PickUpController extends UserController
                 'pickUp->created_at'            => 'Waktu Penjemputan dibuat',
             ];
             $table[ 'number' ]  = 1;
+            // customer
             $table[ 'rows' ]    = Auth::user()->userable->requests->where( 'status',  1 );
         }
        

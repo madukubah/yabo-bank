@@ -18,5 +18,9 @@ class Transaction extends Model
     public function mutation()
     {
         return $this->hasOne('App\Model\Mutation');
+	}
+	public function customer()
+    {
+        return $this->belongsTo('App\Model\Customer');
     }
 }

@@ -138,6 +138,9 @@ class InvoiceController extends UserController
         $pickup->update([
             'status' => 1
         ]);
+        $pickup->request->update([
+            'status' => 2
+        ]);
         return redirect()->route('pickups.index')->with(['message' => Alert::setAlert( 1, "transaksi Berhasil berhasil di buat" ) ]);
         // dd( $request->input() );die;
     }

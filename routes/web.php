@@ -28,6 +28,10 @@ Route::get('/menus_role/{role}', 'S_admin\MenuController@role')->name("menu_role
 Route::resource('/menus', 'S_admin\MenuController');
 
 Route::resource('/users', 'S_admin\UsersManagementController');
+
+Route::get('/customers', 'S_admin\UsersManagementController@customers')->name("customers");
+Route::get('/drivers', 'S_admin\UsersManagementController@drivers')->name("drivers");
+
 Route::resource('/profiles', 'User\ProfileController');
 Route::resource('/pricelists', 'User\PriceListController');
 
@@ -37,4 +41,8 @@ Route::post('/invoices/create', 'User\InvoiceController@create')->name( 'invoice
 Route::resource('/requests', 'User\RequestController');
 Route::resource('/pickups', 'User\PickUpController');
 
-Route::get('/pickup/process/{role}', 'User\PickUpController@process')->name("menu_role");
+Route::get('/pickup/process/{role}', 'User\PickUpController@process')->name("pickup_process");
+
+Route::resource('/mutations', 'User\MutationController');
+Route::resource('/transactions', 'User\TransactionController');
+

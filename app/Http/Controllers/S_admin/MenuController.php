@@ -11,6 +11,8 @@ use Session;
 use App\Model\Role;
 use App\Model\Menu;
 use App\Alert;
+use Auth;
+
 
 
 class MenuController extends AdminController
@@ -176,8 +178,8 @@ class MenuController extends AdminController
             'position' => $request->input('position'),
             'description' => $request->input('description'),
         ]);
-
-        return redirect()->route('menu_role', $request->input('role_id') )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
+        // dd( $request->input('role_id') );die;
+        return redirect()->route('menu_role', [ 'role' => $request->input('role_id') ]  )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
     }
 
     /**

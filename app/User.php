@@ -115,7 +115,7 @@ class User extends Authenticatable
         {
             $role = $role->where('roles.role_name',"!=", 'admin' );
         }
-        $roles =  $role->get();
+        $roles      =  $role->get();
         $roleSelect = [];
         foreach( $roles as $role )
         {

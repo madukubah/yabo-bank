@@ -29,7 +29,15 @@ class UsersManagementController extends UadminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function customers(  ){
+        $this->data[ 'menu_id' ] = "customers";
+        return $this->index( 13 );
+    }
+    public function drivers(  ){
+        $this->data[ 'menu_id' ] = "drivers";
+        return $this->index( 14 );
+    }
+    public function index( $roleId = NULL )
     {
         $table[ 'header' ]  = [ 
             'role_name' => 'Role',
@@ -43,6 +51,10 @@ class UsersManagementController extends UadminController
                                     ->join('roles', 'roles.id', '=', 'role_user.role_id')
                                     ->where('users.id',"!=", Auth::user()->id )
                                     ->orderBy('roles.id',"asc" );
+        if( isset( $roleId  ) )
+        {
+            $users = $users->where('role_user.role_id', $roleId );
+        }
         if( Auth::user()->roles()->first()->role_name != 'admin' )
         {
             $users = $users->where('roles.role_name',"!=", 'admin' );

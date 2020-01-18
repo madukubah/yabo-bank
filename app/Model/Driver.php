@@ -17,4 +17,8 @@ class Driver extends Model
     {
         return $this->hasMany('App\Model\PickUp');
     }
+    public function transactions()
+    {
+        return $this->hasMany('App\Model\Transaction');
+    }
 }
