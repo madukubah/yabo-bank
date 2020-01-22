@@ -1,73 +1,69 @@
 <?php
 
-namespace App\Http\Controllers\S_admin;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\UadminController;
-use Illuminate\Support\Facades\Hash;
 
 use Session;
 use App\User;
 use App\Model\Role;
+use App\Model\Mutation;
 use App\Alert;
 use Auth;
-use App\Model\Customer;
+use DB;
 use App\Model\Driver;
-use App\Model\Mutation;
+use Illuminate\Support\Facades\Hash;
 
-
-
-
-class UsersManagementController extends UadminController
+class DriverController extends UadminController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->data[ 'menu_id' ] = "users";
+        $this->data[ 'menu_id' ] = "drivers";
+        $this->data[ 'page_title' ]          = 'Driver';
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index( $roleId = NULL )
+    public function index()
     {
         $table[ 'header' ]  = [ 
-            'role_name' => 'Role',
+            'userable->code' => 'Kode',
             'name' => 'Nama',
             'email' => 'Email',
          ];
         $table[ 'number' ]  = 1;
         
-        $users = User::select([ 'role_name','name', 'email', 'users.id as id' ])
+        $users = User::select([ 'role_name','name', 'email', 'users.id as id', 'userable_type', 'userable_id' ])
                                     ->join('role_user', 'role_user.user_id', '=', 'users.id')
                                     ->join('roles', 'roles.id', '=', 'role_user.role_id')
                                     ->where('users.id',"!=", Auth::user()->id )
                                     ->orderBy('roles.id',"asc" );
-        if( isset( $roleId  ) )
-        {
-            $users = $users->where('role_user.role_id', $roleId );
-        }
+
+        $users = $users->where('roles.role_name', 'driver' );
         if( Auth::user()->roles()->first()->role_name != 'admin' )
         {
             $users = $users->where('roles.role_name',"!=", 'admin' );
             // $users = $users->where('roles.role_name',"!=", Auth::user()->roles()->first()->role_name );
         }
-        
+        // dd( $users->get()[2]->userable->code );die;
 
         $table[ 'rows' ]    = $users->get();
         $table[ 'action' ]  = [
             "link" => [
                 "dataParam"     => "id",
                 "linkName"      => "Detail",
-                "url"           => url('users'),
+                "url"           => url('drivers'),
                 "buttonColor"   => "primary",
             ],//link
             "modal_delete" => [
                 "modalId"       => "delete",
                 "dataParam"     => "id",
                 "modalTitle"    => "Hapus",
-                "formUrl"       => url('users'),
+                "formUrl"       => url('drivers'),
                 "formMethod"    => "post",
                 "buttonColor"   => "danger",
                 "formFields"    => [
@@ -83,20 +79,19 @@ class UsersManagementController extends UadminController
         ];
         $table = view('layouts.templates.tables.plain_table', $table);
 
-        $linkCreate['url']              = url('users/create');
-        $linkCreate['linkName']         = 'Tambah User';
+        $linkCreate['url']              = url('drivers/create');
+        $linkCreate['linkName']         = 'Tambah Driver';
         $linkCreate                     = view('layouts.templates.tables.actions.link', $linkCreate);
         $this->data[ 'header_button' ]  = $linkCreate;
 
 
         $this->data[ 'contents' ]            = $table;
 
-        $this->data[ 'message_alert' ]       = '';//Session::get('message');
-        $this->data[ 'page_title' ]          = 'User management';
+        $this->data[ 'message_alert' ]       = Session::get('message');
+        $this->data[ 'page_title' ]          = 'Driver';
         $this->data[ 'header' ]              = 'List';
         $this->data[ 'sub_header' ]          = '';
         return $this->render(  );
-
     }
 
     /**
@@ -106,20 +101,28 @@ class UsersManagementController extends UadminController
      */
     public function create()
     {
-        // dd( $user->roles );
-        $form[ 'formUrl' ]      = url('users');
+        $form[ 'formUrl' ]      = url('drivers');
         $form[ 'formMethod' ]   = 'post';
         $form[ 'blank' ]        = 'blank';
         $formFields = User::getFormData(  );
         unset( $formFields['_password'] );
         unset( $formFields['_password_confirmation'] );
-        $form[ 'content' ]      = view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields ] );
+        unset( $formFields['role'] );
+        $form[ 'content' ]      = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+            'driver_code' => [
+                'type' => 'text',
+                'label' => 'Kode Driver',
+                'value' => 'Driver_'.time(),
+                'readonly' => ''
+            ],
+        ] ] );
+        $form[ 'content' ]      .= view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields ] );
         $form                   = view('layouts.templates.forms.form', $form );
         
         $this->data[ 'contents' ]            = $form ;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
-        $this->data[ 'page_title' ]          = 'User management';
+        $this->data[ 'page_title' ]          = 'Driver';
         $this->data[ 'header' ]              = 'Tambah User';
         $this->data[ 'sub_header' ]          = '';
         return $this->render(  );
@@ -140,8 +143,8 @@ class UsersManagementController extends UadminController
             'address' => ['required', 'string', 'max:255'],
 
         ];
-        
         $request->validate( $validationConfig );
+        // dd( $request->input() );die;
         $user = User::create([
             'name'          =>  $request->input('name'),
             'email'         =>  $request->input('email'),
@@ -153,35 +156,12 @@ class UsersManagementController extends UadminController
             'identity_photo'=>  'default.jpg',
             'map_point'     =>  '0,0',
         ]);
-
-        $role = Role::find( $request->input('role') );
-        $user->putRole( $role );
-        // dd( Role::findOrFail( $request->input('role') ) );die;
-        $previlege = NULL;
-        if( $role->role_name == 'customer' )
-        {
-            $previlege = Customer::create( [
-                'code' => 'Customer_'.time()
-            ] );
-            Mutation::create([
-                'customer_id'       => $previlege->id,
-                'transaction_id'    => 0 ,
-                'nominal'           => 0,
-                'position'          => 1,
-                'description'       => 'initial',
-            ]);
-        }
-        else if( $role->role_name == 'driver' )
-        {
-            $previlege = Driver::create( [
-                'code' => 'Driver_'.time()
-            ] );
-        }
-
-        if( $previlege != NULL )
-            $previlege->user()->save( $user );
-        
-        return redirect()->route('users.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di buat, PASSWORD PERTAMA adalah nama email sampai '@' " ) ]);
+        $user->putRole( 'driver' );
+        $previlege = Driver::create( [
+            'code' => $request->input('driver_code')
+        ] );
+        $previlege->user()->save( $user );
+        return redirect()->route('drivers.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di buat, PASSWORD PERTAMA adalah nama email sampai '@' " ) ]);
     }
 
     /**
@@ -190,26 +170,53 @@ class UsersManagementController extends UadminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( $id )
+    public function show($id)
     {
         $user       = User::findOrFail( $id );
         $user->role = $user->roles[0]->id;
         $user->role_name = $user->roles[0]->role_name;
         // dd( $user->roles );
-        $detail     = view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => User::getFormData( FALSE ), 'data'=> $user ] );
+        $detail     = view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => [
+            'customer_code' => [
+                'type' => 'text',
+                'label' => 'Kode Driver',
+                'placeholder' => '',
+                'value' => $user->userable->code,
+                'readonly' => ''
+            ],
+        ] ] );
+        $formFields = User::getFormData( FALSE );
+        unset( $formFields['role_name'] );
+        
+        $detail     .= view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => $formFields, 'data'=> $user ] );
 
-        $linkEdit['url']        = url('users').'/'. $user->id.'/edit';
+        $linkEdit['url']        = url('drivers').'/'. $user->id.'/edit';
         $linkEdit['linkName']   = 'Edit';
         $linkEdit               = view('layouts.templates.tables.actions.link', $linkEdit);
-
         
         $this->data[ 'contents' ]            = $detail.'<br>'.$linkEdit;
 
+        ##########
+        # transaction 
+        $transactionTable[ 'header' ]  = [ 
+            'create_at'    => 'Tanggal',
+            'customer->user->name'   => 'Nama',
+            'product'       => 'Produk',
+            'quantity'      => 'Jumlah',
+            'total'         => 'Total',
+        ];
+        $transactionTable[ 'number' ]  = 1;
+        // customer
+        $transactionTable[ 'rows' ]    = $user->userable->transactions;
+        $transactionTable = view('transaction.table', $transactionTable);
+        $this->data[ 'transactionTable' ]       = $transactionTable;
+
         $this->data[ 'message_alert' ]       = Session::get('message');
-        $this->data[ 'page_title' ]          = 'User management';
-        $this->data[ 'header' ]              = $user->name;
+        $this->data[ 'page_title' ]          = 'Driver';
+        $this->data[ 'header' ]              = 'detail';
         $this->data[ 'sub_header' ]          = '';
-        return $this->render(  );
+        
+        return $this->render( 'driver.detail' );
     }
 
     /**
@@ -224,7 +231,7 @@ class UsersManagementController extends UadminController
         $user->role = $user->roles[0]->id;
         $user->role_name = $user->roles[0]->role_name;
       
-        $form[ 'formUrl' ]      = url('users').'/'. $user->id;
+        $form[ 'formUrl' ]      = url('drivers').'/'. $user->id;
         $form[ 'formMethod' ]   = 'post';
         $form[ 'blank' ]        = 'blank';
         $formFields = User::getFormData(  );
@@ -239,8 +246,7 @@ class UsersManagementController extends UadminController
         $this->data[ 'contents' ]            = $form ;
         
         $this->data[ 'message_alert' ]       = Session::get('message');
-        $this->data[ 'page_title' ]          = 'User management';
-        $this->data[ 'header' ]              = 'edit '.$user->name;
+        $this->data[ 'header' ]              = 'edit driver';
         $this->data[ 'sub_header' ]          = '';
         return $this->render(  );
     }
@@ -278,21 +284,14 @@ class UsersManagementController extends UadminController
             'email'         =>  $request->input('email'),
             'phone'         =>  $request->input('phone'),
             'address'       =>  $request->input('address'),
-            'photo'         =>  'default.jpg',
-            'identity_photo'=>  'default.jpg',
         ];
         if( $request->input('_password') != NULL )
             $data['password'] = Hash::make( $request->input('_password') );
 
         $user->update( $data );
 
-        $user->forgetRole();
-        $user->putRole( Role::find( $request->input('role') ) );
-
-        return redirect()->route('users.show', $id )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
-
+        return redirect()->route('drivers.show', $id )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -302,9 +301,11 @@ class UsersManagementController extends UadminController
     public function destroy($id)
     {
         $user       = User::findOrFail( $id );
+        $driver_id  = $user->userable->id;
+        $driver     = Driver::findOrFail( $driver_id );
         $user->forgetRole();
         $user->delete();
-        return redirect()->route('users.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di Hapus" ) ]);
-
+        // $driver->delete();
+        return redirect()->route('drivers.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di Hapus" ) ]);
     }
 }

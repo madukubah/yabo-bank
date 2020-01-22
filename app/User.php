@@ -76,7 +76,7 @@ class User extends Authenticatable
     */ 
     public function putRole($role)
     {
-        if (is_string($role))
+        if ( is_string($role) )
         {
             $role = Role::whereRoleName($role)->first();
         }

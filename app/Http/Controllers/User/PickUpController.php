@@ -18,8 +18,9 @@ class PickUpController extends UserController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:customer|driver' ], ['only' => ['index'], ] );
-        $this->middleware( [ 'role:driver' ], ['only' => ['store', 'process'] ] );
+        $this->middleware( [ 'role:customer|driver|uadmin' ], ['only' => ['index'], ] );
+        $this->middleware( [ 'role:driver' ], ['only' => ['process'] ] );
+        $this->middleware( [ 'role:uadmin' ], ['only' => ['store'] ] );
         $this->data[ 'page_title' ]          = 'Penjemputan';
         $this->data[ 'menu_id' ] = "pickups";
 
@@ -52,7 +53,7 @@ class PickUpController extends UserController
                 ],//link
             ];
         }
-        else
+        else if ( Auth::user()->hasRole( 'customer' ) )
         {
             $table[ 'header' ]  = [ 
                 'code'                          => 'Kode Request',
@@ -63,6 +64,17 @@ class PickUpController extends UserController
             $table[ 'number' ]  = 1;
             // customer
             $table[ 'rows' ]    = Auth::user()->userable->requests->where( 'status',  1 );
+        }
+        else // uadmin
+        {
+            $table[ 'header' ]  = [ 
+                'request->code'                 => 'Kode Request',
+                'request->customer->user->name' => 'Nama Customer',
+                'driver->user->name'            => 'Driver Penjemput',
+            ];
+            $table[ 'number' ]  = 1;
+            // customer
+            $table[ 'rows' ]    = PickUp::where( 'status',  0 )->get();
         }
        
         $table = view('layouts.templates.tables.plain_table', $table);
@@ -127,16 +139,20 @@ class PickUpController extends UserController
     {
         $request->validate( [
             'request_id' => ['required', 'unique:pick_ups'],
+            'driver_id' => ['required'],
         ] );
-
-        PickUp::create([
-            'request_id'=> $request->input('request_id'),
-            'driver_id' => Auth::user()->userable->id ,
-            'status'    => 0,
-        ]);
-        RequestModel::findOrFail( $request->input('request_id') )->update([
-            'status'    => 1,
-        ]);
+        // dd( $request->input()  );die;
+        foreach( $request->input('request_id') as $ind => $request_id ):
+            PickUp::create([
+                'request_id'=> $request_id,
+                'driver_id' => $request->input('driver_id') ,
+                'status'    => 0,
+            ]);
+            RequestModel::findOrFail( $request_id )->update([
+                'status'    => 1,
+            ]);
+        endforeach;
+        
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di buat" ) ]);
         
     }

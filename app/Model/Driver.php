@@ -8,6 +8,8 @@ class Driver extends Model
 {
     protected $fillable = [
         'id', 
+        'code' ,
+
     ];
     public function user()
     {

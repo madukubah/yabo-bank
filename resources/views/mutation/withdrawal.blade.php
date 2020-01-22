@@ -48,12 +48,12 @@
                 <div class="row invoice-info">
                     <div class="col-sm-4 invoice-col">
                         <address>
-                        <strong><?= $request->customer->code?></strong><br>
-                        <?= $request->customer->user->name?><br>
-                        <?= $request->customer->user->address?><br>
-                        Phone: <?= $request->customer->user->phone?><br>
-                        Email: <?= $request->customer->user->email?> <br>
-                        Keterangan: <?= $request->info?>
+                        <strong><?= $customer->code?></strong><br>
+                        <?= $customer->user->name?><br>
+                        <?= $customer->user->address?><br>
+                        Phone: <?= $customer->user->phone?><br>
+                        Email: <?= $customer->user->email?> <br>
+                        Keterangan: Pencairan
                         </address>
                     </div>
                     <!-- /.col -->
@@ -62,7 +62,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-4 invoice-col">
-                   
+                        
                     </div>
                     <!-- /.col -->
                 </div>
@@ -74,31 +74,19 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Produk</th>
-                                <th>Harga / Satuan</th>
-                                <th>Jumlah</th>
-                                <th>Sub Total</th>
+                                <td>
+                                    Jumlah Pencairan
+                                </td>
+                                <td>
+                                    :
+                                </td>
+                                <td>
+                                    <?= number_format( $total )?>
+                                </td>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                                foreach( $tableData as $data ):
-                            ?>
-                                <tr>
-                                    <td>
-                                        <?= $data->product_name?>
-                                    </td>
-                                    <td>
-                                        <?= $data->product_price_per_unit ?>
-                                    </td>
-                                    <td>
-                                        <?= $data->quantity ?>
-                                    </td>
-                                    <td>
-                                        Rp. <?= number_format( $data->sub_total ) ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach;?>
+                            
                         </tbody>
                     </table>
                     </div>
@@ -107,17 +95,17 @@
                 <!-- /.row -->
                 <div class="row">
                     <!-- accepted payments column -->
-                    <div class="col-7">
+                    <div class="col-6">
                     
                     </div>
                     <!-- /.col -->
-                    <div class="col-5">
+                    <div class="col-6">
                     <div class="table-responsive">
                         <table class="table">
                         <tbody>
                         <tr>
                             <th>Total:</th>
-                            <th id="total" > Rp. <?= number_format( $total ) ?> </th>
+                            <th id="total" > <?= number_format( $total ) ?> </th>
                         </tr>
                         </tbody></table>
                     </div>

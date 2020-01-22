@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use Auth;
 use App\Alert;
 use App\User;
+use App\Model\Driver;
 use Session;
 
 use App\Model\Request as RequestModel ;
@@ -17,8 +18,9 @@ class RequestController extends UserController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:driver|customer' ], ['only' => ['index']] );
         $this->middleware( [ 'role:customer' ], ['only' => ['store', 'update']] );
+        $this->middleware( [ 'role:uadmin|customer' ], ['only' => ['index']] );
+
 
         $this->data[ 'page_title' ]          = 'Penjemputan';
     }
@@ -30,12 +32,12 @@ class RequestController extends UserController
     public function index()
     {
 
-        if( Auth::user()->hasRole( 'driver' )  )
+        if( Auth::user()->hasRole( 'uadmin' )  )
         {
             ################
             # Driver
             ################
-            $table[ 'header' ]  = [ 
+            $tableForm[ 'header' ]  = [ 
                 // 'customer->code' => 'Kode Customer',
                 'code' => 'Kode Request',
                 'customer->user->name' => 'Nama Customer',
@@ -43,29 +45,44 @@ class RequestController extends UserController
                 'info'          => 'Keterangan',
                 'created_at' => 'Waktu Request',
              ];
-             $table[ 'rows' ]    = RequestModel::
+             $tableForm[ 'rows' ]    = RequestModel::
                                                 select([ '*','requests.id as request_id' ])
                                                 ->where( 'status', 0 )
                                                 ->get();
-             $table[ 'action' ]  = [
-                "modal_form" => [
-                    "modalId"       => "create",
-                    "dataParam"     => "id",
-                    "modalTitle"    => "Ambil Request",
-                    "formUrl"       => url('pickups'),
-                    "formMethod"    => "post",
-                    "isCreateMode"  => true,
-                    "buttonColor"   => "success",
-                    "additional_dialog" => "<div class='alert alert-success alert-dismissible'>
-                                            <h5>Yakin mengambil request ini ?</h5></div>",
-                    "formFields"    => [
-                        'request_id' => [
-                            'type' => 'hidden',
-                        ],
-                    ],
-                ],//modal_form
-            ];
-            $table[ 'number' ]  = 1;
+            //  $table[ 'action' ]  = [
+            //     "modal_form" => [
+            //         "modalId"       => "create",
+            //         "dataParam"     => "id",
+            //         "modalTitle"    => "Ambil Request",
+            //         "formUrl"       => url('pickups'),
+            //         "formMethod"    => "post",
+            //         "isCreateMode"  => true,
+            //         "buttonColor"   => "success",
+            //         "additional_dialog" => "<div class='alert alert-success alert-dismissible'>
+            //                                 <h5>Yakin mengambil request ini ?</h5></div>",
+            //         "formFields"    => [
+            //             'request_id' => [
+            //                 'type' => 'hidden',
+            //             ],
+            //         ],
+            //     ],//modal_form
+            // ];
+            $tableForm[ 'number' ]        = 1;
+            $drivers = Driver::all();
+            $driverSelect = array();
+            foreach( $drivers as $driver )
+            {
+                $driverSelect[ $driver->id ] = $driver->code ." | ".$driver->user->name;
+            }
+            // dd( $driver );die;
+            $tableForm[ 'driverSelect' ]  = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                    'driver_id' => [
+                                                        'type' => 'select',
+                                                        'label' => 'Pilih Driver',
+                                                        'options' => $driverSelect,
+                                                    ],
+                                            ]] );
+            $table = view('request.table_form', $tableForm );
             
         }
         else
@@ -124,11 +141,10 @@ class RequestController extends UserController
             $modalCreate = view('layouts.templates.modals.modal', $modalCreate );
             $this->data[ 'header_button' ]       = $modalCreate;
 
+            $table = view('layouts.templates.tables.plain_table', $table);
+
         }
        
-       
-        $table = view('layouts.templates.tables.plain_table', $table);
-
         $this->data[ 'contents' ]            = $table;
 
         $this->data[ 'message_alert' ]       = Session::get('message');

@@ -66,6 +66,70 @@
                     </div>
                 </div>
             </div>
+            <!-- mutations -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-12">
+                           
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <h5>
+                                    Mutasi Rekening
+                                    <p class="text-secondary"><small><?= $sub_header = ( isset( $sub_header ) ) ? $sub_header : ''  ?></small></p>
+                                </h5>
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-2"></div>
+                                    <div class="col-10">
+                                        <div class="float-right mr-5">
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    <div class="row">
+                        <div class="col text-center" >
+                            <h5>
+                                <?= ' Kredit = '.number_format( $credit )?>
+                            </h5>
+                        </div>
+                        <div class="col text-center" >
+                            <h5>
+                                <?= ' Debit = '.number_format( abs( $debit ) )?>
+                            </h5>
+                        </div>
+                        <div class="col text-center" >
+                            <h5>
+                                <?= ' Saldo = '.number_format( $balance )?>
+                            </h5>
+                        </div>
+                    </div>
+                    <br>
+                    <!--  -->
+                    <?php echo (isset($mutationsTable)) ? $mutationsTable : '';  ?>
+                    <!--  -->
+                    <!--  -->
+                    <?php echo (isset($pagination_links)) ? $pagination_links : '';  ?>
+                    <!--  -->
+                    </div>
+                </div>
+            </div>
+            <!-- withdrawal -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                    <!--  -->
+                    <?php echo (isset($modalwithdrawal)) ? $modalwithdrawal : '';  ?>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

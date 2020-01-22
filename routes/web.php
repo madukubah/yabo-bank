@@ -29,9 +29,6 @@ Route::resource('/menus', 'S_admin\MenuController');
 
 Route::resource('/users', 'S_admin\UsersManagementController');
 
-Route::get('/customers', 'S_admin\UsersManagementController@customers')->name("customers");
-Route::get('/drivers', 'S_admin\UsersManagementController@drivers')->name("drivers");
-
 Route::resource('/profiles', 'User\ProfileController');
 Route::resource('/pricelists', 'User\PriceListController');
 
@@ -44,5 +41,12 @@ Route::resource('/pickups', 'User\PickUpController');
 Route::get('/pickup/process/{role}', 'User\PickUpController@process')->name("pickup_process");
 
 Route::resource('/mutations', 'User\MutationController');
+Route::post('/withdrawal', 'User\MutationController@withdrawal')->name('withdrawal');
+Route::post('/confirm_withdrawal', 'User\MutationController@confirmWithdrawal')->name('confirm.withdrawal');
+
 Route::resource('/transactions', 'User\TransactionController');
+
+Route::resource('/customers', 'User\CustomerController');
+Route::resource('/drivers', 'User\DriverController');
+
 

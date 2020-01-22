@@ -4,8 +4,12 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
+use App\Model\Mutation;
+use App\Model\Customer;
 use Session;
 use Auth;
+use App\Alert;
+
 
 
 class MutationController extends UserController
@@ -13,7 +17,8 @@ class MutationController extends UserController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:customer' ] );
+        $this->middleware( [ 'role:uadmin' ], ['only' => [ 'withdrawal', 'confirmWithdrawal' ] ]  );
+        $this->middleware( [ 'role:customer' ], ['except' => [ 'withdrawal', 'confirmWithdrawal'] ] );
         $this->data[ 'page_title' ]          = 'Mutasi';
     }
     /**
@@ -23,23 +28,155 @@ class MutationController extends UserController
      */
     public function index()
     {
-        $table[ 'header' ]  = [ 
+        // $table[ 'header' ]  = [ 
+        //     'created_at'    => 'Tanggal',
+        //     'description'   => 'Keterangan',
+        //     'nominal'       => 'nominal',
+        //     'position'      => 'Posisi',
+        // ];
+        // $table[ 'number' ]  = 1;
+        // // customer
+        // // $table[ 'rows' ]    = Auth::user()->userable->mutations->orderBy( 'id' );
+        // $table[ 'rows' ]    = Mutation::where( 'customer_id', Auth::user()->userable->id )->orderBy( 'id', 'desc' )->get();
+        // $table = view('mutation.table', $table);
+        # OLD
+        # NEW
+        $mutationsTable[ 'header' ]  = [ 
             'created_at'    => 'Tanggal',
             'description'   => 'Keterangan',
-            'nominal'       => 'nominal',
-            'position'      => 'Posisi',
+            // 'nominal'       => 'nominal',
+            'credit_total' => 'Kredit',
+            'debit_total'  => 'Debit',
+            'balance'      => 'Saldo',
         ];
-        $table[ 'number' ]  = 1;
-        // customer
-        $table[ 'rows' ]    = Auth::user()->userable->mutations;
-        $table = view('mutation.table', $table);
+        $mutationsTable[ 'number' ]  = 1;
 
-        $this->data[ 'contents' ]            = $table;
+        // customer
+        // $mutations = $user->userable->mutations;
+        // $mutations = Mutation::where( 'customer_id', $user->userable->id )->orderBy( 'id', 'desc' )->get();
+        $mutations = Mutation::accountBook(  Auth::user()->userable->id )->get();
+        
+        $mutationsTable[ 'rows' ]    = $mutations;
+        $table = view('mutation.table2', $mutationsTable);
+
+        $balance             = Mutation::getAccumulations( Auth::user()->userable->id )->first()->total;
+        $credit              = Mutation::getAccumulations( Auth::user()->userable->id, 1 )->first()->total;
+        $debit               = Mutation::getAccumulations( Auth::user()->userable->id, 2 )->first();
+        $debit               =  ( $debit != NULL ) ? $debit->total : 0 ;
+
+
+        $this->data[ 'contents' ]            = '<div class="row">
+                                                    <div class="col text-center" >
+                                                        <h5>
+                                                            Kredit = '.number_format( $credit ).'
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col text-center" >
+                                                        <h5>
+                                                            Debit = '.number_format( abs( $debit ) ).'
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col text-center" >
+                                                        <h5>
+                                                            Saldo = '.number_format( $balance ).'
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                                <br>';
+        $this->data[ 'contents' ]            .= $table;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'header' ]              = 'Daftar Mutasi Rekening ';
         $this->data[ 'sub_header' ]          = '';
         return $this->render(  );
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function withdrawal( Request $request )
+    {
+        $request->validate([
+            'nominal' => ['required'],
+            'customer_id' => ['required'],
+            'user_id' => ['required'],
+        ] );
+        
+        $balance = Mutation::getAccumulations( $request->input('customer_id') )->first()->total;
+        $nominal = $request->input('nominal');
+        if( $nominal > $balance )
+        {
+            return redirect()->route('customers.show', $request->input('user_id') )->with(['message' => Alert::setAlert( Alert::DANGER, "Nominal Melewati saldo" ) ]);
+        }
+
+        $customer = Customer::findOrFail( $request->input('customer_id') );
+
+        $this->data[ 'customer' ]       = $customer;
+        $this->data[ 'total' ]           = $nominal;
+        ################
+        # modal
+        ################
+        $confirmFormFields [ 'nominal' ]= [
+            'type' => 'hidden',
+            'value' =>  $request->input('nominal') ,
+        ];
+        $confirmFormFields [ 'customer_id' ]= [
+            'type' => 'hidden',
+            'value' =>  $request->input('customer_id') ,
+        ];
+        $confirmFormFields [ 'user_id' ]= [
+            'type' => 'hidden',
+            'value' =>  $request->input('user_id') ,
+        ];
+        $modalConfirm['modalTitle']    = "Konfirmasi";
+        $modalConfirm['modalId']       = "confirm";
+        $modalConfirm['buttonColor']   = "success";
+        $modalConfirm['formMethod']    = "post";
+        $modalConfirm['formUrl']       = route('confirm.withdrawal') ;
+        $modalConfirm['modalBody']     =  "<div class='alert alert-success alert-dismissible'>
+                                            <h5>Anda Yakin ?</h5></div>";
+        $modalConfirm['modalBody']     .= view('layouts.templates.forms.form_fields', [ 'formFields' => $confirmFormFields ] );
+        $modalConfirm = view('layouts.templates.modals.modal', $modalConfirm );
+
+        $this->data[ 'modalConfirm' ]       = $modalConfirm;
+
+        $this->data[ 'page_title' ]          = 'Pencairan';
+        return $this->render( 'mutation.withdrawal' );
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmWithdrawal( Request $request )
+    {
+        $request->validate([
+            'nominal' => ['required'],
+            'customer_id' => ['required'],
+            'user_id' => ['required'],
+        ] );
+        
+        $balance = Mutation::getAccumulations( $request->input('customer_id') )->first()->total;
+        $nominal = $request->input('nominal');
+        if( $nominal > $balance )
+        {
+            return redirect()->route('customers.show', $request->input('user_id') )->with(['message' => Alert::setAlert( Alert::DANGER, "Nominal Melewati saldo" ) ]);
+        }
+
+        $customer = Customer::findOrFail( $request->input('customer_id') );
+
+        // dd( $request->input() );die;
+        Mutation::create([
+            'customer_id'       => $customer->id,
+            'transaction_id'    => 0,
+            'nominal'           => $nominal,
+            'position'          => 2, // debit
+            'description'       => 'withdrawal to customer '.  $customer->code ,
+        ]);
+        return redirect()->route('customers.show', $request->input('user_id') )->with(['message' => Alert::setAlert( Alert::SUCCESS, "Pencairan Berhasil" ) ]);
     }
 
     /**

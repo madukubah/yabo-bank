@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use Session;
 use Auth;
+use App\Model\Transaction;
 
 class TransactionController extends UserController
 {
@@ -31,8 +32,9 @@ class TransactionController extends UserController
         ];
         $table[ 'number' ]  = 1;
         // customer
-        $table[ 'rows' ]    = Auth::user()->userable->transactions;
-        $table = view('transaction\table', $table);
+        // $table[ 'rows' ]    = Auth::user()->userable->transactions;
+        $table[ 'rows' ]    = Transaction::where( 'driver_id', Auth::user()->userable->id )->orderBy( 'id', 'desc' )->get();
+        $table = view('transaction.table', $table);
 
         $this->data[ 'contents' ]            = $table;
 
