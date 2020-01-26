@@ -12,7 +12,38 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Route::post('register', 'API\RegisterController@register');
+Route::post('login', 'API\AuthController@login');
+Route::post('register', 'API\AuthController@register');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('logout', 'API\AuthController@logout');
+    Route::get('pricelists', 'API\PriceListController@index');
 });
+
+Route::group(['middleware' => [ 'auth:api'] ], function(){
+    Route::resource('profiles', 'API\ProfileController');
+});
+
+Route::group(['middleware' => [ 'auth:api', 'role:customer'] ], function(){
+    Route::resource('requests', 'API\RequestController');
+    Route::get('mutations', 'API\MutationController@index');
+});
+
+Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
+    Route::resource('invoices', 'API\InvoiceController');
+    Route::get('transactions', 'API\TransactionController@index');
+
+});
+
+Route::group(['middleware' => [ 'auth:api', 'role:customer|driver'] ], function(){
+    Route::get('pickups', 'API\PickUpController@index');
+});
+  
+// Route::middleware('auth:api')->group( function () {
+// 	Route::resource('products', 'API\ProductController');
+// });
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

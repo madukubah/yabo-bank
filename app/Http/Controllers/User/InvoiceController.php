@@ -51,6 +51,7 @@ class InvoiceController extends UserController
         $quantities                         = $request->input('quantity');
         $tableData = [];
         $total = 0;
+
         $confirmFormFields = [];
         foreach( $request->input('product') as $ind => $product ):
             $product_ = PriceList::findOrFail( $product );
@@ -70,6 +71,7 @@ class InvoiceController extends UserController
                 'value' => $quantities[ $ind ],
             ];
         endforeach;
+
         $this->data[ 'tableData' ]       = $tableData;
         $this->data[ 'total' ]           = $total;
         ################
@@ -106,7 +108,7 @@ class InvoiceController extends UserController
         $request->validate( [
             'product' => ['required'],
             'quantity' => ['required'],
-            'pickUpId' => ['required'],
+            // 'pickUpId' => ['required'],
         ] );
         $pickup = Auth::user()->userable->pickUps->find( $request->input('pickUpId') );
         $quantities                         = $request->input('quantity');
@@ -135,12 +137,16 @@ class InvoiceController extends UserController
                                         .'driver:'.Auth::user()->name,
             ]);
         endforeach;
-        $pickup->update([
-            'status' => 1
-        ]);
-        $pickup->request->update([
-            'status' => 2
-        ]);
+        if( $request->input('pickUpId') != NULL )
+        {
+            $pickup->update([
+                'status' => 1
+            ]);
+            $pickup->request->update([
+                'status' => 2
+            ]);
+        }
+        
         return redirect()->route('pickups.index')->with(['message' => Alert::setAlert( 1, "transaksi Berhasil berhasil di buat" ) ]);
         // dd( $request->input() );die;
     }

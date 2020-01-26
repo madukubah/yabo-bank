@@ -44,7 +44,7 @@ Route::resource('/mutations', 'User\MutationController');
 Route::post('/withdrawal', 'User\MutationController@withdrawal')->name('withdrawal');
 Route::post('/confirm_withdrawal', 'User\MutationController@confirmWithdrawal')->name('confirm.withdrawal');
 
-Route::resource('/transactions', 'User\TransactionController');
+Route::resource('/transactions', 'User\TransactionController');  
 
 Route::resource('/customers', 'User\CustomerController');
 Route::resource('/drivers', 'User\DriverController');

@@ -35,7 +35,7 @@ class RequestController extends UserController
         if( Auth::user()->hasRole( 'uadmin' )  )
         {
             ################
-            # Driver
+            # uadmin
             ################
             $tableForm[ 'header' ]  = [ 
                 // 'customer->code' => 'Kode Customer',
@@ -96,27 +96,44 @@ class RequestController extends UserController
                 'info'          => 'Keterangan',
              ];
              $table[ 'action' ]  = [
-                "modal_form" => [
-                    "modalId"       => "edit",
+                "modal_delete" => [
+                    "modalId"       => "delete",
                     "dataParam"     => "id",
-                    "modalTitle"    => "Edit Request",
+                    "modalTitle"    => "Hapus",
                     "formUrl"       => url('requests'),
                     "formMethod"    => "post",
-                    "buttonColor"   => "warning",
+                    "buttonColor"   => "danger",
                     "formFields"    => [
                         '_method' => [
                             'type' => 'hidden',
-                            'value'=> 'PUT'
+                            'value'=> 'DELETE'
                         ],
                         'id' => [
                             'type' => 'hidden',
                         ],
-                        'info' => [
-                            'type' => 'textarea',
-                            'label' => 'Keterangan',
-                        ],
                     ],
-                ],//modal_form
+                ],//modal_delete
+                // "modal_form" => [
+                //     "modalId"       => "edit",
+                //     "dataParam"     => "id",
+                //     "modalTitle"    => "Edit Request",
+                //     "formUrl"       => url('requests'),
+                //     "formMethod"    => "post",
+                //     "buttonColor"   => "warning",
+                //     "formFields"    => [
+                //         '_method' => [
+                //             'type' => 'hidden',
+                //             'value'=> 'PUT'
+                //         ],
+                //         'id' => [
+                //             'type' => 'hidden',
+                //         ],
+                //         'info' => [
+                //             'type' => 'textarea',
+                //             'label' => 'Keterangan',
+                //         ],
+                //     ],
+                // ],//modal_form
             ];
             $table[ 'number' ]  = 1;
             $table[ 'rows' ]    = Auth::user()->userable->requests->where( 'status', 0 );
@@ -244,6 +261,14 @@ class RequestController extends UserController
      */
     public function destroy($id)
     {
-        //
+        $req = RequestModel::find( $id );
+        if( $req->status != 0 )
+        {
+            return redirect()->route('requests.index')->with(['message' => Alert::setAlert( Alert::DANGER, "tidak dapat menghapus" ) ]);
+
+        }
+        $req->delete();
+        return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di hapus" ) ]);
+
     }
 }

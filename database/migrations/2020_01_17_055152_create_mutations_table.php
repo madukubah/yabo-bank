@@ -13,6 +13,7 @@ class CreateMutationsTable extends Migration
      */
     public function up()
     {
+        return;
         Schema::create('mutations', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customer_id');

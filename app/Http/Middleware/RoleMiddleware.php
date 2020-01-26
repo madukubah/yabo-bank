@@ -17,6 +17,17 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $roleName)
     {
+        if ( $request->expectsJson()) {
+            $roleNames = explode( "|", $roleName );
+            foreach( $roleNames as $roleName )
+            {
+                if( $request->user()->hasRole($roleName) )
+                {
+                    return $next($request);
+                }
+            }
+            return response()->json(['error'=>'not role'], 401);
+        }
         $roleNames = explode( "|", $roleName );
         foreach( $roleNames as $roleName )
         {
