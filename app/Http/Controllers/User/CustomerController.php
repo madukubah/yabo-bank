@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UadminController;
 
 use Session;
 use App\User;
@@ -17,12 +17,11 @@ use App\Model\Driver;
 use Illuminate\Support\Facades\Hash;
 
 
-class CustomerController extends UserController
+class CustomerController extends UadminController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:uadmin' ] );
         $this->data[ 'menu_id' ] = "customers";
     }
     /**
@@ -370,7 +369,7 @@ class CustomerController extends UserController
         $request->validate( [
             'photo' => 'required|file|max:1024',
         ] );
-        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        $fileName = "IDENTITY_".time().".".$request->photo->getClientOriginalExtension();
         
         if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
         {

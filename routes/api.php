@@ -24,6 +24,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 Route::group(['middleware' => [ 'auth:api'] ], function(){
     Route::resource('profiles', 'API\ProfileController');
 });
+Route::post('/upload_photo', 'API\ProfileController@uploadProfilPhoto')->middleware('auth:api');
+Route::post('/upload_identity', 'API\ProfileController@uploadIdendityPhoto')->middleware([ 'auth:api', 'role:customer' ]);
+
 
 Route::group(['middleware' => [ 'auth:api', 'role:customer'] ], function(){
     Route::resource('requests', 'API\RequestController');

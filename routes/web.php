@@ -30,11 +30,9 @@ Route::resource('/menus', 'S_admin\MenuController');
 Route::resource('/users', 'S_admin\UsersManagementController');
 Route::post('/users_photo/{userId}', 'S_admin\UsersManagementController@uploadProfilPhoto')->name('users.upload_photo');
 
-
 Route::resource('/profiles', 'User\ProfileController');
 Route::post('/upload_photo', 'User\ProfileController@uploadProfilPhoto')->name('profile.upload_photo');
 Route::post('/identity_photo/{customerId}', 'User\ProfileController@uploadIdendityPhoto')->name('customers.identity_photo');
-
 
 Route::resource('/pricelists', 'User\PriceListController');
 

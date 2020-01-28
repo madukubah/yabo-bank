@@ -57,17 +57,20 @@ class RequestController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'code' => ['required'],
-            'info' => ['required'],
+            'photo' => 'required|file|max:1024',
+            'info' => 'required',
         ]  );
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+        $fileName = "REQUEST_".time().".".$request->photo->getClientOriginalExtension();
+        $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
 
         $req = RequestModel::create([
             'code'=> 'Request_'.time(),
             'info'=> $request->input('info'),
+            'photo'         => $fileName ,
             'customer_id' => Auth::user()->userable->id ,
             'status'    => 0,
         ]);

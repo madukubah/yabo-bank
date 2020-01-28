@@ -246,7 +246,7 @@ class ProfileController extends UserController
         $request->validate( [
             'photo' => 'required|file|max:1024',
         ] );
-        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        $fileName = "IDENTITY_".time().".".$request->photo->getClientOriginalExtension();
         
         if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
         {

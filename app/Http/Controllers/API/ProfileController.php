@@ -69,5 +69,75 @@ class ProfileController extends BaseController
         $data['user'] = $user;
         return $this->sendResponse( $data, 'data berhasil di edit' );
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadProfilPhoto( Request $request )
+    {
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|file|max:1024',
+        ]  );
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        // var_dump( $request->photo );die;
+        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
+        {
+            $user = Auth::user();
+
+            $oldPhoto   = $user->photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( User::PHOTO_PATH."/".$oldPhoto );
+
+            $user->update( [
+                'photo' => $fileName
+            ] );
+        }
+        $data['user'] = $user;
+
+        return $this->sendResponse( $data, 'berhasil upload foto' );
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadIdendityPhoto( Request $request )
+    {
+        // dd( $request->input() );die;
+        $customer       = Auth::user()->userable ;
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|file|max:1024',
+        ]  );
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $fileName = "IDENTITY_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
+        {
+            $oldPhoto   = $customer->identity_photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( Customer::PHOTO_PATH."/".$oldPhoto );
+
+            $customer->identity_photo = $fileName;
+            $customer->save();
+            // dd( $customer->identity_photo );die;
+
+        }
+        $data['user'] = Auth::user();
+        return $this->sendResponse( $data, 'berhasil upload foto' );
+    }
  
 }
