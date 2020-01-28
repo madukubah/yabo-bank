@@ -9,6 +9,8 @@ use App\Alert;
 use App\User;
 use App\Model\Driver;
 use Session;
+use Validator;
+
 
 use App\Model\Request as RequestModel ;
 
@@ -20,7 +22,6 @@ class RequestController extends UserController
         parent::__construct();
         $this->middleware( [ 'role:customer' ], ['only' => ['store', 'update']] );
         $this->middleware( [ 'role:uadmin|customer' ], ['only' => ['index']] );
-
 
         $this->data[ 'page_title' ]          = 'Penjemputan';
     }
@@ -39,34 +40,20 @@ class RequestController extends UserController
             ################
             $tableForm[ 'header' ]  = [ 
                 // 'customer->code' => 'Kode Customer',
-                'code' => 'Kode Request',
-                'customer->user->name' => 'Nama Customer',
-                'customer->user->address' => 'Alamat',
-                'info'          => 'Keterangan',
-                'created_at' => 'Waktu Request',
+                'code'                      => 'Kode Request',
+                'customer->user->name'      => 'Nama Customer',
+                'customer->user->address'   => 'Alamat',
+                'photo'                     => 'Gambar',
+                'info'                      => 'Keterangan',
+                'created_at'                => 'Waktu Request',
              ];
+             $tableForm[ 'imageUrl' ]    = RequestModel::PHOTO_PATH."/";
+
              $tableForm[ 'rows' ]    = RequestModel::
                                                 select([ '*','requests.id as request_id' ])
                                                 ->where( 'status', 0 )
                                                 ->get();
-            //  $table[ 'action' ]  = [
-            //     "modal_form" => [
-            //         "modalId"       => "create",
-            //         "dataParam"     => "id",
-            //         "modalTitle"    => "Ambil Request",
-            //         "formUrl"       => url('pickups'),
-            //         "formMethod"    => "post",
-            //         "isCreateMode"  => true,
-            //         "buttonColor"   => "success",
-            //         "additional_dialog" => "<div class='alert alert-success alert-dismissible'>
-            //                                 <h5>Yakin mengambil request ini ?</h5></div>",
-            //         "formFields"    => [
-            //             'request_id' => [
-            //                 'type' => 'hidden',
-            //             ],
-            //         ],
-            //     ],//modal_form
-            // ];
+            
             $tableForm[ 'number' ]        = 1;
             $drivers = Driver::all();
             $driverSelect = array();
@@ -93,6 +80,7 @@ class RequestController extends UserController
             $table[ 'header' ]  = [ 
                 'code'          => 'Kode Request',
                 'created_at'    => 'Waktu Request',
+                'photo'         => 'Gambar',
                 'info'          => 'Keterangan',
              ];
              $table[ 'action' ]  = [
@@ -135,13 +123,16 @@ class RequestController extends UserController
                 //     ],
                 // ],//modal_form
             ];
-            $table[ 'number' ]  = 1;
-            $table[ 'rows' ]    = Auth::user()->userable->requests->where( 'status', 0 );
+            $table[ 'number' ]      = 1;
+            $table[ 'rows' ]        = Auth::user()->userable->requests->where( 'status', 0 );
+            $table[ 'imageUrl' ]    = RequestModel::PHOTO_PATH."/";
+            $table = view('request.table', $table);
 
             # modal
             $modalCreate['modalTitle']    = "Buat Request";
             $modalCreate['modalId']       = "create";
             $modalCreate['formMethod']    = "post";
+            $modalCreate['formEnctype']    = "multipart";
             $modalCreate['formUrl']       = route('requests.store') ;
             $modalCreate['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
                                                     'code' => [
@@ -150,16 +141,17 @@ class RequestController extends UserController
                                                         'readonly' => 'Ex. admin/member',
                                                         'value' => 'Request_'.time(),
                                                     ],
+                                                    'photo' => [
+                                                        'type' => 'file',
+                                                        'label' => 'Foto',
+                                                    ],
                                                     'info' => [
                                                         'type' => 'textarea',
-                                                        'label' => 'Kerterangan',
+                                                        'label' => 'Keterangan',
                                                     ],
                                             ]] );
             $modalCreate = view('layouts.templates.modals.modal', $modalCreate );
             $this->data[ 'header_button' ]       = $modalCreate;
-
-            $table = view('layouts.templates.tables.plain_table', $table);
-
         }
        
         $this->data[ 'contents' ]            = $table;
@@ -190,14 +182,22 @@ class RequestController extends UserController
     {
 
         $request->validate( [
-            'code' => ['required'],
-            'info' => ['required'],
+            'code' => 'required',
+            'photo' => 'required|file|max:1024',
+            'info' => 'required',
         ] );
+
+        $fileName = "REQUEST_".time().".".$request->photo->getClientOriginalExtension();
+        $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
+        // unlink( RequestModel::PHOTO_PATH."/".$fileName );
+        // die;
+        
         RequestModel::create([
-            'code'=> $request->input('code'),
-            'info'=> $request->input('info'),
-            'customer_id' => Auth::user()->userable->id ,
-            'status'    => 0,
+            'code'          => $request->input('code') ,
+            'info'          => $request->input('info') ,
+            'photo'         => $fileName ,
+            'customer_id'   => Auth::user()->userable->id ,
+            'status'        => 0 ,
         ]);
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di buat" ) ]);
     }
@@ -238,12 +238,10 @@ class RequestController extends UserController
             'id' => ['required'],
             'info' => ['required'],
         ] );
-
         $req = RequestModel::findOrFail( $id );
         if( $req->status != 0 )
         {
             return redirect()->route('requests.index')->with(['message' => Alert::setAlert( Alert::DANGER, "tidak dapat mengubah" ) ]);
-
         }
         $req->update([
             'info'    => $request->input('info'),
@@ -267,6 +265,7 @@ class RequestController extends UserController
             return redirect()->route('requests.index')->with(['message' => Alert::setAlert( Alert::DANGER, "tidak dapat menghapus" ) ]);
 
         }
+        unlink( RequestModel::PHOTO_PATH."/".$req->photo );
         $req->delete();
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di hapus" ) ]);
 

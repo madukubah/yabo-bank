@@ -31,7 +31,7 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-10">
                 <div class="card">
                     <div class="card-header">
                         <div class="col-12">
@@ -66,6 +66,22 @@
                     </div>
                 </div>
             </div>
+             <!-- photo -->
+             <div class=" col-md-2 ">
+                <div class="row clearfix">
+                    <div class=" col-md-12 ">
+                        <div class="card">
+                            <div class="card-body">
+                                <img class=" img-fluid " src="<?= url('uploads/users/'.$user->photo ) ?>" width="100%" >
+                                <br>
+                                <br>
+                                <?php echo ( isset( $modalUploadPhoto )  ) ? $modalUploadPhoto : '' ;  ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  -->
             <!-- transaction -->
             <div class="col-12">
                 <div class="card">

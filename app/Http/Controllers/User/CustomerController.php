@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\UadminController;
+use App\Http\Controllers\UserController;
 
 use Session;
 use App\User;
@@ -17,11 +17,12 @@ use App\Model\Driver;
 use Illuminate\Support\Facades\Hash;
 
 
-class CustomerController extends UadminController
+class CustomerController extends UserController
 {
     public function __construct()
     {
         parent::__construct();
+        $this->middleware( [ 'role:uadmin' ] );
         $this->data[ 'menu_id' ] = "customers";
     }
     /**
@@ -157,6 +158,8 @@ class CustomerController extends UadminController
         $user       = User::findOrFail( $id );
         $user->role = $user->roles[0]->id;
         $user->role_name = $user->roles[0]->role_name;
+        $this->data[ 'user' ]            = $user;
+
         // dd( $user->roles );
         $detail     = view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => [
             'customer_code' => [
@@ -176,11 +179,38 @@ class CustomerController extends UadminController
         $linkEdit               = view('layouts.templates.tables.actions.link', $linkEdit);
         
         $this->data[ 'contents' ]            = $detail.'<br>'.$linkEdit;
-
+        # modal upload photo
+        $modalUploadPhoto['modalTitle']    = "Upload Foto";
+        $modalUploadPhoto['modalId']       = "upload";
+        $modalUploadPhoto['formMethod']    = "post";
+        $modalUploadPhoto['formEnctype']    = "multipart";
+        $modalUploadPhoto['formUrl']       = route('users.upload_photo', $user->id) ;
+        $modalUploadPhoto['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                'photo' => [
+                                                    'type' => 'file',
+                                                    'label' => 'Foto',
+                                                ],
+                                        ]] );
+        $modalUploadPhoto = view('layouts.templates.modals.modal', $modalUploadPhoto );
+        $this->data[ 'modalUploadPhoto' ]    = $modalUploadPhoto;
+        # modal upload identity photo
+        $modalUploadIdentity['modalTitle']    = "Upload Foto KTP";
+        $modalUploadIdentity['modalId']       = "customers_upload";
+        $modalUploadIdentity['formMethod']    = "post";
+        $modalUploadIdentity['formEnctype']    = "multipart";
+        $modalUploadIdentity['formUrl']       = route('customers.upload_photo', $user->userable->id) ;
+        $modalUploadIdentity['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                'photo' => [
+                                                    'type' => 'file',
+                                                    'label' => 'Foto',
+                                                ],
+                                        ]] );
+        $modalUploadIdentity = view('layouts.templates.modals.modal', $modalUploadIdentity );
+        $this->data[ 'modalUploadIdentity' ]    = $modalUploadIdentity;
+        #notations
         $mutationsTable[ 'header' ]  = [ 
             'created_at'    => 'Tanggal',
             'description'   => 'Keterangan',
-            // 'nominal'       => 'nominal',
             'credit_total' => 'Kredit',
             'debit_total'  => 'Debit',
             'balance'      => 'Saldo',
@@ -254,6 +284,8 @@ class CustomerController extends UadminController
         return $this->render( 'customer.detail' );
     }
 
+    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -325,6 +357,34 @@ class CustomerController extends UadminController
         return redirect()->route('customers.show', $id )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
     }
 
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadIdendityPhoto( $id, Request $request )
+    {
+        // dd( $request->input() );die;
+        $customer       = Customer::findOrFail( $id );
+        $request->validate( [
+            'photo' => 'required|file|max:1024',
+        ] );
+        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
+        {
+            $oldPhoto   = $customer->identity_photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( Customer::PHOTO_PATH."/".$oldPhoto );
+
+            $customer->identity_photo = $fileName;
+            $customer->save();
+            // dd( $customer->identity_photo );die;
+
+        }
+        return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
+    }
     /**
      * Remove the specified resource from storage.
      *

@@ -28,8 +28,14 @@ Route::get('/menus_role/{role}', 'S_admin\MenuController@role')->name("menu_role
 Route::resource('/menus', 'S_admin\MenuController');
 
 Route::resource('/users', 'S_admin\UsersManagementController');
+Route::post('/users_photo/{userId}', 'S_admin\UsersManagementController@uploadProfilPhoto')->name('users.upload_photo');
+
 
 Route::resource('/profiles', 'User\ProfileController');
+Route::post('/upload_photo', 'User\ProfileController@uploadProfilPhoto')->name('profile.upload_photo');
+Route::post('/identity_photo/{customerId}', 'User\ProfileController@uploadIdendityPhoto')->name('customers.identity_photo');
+
+
 Route::resource('/pricelists', 'User\PriceListController');
 
 Route::resource('/invoices', 'User\InvoiceController');
@@ -47,6 +53,8 @@ Route::post('/confirm_withdrawal', 'User\MutationController@confirmWithdrawal')-
 Route::resource('/transactions', 'User\TransactionController');  
 
 Route::resource('/customers', 'User\CustomerController');
+Route::post('/customers_photo/{customerId}', 'User\CustomerController@uploadIdendityPhoto')->name('customers.upload_photo');
+
 Route::resource('/drivers', 'User\DriverController');
 
 

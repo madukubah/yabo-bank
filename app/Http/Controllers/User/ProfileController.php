@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use Auth;
 use App\Alert;
 use App\User;
+use App\Model\Customer;
 use Session;
 use Illuminate\Support\Facades\Hash;
 
@@ -83,14 +84,72 @@ class ProfileController extends UserController
         $linkEdit['url']        = route('profiles.edit', $user->id);
         $linkEdit['linkName']   = 'Edit';
         $linkEdit               = view('layouts.templates.tables.actions.link', $linkEdit);
-
-        
         $this->data[ 'contents' ]            = $detail.'<br>'.$linkEdit;
 
+        # modal
+        $modalUploadPhoto['modalTitle']    = "Upload Foto";
+        $modalUploadPhoto['modalId']       = "upload";
+        $modalUploadPhoto['formMethod']    = "post";
+        $modalUploadPhoto['formEnctype']    = "multipart";
+        $modalUploadPhoto['formUrl']       = route('profile.upload_photo') ;
+        $modalUploadPhoto['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                'photo' => [
+                                                    'type' => 'file',
+                                                    'label' => 'Foto',
+                                                ],
+                                        ]] );
+        $modalUploadPhoto = view('layouts.templates.modals.modal', $modalUploadPhoto );
+
+        if( Auth::user()->hasRole( 'customer' ) )
+        {
+             # modal upload identity photo
+            $modalUploadIdentity['modalTitle']    = "Upload Foto KTP";
+            $modalUploadIdentity['modalId']       = "upload_idendity_photo";
+            $modalUploadIdentity['formMethod']    = "post";
+            $modalUploadIdentity['formEnctype']   = "multipart";
+            $modalUploadIdentity['formUrl']       = route('customers.identity_photo', Auth::user()->userable->id) ;
+            $modalUploadIdentity['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                    'photo' => [
+                                                        'type' => 'file',
+                                                        'label' => 'Foto',
+                                                    ],
+                                            ]] );
+            $modalUploadIdentity = view('layouts.templates.modals.modal', $modalUploadIdentity );
+            $this->data[ 'modalUploadIdentity' ]    = $modalUploadIdentity;
+        }
+
+        $this->data[ 'modalUploadPhoto' ]    = $modalUploadPhoto;
         $this->data[ 'message_alert' ]       = Session::get('message');
-        $this->data[ 'header' ]              = $user->name;
+        $this->data[ 'header' ]              = 'Detail';
         $this->data[ 'sub_header' ]          = '';
-        return $this->render(  );
+        return $this->render( 'profile.detail' );
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadProfilPhoto( Request $request )
+    {
+        $request->validate( [
+            'photo' => 'required|file|max:1024',
+        ] );
+        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
+        {
+            $user       = Auth::user() ;
+            $oldPhoto   = $user->photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( User::PHOTO_PATH."/".$oldPhoto );
+
+            $user->update( [
+                'photo' => $fileName
+            ] );
+        }
+        return redirect()->route('profiles.show', $user->id )->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
     }
 
     /**
@@ -168,6 +227,39 @@ class ProfileController extends UserController
         $user->update( $data );
 
         return redirect()->route('profiles.show', $id )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
+    }
+
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadIdendityPhoto( $id, Request $request )
+    {
+        // dd( $request->input() );die;
+        if( ! Auth::user()->hasRole( 'customer' ) )
+        {
+            return redirect()->back()->with(['message' => Alert::setAlert( Alert::DANGER, "Bukan Customer" ) ]);
+        }
+        $customer       = Customer::findOrFail( $id );
+        $request->validate( [
+            'photo' => 'required|file|max:1024',
+        ] );
+        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
+        {
+            $oldPhoto   = $customer->identity_photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( Customer::PHOTO_PATH."/".$oldPhoto );
+
+            $customer->identity_photo = $fileName;
+            $customer->save();
+            // dd( $customer->identity_photo );die;
+
+        }
+        return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
     }
 
     /**

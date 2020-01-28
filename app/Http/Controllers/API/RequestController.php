@@ -123,6 +123,8 @@ class RequestController extends BaseController
             return $this->sendError( NULL , 'Gagal' );
 
         }
+        // dd( $req->photo ); die;
+        unlink( RequestModel::PHOTO_PATH."/".$req->photo );
         $req->delete();
         return $this->sendResponse( NULL , 'request berhasil di Hapus' );
 

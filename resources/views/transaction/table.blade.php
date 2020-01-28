@@ -19,7 +19,7 @@
                 ?>
                <tr>
                    <td> <?= $no++ ?> </td>
-                   <td> <?= $row->customer->code ?> </td>
+                   <td> <?= $row->created_at ?> </td>
                    <td> <?= $row->customer->user->name ?> </td>
                    <td> <?= $row->product.' ( Rp. '. number_format( $row->price ).'/'. $row->unit .') ' ?> </td>
                    <td> <?= $row->quantity ?> </td>

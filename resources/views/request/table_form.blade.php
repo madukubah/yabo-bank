@@ -1,12 +1,5 @@
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                {{ $error }}
-                <br>
-            @endforeach
-    </div>
-@endif
+
 <form action="{{route('pickups.store')}}" method="POST"  >
     @csrf
     <div class="table-responsive">
@@ -25,52 +18,24 @@
                 $no = (isset($number) && ($number != NULL))  ? $number : 1;
                 foreach ($rows as $ind => $row) :
                     ?>
-                
                     <tr>
                         <td> <?php echo $no++ ?> </td>
-                        <?php foreach ($header as $key => $value) : ?>
-                            <td>
-                            <?php
-                                    $attr = "";
-                                    if (is_numeric($row->$key) && ($key != 'phone' && $key != 'username'))
-                                        $attr = number_format($row->$key);
-                                    else
-                                        $attr = $row->$key;
-                                    
-                                    if( strpos( $key , '->' ) )
-                                    {
-                                        $output = $row;
-                                        $keys = explode('->', $key );
-                                        $isValid = true;
-                                        foreach( $keys as $key )
-                                        {
-                                            if( strpos( $key , '()' ) )
-                                            {
-                                                if( $output->{$key}() == NULL ) 
-                                                {
-                                                    $isValid = false;
-                                                    break;
-                                                }
-                                                $output = $output->{$key}();
-                                            }
-                                            else
-                                            {
-                                                if( $output->{$key} == NULL ) 
-                                                {
-                                                    $isValid = false;
-                                                    break;
-                                                }
-                                                $output = $output->{$key};
-                                            }
-                                        }
-                                        if( !$isValid ) continue;
-
-                                        $attr = $output;
-                                    }
-                                    echo $attr; 
-                            ?>
-                            </td>
-                        <?php endforeach; ?>
+                        <td> <?= $row->code ?> </td>
+                        <td> <?= $row->customer->user->name ?> </td>
+                        <td> <?= $row->customer->user->address ?> </td>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#image<?php echo  $row->id ; ?>">
+                                <img class=" img-fluid" src="<?php echo $imageUrl.$row->photo  ?>" alt="" height="auto" width="100">
+                            </a>
+                            <div class="modal fade" id="image<?php echo  $row->id ; ?>" role="dialog">
+                                <div class="modal-dialog modal-xl " style="overflow: hidden">
+                                    <img class=" img-fluid" src="<?php echo $imageUrl.$row->photo  ?>" alt="" height="auto" width="1500">
+                                </div>
+                            </div>
+                        </td>
+                        <td> <?= $row->info ?> </td>
+                        <td> <?= $row->created_at ?> </td>
+                        
                         <td>
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" name="request_id[]" id="customCheckbox<?= $ind?>" value="<?= $row->id ?>">

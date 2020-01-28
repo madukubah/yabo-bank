@@ -294,6 +294,33 @@ class UsersManagementController extends UadminController
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadProfilPhoto( $id, Request $request )
+    {
+        $user       = User::findOrFail( $id );
+        $request->validate( [
+            'photo' => 'required|file|max:1024',
+        ] );
+        $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
+        
+        if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
+        {
+            $oldPhoto   = $user->photo;
+            if( $oldPhoto != 'default.jpg' )
+                unlink( User::PHOTO_PATH."/".$oldPhoto );
+
+            $user->update( [
+                'photo' => $fileName
+            ] );
+        }
+        return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
+    public const PHOTO_PATH = "uploads/requests";
     protected $fillable = [
 		'id', 
 		'customer_id', 
 		'code', 
 		'status', 
-		'info', 
+		'info',
+		'photo',
     ];
     
     public function customer()
@@ -20,6 +22,11 @@ class Request extends Model
     }
 
     public function pickUp()
+    {
+        return $this->hasOne('App\Model\PickUp');
+    }
+
+    public function a()
     {
         return $this->hasOne('App\Model\PickUp');
     }

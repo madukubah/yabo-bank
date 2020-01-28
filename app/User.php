@@ -14,6 +14,7 @@ use Auth;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    public const PHOTO_PATH = "uploads/users";
 
     /**
      * The attributes that are mass assignable.

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    public const PHOTO_PATH = "uploads/identity_photo";
 
     protected $fillable = [
         'id', 

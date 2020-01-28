@@ -1,4 +1,9 @@
 <?php
+    $Enctype = [
+        'none' => ' ',
+        'multipart' => 'enctype="multipart/form-data" '
+    ];
+
     $formMethod     = ( isset( $formMethod ) ) ? $formMethod : 'get' ;
     $formUrl        = ( isset( $formUrl ) ) ? $formUrl : '#' ;
 
@@ -6,17 +11,12 @@
 
     $formAttr        .= ( isset( $blank ) ) ? 'target="_blank"' : '' ;
 
+    $formEnctype        = ( isset( $formEnctype ) ) ? $formEnctype : 'none' ;
+
+
     $content      = ( isset( $content ) ) ? $content : '' ;
 ?>
- @if ($errors->any())
-    <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                {{ $error }}
-                <br>
-            @endforeach
-    </div>
-@endif
-<form action="<?= $formUrl ?>" method="<?= strtoupper( $formMethod ) ?>"  >
+<form action="<?= $formUrl ?>" method="<?= strtoupper( $formMethod ) ?>" <?= $Enctype[ $formEnctype ] ?>  >
     @csrf
     <?= $content ?>
     <br>

@@ -175,6 +175,8 @@ class DriverController extends UadminController
         $user       = User::findOrFail( $id );
         $user->role = $user->roles[0]->id;
         $user->role_name = $user->roles[0]->role_name;
+        $this->data[ 'user' ]            = $user;
+
         // dd( $user->roles );
         $detail     = view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => [
             'customer_code' => [
@@ -195,11 +197,25 @@ class DriverController extends UadminController
         $linkEdit               = view('layouts.templates.tables.actions.link', $linkEdit);
         
         $this->data[ 'contents' ]            = $detail.'<br>'.$linkEdit;
-
+        # modal upload photo
+        $modalUploadPhoto['modalTitle']    = "Upload Foto";
+        $modalUploadPhoto['modalId']       = "upload";
+        $modalUploadPhoto['formMethod']    = "post";
+        $modalUploadPhoto['formEnctype']    = "multipart";
+        $modalUploadPhoto['formUrl']       = route('users.upload_photo', $user->id) ;
+        $modalUploadPhoto['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                'photo' => [
+                                                    'type' => 'file',
+                                                    'label' => 'Foto',
+                                                ],
+                                        ]] );
+        $modalUploadPhoto = view('layouts.templates.modals.modal', $modalUploadPhoto );
+        $this->data[ 'modalUploadPhoto' ]    = $modalUploadPhoto;
+        
         ##########
         # transaction 
         $transactionTable[ 'header' ]  = [ 
-            'create_at'    => 'Tanggal',
+            'created_at'    => 'Tanggal',
             'customer->user->name'   => 'Nama',
             'product'       => 'Produk',
             'quantity'      => 'Jumlah',
