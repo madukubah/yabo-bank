@@ -20,14 +20,18 @@ class Mutation extends Model
         return $this->belongsTo('App\Model\Transaction');
     }
 
-    public static function getAccumulations( $customer_id = NULL, $position = 0 )
+    public static function getAccumulations( $customer_id = NULL, $position = 0, $from = "2018", $to = NULL )
     {
+        if( !isset( $to ) )
+            $to = date( "Y-m-d" );
+        
         $mutations = DB::table('mutations')
                   ->selectRaw(  "
                       SUM( CASE WHEN mutations.position = 1 THEN  mutations.nominal ELSE 0 end  ) as credit_total,
                       SUM( CASE WHEN mutations.position = 2 THEN  mutations.nominal ELSE 0 end  ) as debit_total,
                       mutations.customer_id
                   "  )
+                  ->whereBetween( 'mutations.created_at', [ $from, $to ] )
                   ->groupBy('mutations.customer_id');
                   // ->groupBy('mutations.position');
                   

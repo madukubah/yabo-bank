@@ -18,6 +18,10 @@ class AuthController extends BaseController
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $user->token =  $user->createToken('YABO_BANK')->accessToken;
+            if( Auth::user()->hasRole('customer') )
+            {
+                $user->identity_photo =  $user->userable->identity_photo;
+            }
             $success['user'] =  $user;
 
             return $this->sendResponse( $success , 'login success');
@@ -32,7 +36,7 @@ class AuthController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register( Request $request )
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',

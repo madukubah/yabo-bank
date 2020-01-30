@@ -22,8 +22,14 @@ class ProfileController extends BaseController
     public function index()
     {
         $user = Auth::user();
-        $user->userable->mutations;
-        return $this->sendResponse( $user );
+        // $user->userable->mutations;
+        if( Auth::user()->hasRole('customer') )
+        {
+            $user->identity_photo =  $user->userable->identity_photo;
+        }
+        $success['user'] =  $user;
+
+        return $this->sendResponse( $success );
     }
 
     /**
@@ -66,6 +72,10 @@ class ProfileController extends BaseController
             $user->password  = Hash::make( $request->input('_password') );
         }
         $user->save();
+        if( Auth::user()->hasRole('customer') )
+        {
+            $user->identity_photo =  $user->userable->identity_photo;
+        }
         $data['user'] = $user;
         return $this->sendResponse( $data, 'data berhasil di edit' );
     }
@@ -100,6 +110,10 @@ class ProfileController extends BaseController
                 'photo' => $fileName
             ] );
         }
+        if( Auth::user()->hasRole('customer') )
+        {
+            $user->identity_photo =  $user->userable->identity_photo;
+        }
         $data['user'] = $user;
 
         return $this->sendResponse( $data, 'berhasil upload foto' );
@@ -116,7 +130,7 @@ class ProfileController extends BaseController
         // dd( $request->input() );die;
         $customer       = Auth::user()->userable ;
         $validator = Validator::make($request->all(), [
-            'photo' => 'required|file|max:1024',
+            'photo' => 'required|file|max:1024', 
         ]  );
 
         if($validator->fails()){
@@ -136,7 +150,10 @@ class ProfileController extends BaseController
             // dd( $customer->identity_photo );die;
 
         }
-        $data['user'] = Auth::user();
+        // absolutely customer
+        $user = Auth::user();
+        $user->identity_photo =  $user->userable->identity_photo;
+        $data['user'] = $user;
         return $this->sendResponse( $data, 'berhasil upload foto' );
     }
  

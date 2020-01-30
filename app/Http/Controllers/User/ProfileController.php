@@ -229,7 +229,7 @@ class ProfileController extends UserController
         return redirect()->route('profiles.show', $id )->with(['message' => Alert::setAlert( 1, "data berhasil di edit" ) ]);
     }
 
-     /**
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

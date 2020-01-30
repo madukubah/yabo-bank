@@ -18,14 +18,27 @@ class MutationController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request )
     {
-        // $data['mutations']              = Mutation::accountBook(  Auth::user()->userable->id )->get();
-        $data['mutations']              = Mutation::where( 'customer_id', Auth::user()->userable->id )->orderBy( 'id', 'desc' )->get();
+        $from   = $request->input('start');
+        $from ||  $from = date( "Y-m-d", strtotime("-1 month", time() )  );
 
-        $data['balance']                = Mutation::getAccumulations( Auth::user()->userable->id )->first()->total;
-        $data['credit']                 = Mutation::getAccumulations( Auth::user()->userable->id, 1 )->first()->total;
-        $debit                          = Mutation::getAccumulations( Auth::user()->userable->id, 2 )->first();
+        $to     = $request->input('end');
+        $to ||  $to = date( "Y-m-d" );
+
+        // Reservation::whereBetween('reservation_from', [$from, $to])->get();
+        // $data['mutations']              = Mutation::accountBook(  Auth::user()->userable->id )->get();
+        $data['mutations']              = Mutation::where( 'customer_id', Auth::user()->userable->id )
+                                                    ->whereBetween( 'created_at', [ $from, $to ] )
+                                                    ->orderBy( 'id', 'desc' )->get();
+
+        $balance                        = Mutation::getAccumulations( Auth::user()->userable->id, $position = 0 )->first();
+        $data['balance']                = ( $balance != NULL ) ? ( $balance->total ) : 0 ;
+
+        $credit                         = Mutation::getAccumulations( Auth::user()->userable->id,$position =  1, $from , $to )->first();
+        $data['credit']                 = ( $credit != NULL ) ? ( $credit->total ) : 0 ;
+
+        $debit                          = Mutation::getAccumulations( Auth::user()->userable->id, $position = 2, $from , $to )->first();
         $data['debit']                  = ( $debit != NULL ) ? abs( $debit->total ) : 0 ;
         return $this->sendResponse( $data );
         
