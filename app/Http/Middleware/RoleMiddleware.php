@@ -26,7 +26,12 @@ class RoleMiddleware
                     return $next($request);
                 }
             }
-            return response()->json(['error'=>'not role'], 401);
+            $response = [
+                'success' => FALSE,
+                'data'    => NULL,
+                'message' => 'not role',
+            ];
+            return response()->json( $response , 200 );
         }
         $roleNames = explode( "|", $roleName );
         foreach( $roleNames as $roleName )

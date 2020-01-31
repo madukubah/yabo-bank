@@ -24,7 +24,12 @@ class PickUpController extends BaseController
             $data    = [];
             foreach( Auth::user()->userable->pickUps->where( 'status',  0 ) as $item )
             {
-                $item->request; 
+                $item->request;
+                $item->customer_name    = $item->request->customer->user->name; 
+                $item->customer_address = $item->request->customer->user->address; 
+                $item->request_info     = $item->request->info;
+                $item->customer_id      = $item->request->customer_id;
+                $item->request_date     = date( 'Y-m-d H:i:s', strtotime( $item->request->created_at ) ) ;
                 $data[]= $item;
             }
         }

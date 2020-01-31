@@ -7,9 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Model\Request as RequestModel;
-
 use App\User;
-
 
 class RequestController extends BaseController
 {

@@ -39,7 +39,7 @@ Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
 
 });
 
-Route::group(['middleware' => [ 'auth:api', 'role:customer|driver'] ], function(){
+Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
     Route::get('pickups', 'API\PickUpController@index');
 });
   

@@ -85,9 +85,9 @@ class InvoiceController extends BaseController
                                         .'driver:'.Auth::user()->name,
             ]);
         endforeach;
-        if( $request->input('pickUpId') != NULL )
+        if( $request->input('pickup_id') != NULL )
         {
-            $pickup = Auth::user()->userable->pickUps->find( $request->input('pickUpId') );
+            $pickup = Auth::user()->userable->pickUps->find( $request->input('pickup_id') );
 
             $pickup->update([
                 'status' => 1

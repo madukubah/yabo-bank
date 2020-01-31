@@ -26,6 +26,7 @@ class MutationController extends BaseController
         $to     = $request->input('end');
         $to ||  $to = date( "Y-m-d" );
 
+        $to = date( "Y-m-d", strtotime("+1 day", strtotime( $to ) )  );
         // Reservation::whereBetween('reservation_from', [$from, $to])->get();
         // $data['mutations']              = Mutation::accountBook(  Auth::user()->userable->id )->get();
         $data['mutations']              = Mutation::where( 'customer_id', Auth::user()->userable->id )
