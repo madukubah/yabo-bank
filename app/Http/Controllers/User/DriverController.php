@@ -77,6 +77,7 @@ class DriverController extends UadminController
                 ],
             ],//modal_delete
         ];
+
         $table = view('layouts.templates.tables.plain_table', $table);
 
         $linkCreate['url']              = url('drivers/create');

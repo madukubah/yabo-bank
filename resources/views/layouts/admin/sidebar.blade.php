@@ -48,7 +48,7 @@
                                             if( isset( $data->branch[0] )  )
                                             {
                                                 ?>
-                                                    <li class="nav-item has-treeview ">
+                                                    <li class="nav-item has-treeview menu-open ">
                                                         <a id="<?php echo $data->list_id ?>" href="#" class="nav-link ">
                                                         <i class="nav-icon fas fa-<?php echo $data->icon ?>"></i>                                  
                                                         <!-- <i class="far fa-circle nav-icon"></i>                                   -->

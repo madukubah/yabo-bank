@@ -202,7 +202,7 @@ class PriceListController extends UadminController
             'price' => $request->input('price'),
             'unit' => $request->input('unit'),
         ]);
-        return redirect()->route('pricelists.index')->with(['message' => Alert::setAlert( 1, "data berhasil di update" ) ]);
+        return redirect()->route('pricelists.index')->with(['message' => Alert::setAlert( Alert::SUCCESS, "data berhasil di update" ) ]);
     }
 
     /**

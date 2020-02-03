@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Model\Request as RequestModel;
+use App\Model\PickUp;
 use App\User;
 
 class RequestController extends BaseController
@@ -34,6 +35,21 @@ class RequestController extends BaseController
             $data['processed_request'] []= $item;
         }
         return $this->sendResponse( $data );
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function countRequest()
+    {
+        $data['unprocess_request'] = RequestModel::
+                                    select([ '*','requests.id as request_id' ])
+                                    ->where( 'status', 0 )->count();
+        $data['processed_request'] = PickUp::where( 'status',  0 )->count();
+        return $this->sendResponse( $data );
+        
     }
 
     /**

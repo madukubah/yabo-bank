@@ -32,6 +32,8 @@ Route::group(['middleware' => [ 'auth:api', 'role:customer'] ], function(){
     Route::resource('requests', 'API\RequestController');
     Route::get('mutations', 'API\MutationController@index');
 });
+Route::get('count_request', 'API\RequestController@countRequest');
+
 
 Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
     Route::resource('invoices', 'API\InvoiceController');

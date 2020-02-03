@@ -55,4 +55,9 @@ Route::post('/customers_photo/{customerId}', 'User\CustomerController@uploadIden
 
 Route::resource('/drivers', 'User\DriverController');
 
+Route::resource('/sellings', 'User\SellingController');
+
+Route::resource('/cash_outs', 'User\CashOutController');
+
+
 
