@@ -15,10 +15,12 @@ class Driver extends Model
     {
         return $this->morphOne('App\User', 'userable');
     }
+
     public function pickUps()
     {
         return $this->hasMany('App\Model\PickUp');
     }
+    
     public function transactions()
     {
         return $this->hasMany('App\Model\Transaction');

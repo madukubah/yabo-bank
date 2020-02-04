@@ -9,6 +9,7 @@ class Mutation extends Model
 {
     protected $fillable = [
 		'id', 
+		'code', 
 		'customer_id', 
 		'transaction_id', 
 		'nominal', 
@@ -23,7 +24,7 @@ class Mutation extends Model
     public static function getAccumulations( $customer_id = NULL, $position = 0, $from = "2018", $to = NULL )
     {
         if( !isset( $to ) )
-            $to = date( "Y-m-d" );
+            $to = date( "Y-m-d", strtotime( "+ 1 day ", time() ) );
         
         $mutations = DB::table('mutations')
                   ->selectRaw(  "
@@ -41,7 +42,7 @@ class Mutation extends Model
         $mutations =  DB::table( DB::raw("({$mutations->toSql()}) mutations ") )
         ->mergeBindings($mutations )
         ->selectRaw('
-            ( mutations.credit_total - mutations.debit_total  ) as total,
+            ( mutations.debit_total - mutations.credit_total   ) as total,
             customers.id as customer_id,
             CONCAT( customers.code, " " )  as customer_code,
             users.id as user_id,
@@ -66,9 +67,19 @@ class Mutation extends Model
                       ( CASE WHEN mutations.position = 1 THEN  mutations.nominal ELSE 0 end  ) as credit_total,
                       ( CASE WHEN mutations.position = 2 THEN  mutations.nominal ELSE 0 end  ) as debit_total
                   "  )->where('mutations.customer_id', $customer_id );
-                //   ->groupBy('mutations.customer_id');
-                  // ->groupBy('mutations.position');
-        // dd( $mutations->toSql() );die;
         return $mutations;
+    }
+
+    public static function createMutaion( $data = [] )
+    {
+        $last = Mutation::latest()->first();
+        $last = ( $last != NULL ) ? $last->id : 0;
+        $last++;
+        $code = "MUTATION_".date('mY');
+        $code = $code.str_pad( $last, 5, "0", STR_PAD_LEFT);
+        // dd( $code );die;
+        $data['code'] = $code;
+
+        return Mutation::create($data);
     }
 }

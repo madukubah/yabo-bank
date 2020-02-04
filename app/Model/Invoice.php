@@ -3,101 +3,91 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
 
-class Selling extends Model
+class Invoice extends Model
 {
     protected $fillable = [
 		'id', 
 		'code', 
-		'factory_name', 
-		'container_number', 
-		'car_number', 
-		'send_date', 
-		'unloading_date', 
-		'gross', 
-		'cut_off', 
-		'selling_price', 
+		'selling_id', 
+		'date', 
+		'due_date', 
     ];
-
-    public function invoice()
+    public function payments()
     {
-        return $this->hasOne('App\Model\Invoice');
+        return $this->hasMany('App\Model\Payment');
     }
-
-    public static function getData(  )
+    
+    public function salesOrder()
     {
-        $sellings = DB::table('sellings')
-                  ->selectRaw(  '
-                        *,
-                        CONCAT( container_number, " / ", car_number )  as container_car,
-                      ( gross -  cut_off ) as netto,
-                      ( ( gross -  cut_off ) * selling_price ) as total
-                    ' );
-        return $sellings;
+        return $this->belongsTo('App\Model\Selling', 'selling_id');
     }
 
     public static function getCode(  )
     {
-        $last = Selling::latest()->first();
+        $last = Invoice::latest()->first();
         $last = ( $last != NULL ) ? $last->id : 0;
         $last++;
-        $code = "SO_".date('mY');
+        $code = "INVOICE_".date('mY');
         return $code = $code.str_pad( $last, 5, "0", STR_PAD_LEFT);
-
     }
+
     public static function getFormData(  )
     {
         $form =  [
             'id' => [
                 'type' => 'hidden',
             ],
+            'selling_id' => [
+                'type' => 'hidden',
+            ],
             'code' => [
-                'type' => 'text',
+                'type' => 'hidden',
                 'label' => 'Code',
                 'readonly' => true,
+                'value' => Invoice::getCode(  )
             ],
             'factory_name' => [
-                'type' => 'text',
+                'type' => 'hidden',
                 'label' => 'Nama Pabrik',
+                'readonly' => true,
                 // 'value' => "KARYA AGUNG REALITI"
             ],
             'container_number' => [
                 'type' => 'text',
                 'label' => 'No. Kontainer',
                 'weight' => 'col-md-6',
+                'readonly' => true,
                 // 'value' => "TEGU 682378(9)4561"
             ],
             'car_number' => [
                 'type' => 'text',
                 'label' => 'No. Mobil',
+                'readonly' => true,
                 'weight' => 'col-md-6',
                 // 'value' => "8762 MJ"
             ],
-            'send_date' => [
+            'date' => [
                 'type' => 'date',
-                'label' => 'Tanggal Kirim',
+                'label' => 'Tanggal Invoice',
                 'weight' => 'col-md-6',
             ],
-            'unloading_date' => [
+            'due_date' => [
                 'type' => 'date',
-                'label' => 'Tanggal Bongkar',
+                'label' => 'Jatuh Tempo',
                 'weight' => 'col-md-6',
             ],
-            'gross' => [
+            'netto' => [
                 'type' => 'number',
-                'label' => 'Bruto ( Kg )',
+                'label' => 'Netto ( Kg )',
+                'readonly' => true,
                 'weight' => 'col-md-6',
                 // 'value' => 20409
             ],
-            'cut_off' => [
-                'type' => 'number',
-                'label' => 'Potongan ( Kg )',
-                'weight' => 'col-md-6',
-                // 'value' => 0
-            ],
             'selling_price' => [
                 'type'  => 'number',
+                'weight' => 'col-md-6',
+                'readonly' => true,
                 'label' => 'Harga Jual',
                 // 'value' => 2115
             ],

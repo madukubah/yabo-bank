@@ -56,8 +56,8 @@ Route::post('/customers_photo/{customerId}', 'User\CustomerController@uploadIden
 Route::resource('/drivers', 'User\DriverController');
 
 Route::resource('/sellings', 'User\SellingController');
+Route::get('/create_invoice/{so_id}', 'User\SellingController@createInvoice')->name( 'invoice.create' );
+Route::post('/confirm_invoice', 'User\SellingController@confirmInvoice')->name( 'invoice.confirm' );
 
 Route::resource('/cash_outs', 'User\CashOutController');
-
-
-
+Route::resource('/payments', 'User\PaymentController');

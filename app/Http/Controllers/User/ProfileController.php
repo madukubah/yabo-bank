@@ -206,7 +206,7 @@ class ProfileController extends UserController
 
         if( $request->input('_password') != NULL )
         {
-            $validationConfig[ '_password' ] = ['required', 'string', 'min:8', 'confirmed'];
+            $validationConfig[ '_password' ] = ['required', 'string', 'min:4', 'confirmed'];
         }
         
         $request->validate( $validationConfig );

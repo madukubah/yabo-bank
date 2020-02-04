@@ -60,6 +60,7 @@
     <script src="{{url('adminlte/dist/js/adminlte.js')}}"></script>
     @section('js')
     @show
+    <?php if( Auth::user()->hasRole( 'uadmin' ) ): ?>
     <script>
         $(document).ready(function() {
             console.log('aa');
@@ -67,7 +68,7 @@
             $( "#notif_pickups" ).addClass( 'right badge badge-info' );
             function countRequest(){
                 $.ajax({
-                    url: "api/count_request",
+                    url: "<?= url('')?>/api/count_request",
                     }).done(function( data ) {
                         if( data.data.unprocess_request > 0 )
                             $( "#notif_requests" ).html( data.data.unprocess_request );
@@ -82,6 +83,7 @@
             countRequest();
         });
     </script>
+    <?php endif; ?>
 </body>
 
 </html>

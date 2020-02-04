@@ -39,7 +39,6 @@ class CustomerController extends UadminController
         $table[ 'number' ]  = 1;
         
         $customers = Mutation::getAccumulations()->get();
-        
 
         $table[ 'rows' ]    = $customers;
         $table[ 'action' ]  = [
@@ -133,11 +132,11 @@ class CustomerController extends UadminController
             'code' => $request->input('customer_code')
         ] );
         $previlege->user()->save( $user );
-        Mutation::create([
+        Mutation::createMutaion([
             'customer_id'       => $previlege->id,
             'transaction_id'    => 0 ,
             'nominal'           => 0,
-            'position'          => 1,
+            'position'          => 2,
             'description'       => 'initial',
         ]);
         return redirect()->route('customers.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di buat, PASSWORD PERTAMA adalah nama email sampai '@' " ) ]);
@@ -242,10 +241,14 @@ class CustomerController extends UadminController
         $filter                   = view('layouts.templates.forms.form_horizontal', $filter );
 
         $this->data[ 'mutationsTable' ]      = $filter.$mutationsTable;
-        $this->data[ 'balance' ]             = Mutation::getAccumulations( $user->userable->id )->first()->total;
-        $this->data[ 'credit' ]              = Mutation::getAccumulations( $user->userable->id, 1 )->first()->total;
-        $debit                               = Mutation::getAccumulations( $user->userable->id, 2 )->first();
-        $this->data[ 'debit' ]               =  ( $debit != NULL ) ? $debit->total : 0 ;
+
+        $balance                              = Mutation::getAccumulations( $user->userable->id, $position = 0 )->first();
+        $this->data['balance']                = ( $balance != NULL ) ? ( $balance->total ) : 0 ;
+        $credit                               = Mutation::getAccumulations( $user->userable->id,$position =  1 )->first();
+        $this->data['credit']                 = ( $credit != NULL ) ? ( $credit->total ) : 0 ;
+        $debit                                = Mutation::getAccumulations( $user->userable->id, $position = 2 )->first();
+        $this->data['debit']                  = ( $debit != NULL ) ? abs( $debit->total ) : 0 ;
+
         // modal pencairan
         $modalwithdrawal['modalTitle']    = "Buat Pencairan";
         $modalwithdrawal['modalId']       = "create";

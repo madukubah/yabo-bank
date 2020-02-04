@@ -37,7 +37,7 @@ class MutationController extends BaseController
         $data['balance']                = ( $balance != NULL ) ? ( $balance->total ) : 0 ;
 
         $credit                         = Mutation::getAccumulations( Auth::user()->userable->id,$position =  1, $from , $to )->first();
-        $data['credit']                 = ( $credit != NULL ) ? ( $credit->total ) : 0 ;
+        $data['credit']                 = ( $credit != NULL ) ? abs( $credit->total ) : 0 ;
 
         $debit                          = Mutation::getAccumulations( Auth::user()->userable->id, $position = 2, $from , $to )->first();
         $data['debit']                  = ( $debit != NULL ) ? abs( $debit->total ) : 0 ;

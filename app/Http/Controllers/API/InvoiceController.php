@@ -63,7 +63,7 @@ class InvoiceController extends BaseController
 
         foreach( $request->input('product_id') as $ind => $product_id ):
             $product_ = PriceList::findOrFail( $product_id );
-            $transaction = Transaction::create([
+            $transaction = Transaction::createTransaction([
                 'customer_id'   => $customer->id ,
                 'driver_id'     => Auth::user()->userable->id,
                 'product'       => $product_->name,
@@ -74,11 +74,11 @@ class InvoiceController extends BaseController
             // nominal
             // 1 = credit
             // 2 = debit
-            Mutation::create([
+            Mutation::createMutaion([
                 'customer_id'       => $customer->id ,
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
-                'position'          => 1,
+                'position'          => 2,
                 'description'       => 'transaction to customer '.  $customer->code  . ': '
                                         .$product_->name.','.$product_->price
                                         .','.$product_->unit.',qty:'.$quantities[ $ind ]

@@ -1,40 +1,29 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover  ">
+    <table class="rg-table table-striped table-bordered table-hover  ">
         <thead>
             <tr>
                 <th style="width:50px">No</th>
                 <?php foreach ( $header as $key => $value) : ?>
                     <th><?php echo $value ?></th>
                 <?php endforeach; ?>
+                <?php if (isset($action)) : ?>
+                    <th><?php echo "Aksi" ?></th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
             <?php
-            $_position = [ 1 => 'Kredit', 2 => 'Debit' ];
             $no = (isset($number) && ($number != NULL))  ? $number : 1;
-            $balance = 0;
             foreach ($rows as $ind => $row) :
                 ?>
+               
                 <tr>
                     <td> <?php echo $no++ ?> </td>
-                    <td>
-                        <?= ( $row->created_at )?>
-                    </td>
-                    <td>
-                        <?= ( $row->description )?>
-                    </td>
-                    <td>
-                        <?= number_format( $row->credit_total )?>
-                    </td>
-                    <td>
-                        <?= number_format( $row->debit_total )?>
-                    </td>
-                    <td>
-                        <?php 
-                            $balance = $balance + $row->debit_total - $row->credit_total ;
-                            echo number_format( $balance ) ;
-                        ?>
-                    </td>
+                    <td> <?php echo $row->code ?> </td>
+                    <td> <?php echo $row->date ?> </td>
+                    <td> Rp. <?php echo number_format( $billTotal ) ?> </td>
+                    <td> Rp. <?php echo number_format( $row->amount ) ?> </td>
+                    <td> Rp. <?php echo number_format( $billTotal = $billTotal - $row->amount ) ?> </td>
                 </tr>
             <?php
             endforeach;

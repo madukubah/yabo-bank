@@ -28,18 +28,6 @@ class MutationController extends UserController
      */
     public function index()
     {
-        // $table[ 'header' ]  = [ 
-        //     'created_at'    => 'Tanggal',
-        //     'description'   => 'Keterangan',
-        //     'nominal'       => 'nominal',
-        //     'position'      => 'Posisi',
-        // ];
-        // $table[ 'number' ]  = 1;
-        // // customer
-        // // $table[ 'rows' ]    = Auth::user()->userable->mutations->orderBy( 'id' );
-        // $table[ 'rows' ]    = Mutation::where( 'customer_id', Auth::user()->userable->id )->orderBy( 'id', 'desc' )->get();
-        // $table = view('mutation.table', $table);
-        # OLD
         # NEW
         $mutationsTable[ 'header' ]  = [ 
             'created_at'    => 'Tanggal',
@@ -59,26 +47,30 @@ class MutationController extends UserController
         $mutationsTable[ 'rows' ]    = $mutations;
         $table = view('mutation.table2', $mutationsTable);
 
-        $balance             = Mutation::getAccumulations( Auth::user()->userable->id )->first()->total;
-        $credit              = Mutation::getAccumulations( Auth::user()->userable->id, 1 )->first()->total;
-        $debit               = Mutation::getAccumulations( Auth::user()->userable->id, 2 )->first();
-        $debit               =  ( $debit != NULL ) ? $debit->total : 0 ;
+        $balance                              = Mutation::getAccumulations( Auth::user()->userable->id, $position = 0 )->first();
+        $this->data['balance']                = ( $balance != NULL ) ? ( $balance->total ) : 0 ;
+
+        $credit                               = Mutation::getAccumulations( Auth::user()->userable->id,$position =  1 )->first();
+        $this->data['credit']                 = ( $credit != NULL ) ? ( $credit->total ) : 0 ;
+
+        $debit                                = Mutation::getAccumulations( Auth::user()->userable->id, $position = 2 )->first();
+        $this->data['debit']                  = ( $debit != NULL ) ? abs( $debit->total ) : 0 ;
 
 
         $this->data[ 'contents' ]            = '<div class="row">
                                                     <div class="col text-center" >
                                                         <h5>
-                                                            Kredit = '.number_format( $credit ).'
+                                                            Kredit = '.number_format( abs( $this->data['credit'] )  ).'
                                                         </h5>
                                                     </div>
                                                     <div class="col text-center" >
                                                         <h5>
-                                                            Debit = '.number_format( abs( $debit ) ).'
+                                                            Debit = '.number_format( $this->data['debit'] ).'
                                                         </h5>
                                                     </div>
                                                     <div class="col text-center" >
                                                         <h5>
-                                                            Saldo = '.number_format( $balance ).'
+                                                            Saldo = '.number_format( $this->data['balance'] ).'
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -169,11 +161,11 @@ class MutationController extends UserController
         $customer = Customer::findOrFail( $request->input('customer_id') );
 
         // dd( $request->input() );die;
-        Mutation::create([
+        Mutation::createMutaion([
             'customer_id'       => $customer->id,
             'transaction_id'    => 0,
             'nominal'           => $nominal,
-            'position'          => 2, // debit
+            'position'          => 1, // credit
             'description'       => 'withdrawal to customer '.  $customer->code ,
         ]);
         return redirect()->route('customers.show', $request->input('user_id') )->with(['message' => Alert::setAlert( Alert::SUCCESS, "Pencairan Berhasil" ) ]);

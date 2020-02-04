@@ -115,7 +115,8 @@ class InvoiceController extends UserController
 
         foreach( $request->input('product') as $ind => $product ):
             $product_ = PriceList::findOrFail( $product );
-            $transaction = Transaction::create([
+            
+            $transaction = Transaction::createTransaction([
                 'customer_id'   => $pickup->request->customer_id,
                 'driver_id'     => Auth::user()->userable->id,
                 'product'       => $product_->name,
@@ -124,13 +125,13 @@ class InvoiceController extends UserController
                 'quantity'      => $quantities[ $ind ]  ,
             ]);
             // nominal
-            // 1 = credit
-            // 2 = debit
-            Mutation::create([
+            // 1 = credit // uang keluar
+            // 2 = debit // uang masuk
+            Mutation::createMutaion([
                 'customer_id'       => $pickup->request->customer_id,
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
-                'position'          => 1,
+                'position'          => 2,
                 'description'       => 'transaction to customer '.  $pickup->request->customer->code  . ': '
                                         .$product_->name.','.$product_->price
                                         .','.$product_->unit.',qty:'.$quantities[ $ind ]
