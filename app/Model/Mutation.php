@@ -66,7 +66,10 @@ class Mutation extends Model
                         *,
                       ( CASE WHEN mutations.position = 1 THEN  mutations.nominal ELSE 0 end  ) as credit_total,
                       ( CASE WHEN mutations.position = 2 THEN  mutations.nominal ELSE 0 end  ) as debit_total
-                  "  )->where('mutations.customer_id', $customer_id );
+                  "  );
+        if( $customer_id != NULL )
+            $mutations->where('mutations.customer_id', $customer_id );
+
         return $mutations;
     }
 
@@ -81,5 +84,30 @@ class Mutation extends Model
         $data['code'] = $code;
 
         return Mutation::create($data);
+    }
+
+    public static function toCashFlow( $month, $year )
+    {
+		$count_days = cal_days_in_month(CAL_GREGORIAN, $month, $year );
+
+        //find withdrawal
+        $mutations = Mutation::accountBook();
+        $mutations->whereBetween( 'mutations.created_at', [ $year.'-'.$month.'-01' , $year.'-'.$month.'-'.$count_days ] );
+        $mutations->where('mutations.position', 1 );
+
+        $data = [];
+        foreach( $mutations->get() as $item )
+        {
+            $data []= [
+                'date'          => $item->created_at,
+                'description'   => $item->description,
+                'position'      => 1,
+                'nominal'       => $item->nominal,
+                'resource_code' => $item->code,
+                'resource_type' => 'App\\Model\\Mutation',
+                'resource_id'   => $item->id,
+            ];
+        }
+        return $data;
     }
 }

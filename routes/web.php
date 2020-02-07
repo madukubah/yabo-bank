@@ -61,3 +61,6 @@ Route::post('/confirm_invoice', 'User\SellingController@confirmInvoice')->name( 
 
 Route::resource('/cash_outs', 'User\CashOutController');
 Route::resource('/payments', 'User\PaymentController');
+
+Route::resource('/reports', 'User\ReportController');
+Route::post('/processData', 'User\ReportController@processData')->name('process.data');

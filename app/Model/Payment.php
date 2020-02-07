@@ -45,6 +45,30 @@ class Payment extends Model
         return $code = $code.str_pad( $last, 5, "0", STR_PAD_LEFT);
     }
 
+    public static function toCashFlow( $month, $year )
+    {
+		$count_days = cal_days_in_month(CAL_GREGORIAN, $month, $year );
+
+        //find withdrawal
+        $payments = Payment::whereBetween( 'date', [ $year.'-'.$month.'-01' , $year.'-'.$month.'-'.$count_days ] );
+
+
+        $data = [];
+        foreach( $payments->get() as $item )
+        {
+            $data []= [
+                'date'          => $item->date,
+                'description'   => "payment from ".$item->invoice->salesOrder->factory_name,
+                'position'      => 2,
+                'nominal'       => $item->amount,
+                'resource_code' => $item->code,
+                'resource_type' => 'App\\Model\\Payment',
+                'resource_id'   => $item->id,
+            ];
+        }
+        return $data;
+    }
+
     public static function getFormData(  )
     {
         $form =  [

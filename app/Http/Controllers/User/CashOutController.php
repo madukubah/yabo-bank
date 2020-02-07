@@ -10,6 +10,11 @@ use App\Alert;
 
 class CashOutController extends UadminController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -101,6 +106,7 @@ class CashOutController extends UadminController
         ]);
 
         CashOut::create([
+            'code'          => CashOut::getCode(),
             'date'          => $request->input('date'),
             'description'   => $request->input('description'),
             'nominal'       => $request->input('nominal'),
