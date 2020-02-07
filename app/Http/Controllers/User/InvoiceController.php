@@ -19,7 +19,7 @@ class InvoiceController extends UserController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware( [ 'role:driver' ]  );
+        $this->middleware( [ 'role:driver|uadmin' ]  );
     }
     /**
      * Display a listing of the resource.
@@ -92,9 +92,7 @@ class InvoiceController extends UserController
 
         $this->data[ 'modalConfirm' ]       = $modalConfirm;
 
-
         return $this->render( 'invoice.create' );
-
     }
 
     /**

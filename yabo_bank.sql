@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2020 at 05:24 PM
+-- Generation Time: Feb 07, 2020 at 02:24 PM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.8
 
@@ -25,6 +25,62 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cash_flows`
+--
+
+CREATE TABLE `cash_flows` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  `nominal` double NOT NULL,
+  `resource_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resource_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resource_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cash_flows`
+--
+
+INSERT INTO `cash_flows` (`id`, `date`, `description`, `position`, `nominal`, `resource_code`, `resource_type`, `resource_id`, `created_at`, `updated_at`) VALUES
+(36, '2020-02-04', 'withdrawal to customer Customer_1580777465', 1, 5000, 'MUTATION_02202000005', 'App\\Model\\Mutation', 5, NULL, NULL),
+(37, '2020-02-04', 'withdrawal to customer Customer_1580777465', 1, 200000, 'MUTATION_02202000010', 'App\\Model\\Mutation', 10, NULL, NULL),
+(38, '2020-02-04', 'payment from KARYA AGUNG REALITI', 2, 35000000, 'PAYMENT_02202000001', 'App\\Model\\Payment', 1, NULL, NULL),
+(39, '2020-02-06', 'payment from KARYA AGUNG REALITI', 2, 7742035, 'PAYMENT_02202000002', 'App\\Model\\Payment', 2, NULL, NULL),
+(40, '2020-02-12', 'payment from KARYA AGUNG REALITI', 2, 35000000, 'PAYMENT_02202000003', 'App\\Model\\Payment', 3, NULL, NULL),
+(41, '2020-02-06', 'Biaya Ekspedisi 682378(9)4561 / 8762 MJ', 1, 10500000, '', 'App\\Model\\CashOut', 1, NULL, NULL),
+(42, '2020-02-06', 'Biaya Ekspedisi 682378(9)4561 / 8762 MJ', 1, 10500000, 'CASH_OUT_02202000002', 'App\\Model\\CashOut', 2, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cash_outs`
+--
+
+CREATE TABLE `cash_outs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nominal` double NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cash_outs`
+--
+
+INSERT INTO `cash_outs` (`id`, `code`, `description`, `nominal`, `date`, `created_at`, `updated_at`) VALUES
+(1, '', 'Biaya Ekspedisi 682378(9)4561 / 8762 MJ', 10500000, '2020-02-06', '2020-02-06 06:16:30', '2020-02-06 06:16:30'),
+(2, 'CASH_OUT_02202000002', 'Biaya Ekspedisi 682378(9)4561 / 8762 MJ', 10500000, '2020-02-06', '2020-02-06 15:55:47', '2020-02-06 15:55:47');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customers`
 --
 
@@ -41,15 +97,7 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `code`, `identity_photo`, `created_at`, `updated_at`) VALUES
-(7, 'Customer_1579500670', 'IDENTITY_1580360384.png', '2020-01-19 22:11:38', '2020-01-29 20:59:44'),
-(9, 'Customer_1579501062', 'default.jpg', '2020-01-19 22:17:42', '2020-01-19 22:17:42'),
-(10, 'Customer_1579678677', 'default.jpg', '2020-01-21 23:37:57', '2020-01-21 23:37:57'),
-(11, 'Customer_1580023902', 'default.jpg', '2020-01-25 23:31:42', '2020-01-25 23:31:42'),
-(12, 'Customer_1580024718', 'default.jpg', '2020-01-25 23:45:18', '2020-01-25 23:45:18'),
-(13, 'Customer_1580025579', 'IDENTITY_1580364180.png', '2020-01-25 23:59:39', '2020-01-29 22:03:00'),
-(14, 'Customer_1580025603', 'default.jpg', '2020-01-26 00:00:03', '2020-01-26 00:00:03'),
-(15, 'Customer_1580184408', 'default.jpg', '2020-01-27 20:07:02', '2020-01-27 20:07:02'),
-(16, 'Customer_1580370979', 'IDENTITY_1580371100.png', '2020-01-29 23:56:19', '2020-01-29 23:58:20');
+(17, 'Customer_1580777465', 'IDENTITY_1580778104.JPG', '2020-02-04 00:51:19', '2020-02-04 01:01:44');
 
 -- --------------------------------------------------------
 
@@ -69,8 +117,31 @@ CREATE TABLE `drivers` (
 --
 
 INSERT INTO `drivers` (`id`, `code`, `created_at`, `updated_at`) VALUES
-(5, 'Driver_1579501076', '2020-01-19 22:18:51', '2020-01-19 22:18:51'),
-(6, 'Driver_1579501202', '2020-01-19 22:20:02', '2020-01-19 22:20:02');
+(1, 'Driver_1580778321', '2020-02-04 01:05:32', '2020-02-04 01:05:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE `invoices` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `selling_id` int(11) NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `due_date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `selling_id`, `code`, `date`, `due_date`, `created_at`, `updated_at`) VALUES
+(1, 2, 'INVOICE_02202000001', '2020-02-04', '2020-02-05', '2020-02-04 05:53:06', '2020-02-04 05:53:06'),
+(2, 3, 'INVOICE_02202000002', '2020-02-04', '2020-02-05', '2020-02-04 08:49:34', '2020-02-04 08:49:34');
 
 -- --------------------------------------------------------
 
@@ -105,9 +176,9 @@ INSERT INTO `menus` (`id`, `menu_id`, `name`, `link`, `list_id`, `icon`, `status
 (27, 2, 'Customer', 'customers', 'customers', 'users', 1, 1, 'customers'),
 (28, 2, 'Driver', 'drivers', 'drivers', 'users', 1, 1, 'drivers'),
 (29, 2, 'LAPORAN', 'header', 'home', 'home', 1, 1, 'LAPORAN'),
-(30, 2, 'Kas Keluar', 'outcome', 'outcome', 'share-square', 1, 3, 'outcome'),
-(31, 2, 'Penjualan', 'selling', 'selling', 'shopping-cart', 1, 1, 'selling'),
-(32, 2, 'Daftar Pembayaran', 'invoice', 'invoice', 'file', 1, 1, 'invoice'),
+(30, 2, 'Kas Keluar', 'cash_outs', 'cash_outs', 'share-square', 1, 3, 'outcome'),
+(31, 2, 'Penjualan', 'sellings', 'sellings', 'shopping-cart', 1, 1, 'selling'),
+(32, 2, 'Daftar Pembayaran', 'payments', 'payments', 'file', 1, 1, 'invoice'),
 (33, 14, 'Beranda', 'home', 'home', 'home', 1, 1, 'home'),
 (34, 14, 'Penjemputan', 'requests', 'requests', 'truck', 0, 1, 'requests'),
 (35, 14, 'Penjemputan Sampah', 'pickups', 'pickups', 'truck', 1, 1, 'pickups'),
@@ -118,7 +189,8 @@ INSERT INTO `menus` (`id`, `menu_id`, `name`, `link`, `list_id`, `icon`, `status
 (40, 14, 'Transaksi', 'transactions', 'transactions', 'credit-card', 1, 1, 'transactions'),
 (41, 2, 'Penjemputan', 'requests', 'reque', 'truck', 1, 0, 'truck'),
 (42, 41, 'Request Masuk', 'requests', 'requests', 'truck', 1, 1, 'requests'),
-(43, 41, 'Request Diproses', 'pickups', 'pickups', 'truck', 1, 1, '-');
+(43, 41, 'Request Diproses', 'pickups', 'pickups', 'truck', 1, 1, '-'),
+(44, 2, 'Proses Data', 'reports', 'reports', 'file-excel', 1, 4, 'reports');
 
 -- --------------------------------------------------------
 
@@ -153,7 +225,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (74, '2016_06_01_000002_create_oauth_access_tokens_table', 5),
 (75, '2016_06_01_000003_create_oauth_refresh_tokens_table', 5),
 (76, '2016_06_01_000004_create_oauth_clients_table', 5),
-(77, '2016_06_01_000005_create_oauth_personal_access_clients_table', 5);
+(77, '2016_06_01_000005_create_oauth_personal_access_clients_table', 5),
+(78, '2020_02_02_185310_create_sellings_table', 6),
+(79, '2020_02_03_110012_create_cash_outs_table', 7),
+(80, '2020_02_04_124806_create_invoices_table', 8),
+(81, '2020_02_04_144516_create_payments_table', 9),
+(82, '2020_02_06_230009_create_cash_flows_table', 10);
 
 -- --------------------------------------------------------
 
@@ -163,6 +240,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `mutations` (
   `id` int(10) UNSIGNED NOT NULL,
+  `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customer_id` int(10) UNSIGNED NOT NULL,
   `transaction_id` int(10) UNSIGNED DEFAULT NULL,
   `nominal` double NOT NULL,
@@ -176,45 +254,15 @@ CREATE TABLE `mutations` (
 -- Dumping data for table `mutations`
 --
 
-INSERT INTO `mutations` (`id`, `customer_id`, `transaction_id`, `nominal`, `position`, `description`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, 20000, 1, 'transaction to customer 1579011827: plastik,1000,kg,qty:20driver:Alfalah', '2020-01-16 16:00:00', '2020-01-16 23:16:16'),
-(2, 2, 2, 15000, 1, 'transaction to customer 1579011827: Besi,5000,kg,qty:3driver:Alfalah', '2020-01-16 16:00:00', '2020-01-16 23:16:16'),
-(3, 2, 3, 4000, 1, 'transaction to customer 1579011827: plastik,1000,kg,qty:4driver:Alfalah', '2020-01-16 16:00:00', '2020-01-16 23:16:16'),
-(4, 2, 4, 20000, 1, 'transaction to customer 1579011827: plastik,1000,kg,qty:20driver:Alfalah', '2020-01-17 16:00:00', '2020-01-18 00:29:57'),
-(5, 3, 0, 0, 1, '-', NULL, NULL),
-(7, 6, 0, 0, 1, 'initial', '2020-01-18 16:00:00', '2020-01-19 01:37:44'),
-(8, 2, 0, 5000, 2, 'withdrawal to customer 1579011827', '2020-01-18 16:00:00', '2020-01-19 08:25:15'),
-(9, 2, 0, 30000, 2, 'withdrawal to customer 1579011827', '2020-01-18 16:00:00', '2020-01-19 08:39:45'),
-(10, 2, 0, 500, 2, 'withdrawal to customer 1579011827', '2020-01-18 16:00:00', '2020-01-19 08:52:27'),
-(11, 7, 0, 0, 1, 'initial', '2020-01-19 16:00:00', '2020-01-19 22:11:38'),
-(12, 9, 0, 0, 1, 'initial', '2020-01-19 16:00:00', '2020-01-19 22:17:42'),
-(13, 7, 5, 4000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:4driver:c alin', '2020-01-19 16:00:00', '2020-01-19 22:39:04'),
-(14, 7, 6, 15000, 1, 'transaction to customer Customer_1579500670: Besi,5000,kg,qty:3driver:c alin', '2020-01-19 16:00:00', '2020-01-19 22:39:04'),
-(15, 7, 0, 1000, 2, 'withdrawal to customer Customer_1579500670', '2020-01-19 16:00:00', '2020-01-19 22:41:27'),
-(16, 7, 7, 120000, 1, 'transaction to customer Customer_1579500670: Kardus,4000,kg,qty:30driver:c alin', '2020-01-19 16:00:00', '2020-01-20 06:38:27'),
-(17, 7, 8, 250000, 1, 'transaction to customer Customer_1579500670: Besi,5000,kg,qty:50driver:c alin', '2020-01-19 16:00:00', '2020-01-20 06:38:27'),
-(18, 7, 0, 50000, 2, 'withdrawal to customer Customer_1579500670', '2020-01-19 16:00:00', '2020-01-20 06:41:04'),
-(19, 7, 9, 5000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:5driver:c alin', '2020-01-20 16:00:00', '2020-01-21 08:52:26'),
-(20, 7, 10, 240000, 1, 'transaction to customer Customer_1579500670: Kardus,4000,kg,qty:60driver:c alin', '2020-01-20 16:00:00', '2020-01-21 09:06:25'),
-(21, 7, 0, 500000, 2, 'withdrawal to customer Customer_1579500670', '2020-01-20 16:00:00', '2020-01-21 09:12:13'),
-(22, 10, 0, 0, 1, 'initial', '2020-01-21 16:00:00', '2020-01-21 23:37:58'),
-(23, 7, 11, 3000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:3driver:c alin', '2020-01-22 16:00:00', '2020-01-23 07:03:53'),
-(24, 7, 12, 20000, 1, 'transaction to customer Customer_1579500670: Besi,5000,kg,qty:4driver:c alin', '2020-01-22 16:00:00', '2020-01-23 07:03:53'),
-(25, 7, 13, 3000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:3driver:c alin', '2020-01-22 16:00:00', '2020-01-23 07:07:01'),
-(26, 7, 14, 20000, 1, 'transaction to customer Customer_1579500670: Besi,5000,kg,qty:4driver:c alin', '2020-01-22 16:00:00', '2020-01-23 07:07:01'),
-(27, 11, 0, 0, 1, 'initial', '2020-01-25 16:00:00', '2020-01-25 23:31:42'),
-(28, 12, 0, 0, 1, 'initial', '2020-01-25 16:00:00', '2020-01-25 23:45:18'),
-(29, 13, 0, 0, 1, 'initial', '2020-01-25 16:00:00', '2020-01-25 23:59:39'),
-(30, 14, 0, 0, 1, 'initial', '2020-01-25 16:00:00', '2020-01-26 00:00:03'),
-(31, 7, 15, 50000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:50driver:d alin', '2020-01-26 16:00:00', '2020-01-27 06:07:45'),
-(32, 7, 0, 100000, 2, 'withdrawal to customer Customer_1579500670', '2020-01-26 16:00:00', '2020-01-27 06:40:32'),
-(33, 15, 0, 0, 1, 'initial', '2020-01-27 16:00:00', '2020-01-27 20:07:02'),
-(34, 16, 0, 0, 1, 'initial', '2020-01-29 23:56:19', '2020-01-29 23:56:19'),
-(35, 7, 16, 3000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:3driver:c alin', '2020-01-31 04:10:46', '2020-01-31 04:10:46'),
-(36, 7, 17, 5000, 1, 'transaction to customer Customer_1579500670: Besi,5000,kg,qty:1driver:c alin', '2020-01-31 04:10:46', '2020-01-31 04:10:46'),
-(37, 7, 18, 2000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:2driver:c alin', '2020-01-31 05:11:28', '2020-01-31 05:11:28'),
-(38, 13, 19, 15000, 1, 'transaction to customer Customer_1580025579: Besi,5000,kg,qty:3driver:c alin', '2020-01-31 05:11:40', '2020-01-31 05:11:40'),
-(39, 7, 20, 10000, 1, 'transaction to customer Customer_1579500670: plastik,1000,kg,qty:10driver:c alin', '2020-01-31 07:24:27', '2020-01-31 07:24:27');
+INSERT INTO `mutations` (`id`, `code`, `customer_id`, `transaction_id`, `nominal`, `position`, `description`, `created_at`, `updated_at`) VALUES
+(1, '', 17, 0, 0, 2, 'initial', '2020-02-04 00:51:19', '2020-02-04 00:51:19'),
+(4, 'MUTATION_02202000002', 17, 2, 10000, 2, 'transaction to customer Customer_1580777465: plastik,1000,kg,qty:10driver:c', '2020-02-04 02:45:27', '2020-02-04 02:45:27'),
+(5, 'MUTATION_02202000005', 17, 0, 5000, 1, 'withdrawal to customer Customer_1580777465', '2020-02-04 02:47:48', '2020-02-04 02:47:48'),
+(6, 'MUTATION_02202000006', 17, 3, 2000, 2, 'transaction to customer Customer_1580777465: plastik,1000,kg,qty:2driver:c', '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(7, 'MUTATION_02202000007', 17, 4, 170000, 2, 'transaction to customer Customer_1580777465: Besi,5000,kg,qty:34driver:c', '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(8, 'MUTATION_02202000007', 17, 5, 28000, 2, 'transaction to customer Customer_1580777465: Kardus,4000,kg,qty:7driver:c', '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(9, 'MUTATION_02202000007', 17, 6, 20000, 2, 'transaction to customer Customer_1580777465: plastik,1000,kg,qty:20driver:c', '2020-02-04 13:18:49', '2020-02-04 13:18:49'),
+(10, 'MUTATION_02202000010', 17, 0, 200000, 1, 'withdrawal to customer Customer_1580777465', '2020-02-04 13:19:34', '2020-02-04 13:19:34');
 
 -- --------------------------------------------------------
 
@@ -284,6 +332,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('969a872d1f24dc0fc590b323c2022225ab4b48a474e88019b66ab5ed57493da46b9a12eee8b8c63d', 43, 1, 'YABO_BANK', '[]', 1, '2020-01-26 06:09:20', '2020-01-26 06:09:20', '2021-01-26 14:09:20'),
 ('9a5ea65540aff00f90150a295e2de86c0ee11529d20fd41e1dd1893670ebaaa5fc9b2a68e5ed5bd7', 34, 1, 'YABO_BANK', '[]', 0, '2020-01-25 04:31:15', '2020-01-25 04:31:15', '2021-01-25 12:31:15'),
 ('9b38b6fed0f657d9a820011b3e38e3c6b38e09c148ff26142f486ed34acfae96283edc005ccff2c0', 43, 1, 'YABO_BANK', '[]', 0, '2020-01-26 00:26:38', '2020-01-26 00:26:38', '2021-01-26 08:26:38'),
+('9debab4f97497cbcec163624dc760a00ed85263714fd9d11df58b502cfc9603011ef3fb43fd548cb', 46, 1, 'YABO_BANK', '[]', 0, '2020-02-04 09:29:35', '2020-02-04 09:29:35', '2021-02-04 17:29:35'),
 ('a5d7672431920921a25fdfd9313da42eacdc6a872228f9fc3a58cdc870e5b805f97c7dfefd9f0656', 43, 1, 'YABO_BANK', '[]', 1, '2020-01-29 23:54:57', '2020-01-29 23:54:57', '2021-01-30 07:54:57'),
 ('a5d7d9d897c9fa8a5863b41e825deceb09200b7f0342e12a83e831cbbe2eb0682fdd88dc8e547990', 41, 1, 'YABO_BANK', '[]', 0, '2020-01-25 23:31:43', '2020-01-25 23:31:43', '2021-01-26 07:31:43'),
 ('a7eecabec60163b455e1b9adb095293403671c9eaa07119dedb9edb5287d1f814e983c308c41533e', 43, 1, 'YABO_BANK', '[]', 1, '2020-01-26 00:23:11', '2020-01-26 00:23:11', '2021-01-26 08:23:11'),
@@ -302,6 +351,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('c337628dd95eee39a305b460e98bb9670f866bdc0de16d2c52136ce2e82e5e9f6f0f24e227022fa0', 31, 1, 'YABO_BANK', '[]', 0, '2020-01-23 01:05:53', '2020-01-23 01:05:53', '2021-01-23 09:05:53'),
 ('c958700d1e30a0b737fbec14978447411d0702067c64547fb6121bdba54d46841764dd932a332049', 31, 1, 'YABO_BANK', '[]', 0, '2020-01-23 01:10:12', '2020-01-23 01:10:12', '2021-01-23 09:10:12'),
 ('ce85027d63744887879ccf5238ef0b7419b7cc1d2c71287b2521973933d4bc2aa24f28c25cf92324', 31, 1, 'YABO_BANK', '[]', 0, '2020-01-27 06:24:20', '2020-01-27 06:24:20', '2021-01-27 14:24:20'),
+('d5e63b38b851860a8f702e21df341fed2bc3f267f91b47a45e10fe9ecf7298976628bd6da976a2f0', 47, 1, 'YABO_BANK', '[]', 0, '2020-02-04 09:37:07', '2020-02-04 09:37:07', '2021-02-04 17:37:07'),
 ('d6dc0b81ced0157796607e17edd2bf1e7375997f9fd2df34aa827a8939d22e743bd6ee7362eb3ee5', 31, 1, 'YABO_BANK', '[]', 0, '2020-01-23 01:00:36', '2020-01-23 01:00:36', '2021-01-23 09:00:36'),
 ('d7199a5e2598d7939a442c31a4c4598b2b0b4e6587dbb570cfac34420a578d0c167098d92e9c0136', 34, 1, 'YABO_BANK', '[]', 0, '2020-01-25 04:09:05', '2020-01-25 04:09:05', '2021-01-25 12:09:05'),
 ('d9be99deb4f0a33c1e3be27f095b7babf38c60acb38eda23c090f4af8e98fe3f3ea4f69be02782a1', 41, 1, 'YABO_BANK', '[]', 1, '2020-01-25 23:36:43', '2020-01-25 23:36:43', '2021-01-26 07:36:43'),
@@ -410,6 +460,31 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `amount` double NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `code`, `invoice_id`, `date`, `amount`, `created_at`, `updated_at`) VALUES
+(1, 'PAYMENT_02202000001', 1, '2020-02-04', 35000000, '2020-02-04 08:16:24', '2020-02-04 08:16:24'),
+(2, 'PAYMENT_02202000002', 1, '2020-02-06', 7742035, '2020-02-04 08:47:24', '2020-02-04 08:47:24'),
+(3, 'PAYMENT_02202000003', 2, '2020-02-12', 35000000, '2020-02-04 08:50:39', '2020-02-04 08:50:39');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pick_ups`
 --
 
@@ -427,17 +502,9 @@ CREATE TABLE `pick_ups` (
 --
 
 INSERT INTO `pick_ups` (`id`, `request_id`, `driver_id`, `status`, `created_at`, `updated_at`) VALUES
-(5, 5, 5, 1, '2020-01-19 22:37:31', '2020-01-19 22:39:04'),
-(6, 6, 5, 1, '2020-01-20 06:35:21', '2020-01-20 06:38:27'),
-(7, 7, 5, 1, '2020-01-21 08:43:12', '2020-01-21 08:52:26'),
-(8, 8, 5, 1, '2020-01-21 08:43:12', '2020-01-21 09:06:25'),
-(9, 9, 5, 1, '2020-01-23 04:56:39', '2020-01-23 07:03:53'),
-(10, 10, 5, 1, '2020-01-23 05:00:00', '2020-01-31 05:11:28'),
-(11, 16, 5, 1, '2020-01-26 08:22:35', '2020-01-31 05:11:40'),
-(12, 20, 6, 1, '2020-01-27 06:06:20', '2020-01-27 06:07:45'),
-(13, 21, 6, 0, '2020-01-27 06:06:20', '2020-01-27 06:06:20'),
-(14, 30, 6, 0, '2020-01-29 09:52:46', '2020-01-29 09:52:46'),
-(15, 33, 5, 1, '2020-01-31 07:19:25', '2020-01-31 07:24:27');
+(1, 1, 1, 1, '2020-02-04 02:35:01', '2020-02-04 02:45:27'),
+(2, 2, 1, 1, '2020-02-04 09:30:24', '2020-02-04 09:37:34'),
+(3, 3, 1, 1, '2020-02-04 13:16:31', '2020-02-04 13:18:49');
 
 -- --------------------------------------------------------
 
@@ -485,20 +552,9 @@ CREATE TABLE `requests` (
 --
 
 INSERT INTO `requests` (`id`, `customer_id`, `code`, `status`, `info`, `photo`, `created_at`, `updated_at`) VALUES
-(5, 7, 'Request_1579502165', 2, 'plastik dan besi !', '', '2020-01-19 22:36:19', '2020-01-19 22:39:04'),
-(6, 7, 'Request_1579530615', 2, 'kardus dan besi', '', '2020-01-20 06:30:32', '2020-01-20 06:38:27'),
-(7, 7, 'Request_1579621946', 2, '1', '', '2020-01-21 07:52:35', '2020-01-21 08:52:26'),
-(8, 7, 'Request_1579621955', 2, '2', '', '2020-01-21 07:52:40', '2020-01-21 09:06:25'),
-(9, 7, 'Request_1579783126', 2, 'plastik', '', '2020-01-23 04:38:46', '2020-01-23 07:03:53'),
-(10, 7, 'Request_1579784371', 2, 'plastik 2', '', '2020-01-23 04:59:31', '2020-01-31 05:11:28'),
-(16, 13, 'Request_1580055696', 2, 'dhkdbmykhkb', '', '2020-01-26 08:21:36', '2020-01-31 05:11:40'),
-(20, 7, 'Request_1580117573', 2, 'asdfjasghdkf', 'REQUEST_1580118025.JPG', '2020-01-27 01:40:25', '2020-01-27 06:07:45'),
-(21, 7, 'Request_1580133885', 1, 'plastik', 'REQUEST_1580133911.JPG', '2020-01-27 06:05:11', '2020-01-27 06:06:20'),
-(30, 7, 'Request_1580319099', 1, 'plastik', 'REQUEST_1580319099.png', '2020-01-29 09:31:39', '2020-01-29 09:52:46'),
-(31, 13, 'Request_1580363118', 0, 'sampah besi', 'REQUEST_1580363118.png', '2020-01-29 21:45:18', '2020-01-29 21:45:18'),
-(32, 16, 'Request_1580371025', 0, 'besi', 'REQUEST_1580371025.png', '2020-01-29 23:57:05', '2020-01-29 23:57:05'),
-(33, 7, 'Request_1580483944', 2, 'Tes 10Kg Plastik', 'REQUEST_1580483944.png', '2020-01-31 07:19:04', '2020-01-31 07:24:27'),
-(36, 7, 'Request_1580485677', 0, 'tes', 'REQUEST_1580485677.png', '2020-01-31 15:47:57', '2020-01-31 15:47:57');
+(1, 17, 'Request_1580783541', 2, 'tes plastic 10 kg', 'REQUEST_1580783559.JPG', '2020-02-04 02:32:39', '2020-02-04 02:45:27'),
+(2, 17, 'Request_1580808608', 2, 'tes 10 plastik', 'REQUEST_1580808608.png', '2020-02-04 09:30:08', '2020-02-04 09:37:34'),
+(3, 17, 'Request_1580822153', 2, 'tes plastik 20 kg', 'REQUEST_1580822153.png', '2020-02-04 13:15:53', '2020-02-04 13:18:49');
 
 -- --------------------------------------------------------
 
@@ -559,7 +615,38 @@ INSERT INTO `role_user` (`user_id`, `role_id`) VALUES
 (40, 13),
 (43, 13),
 (44, 13),
-(45, 13);
+(45, 13),
+(46, 13),
+(47, 14);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sellings`
+--
+
+CREATE TABLE `sellings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `factory_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `container_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `car_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `send_date` date NOT NULL,
+  `unloading_date` date NOT NULL,
+  `gross` double NOT NULL,
+  `cut_off` double NOT NULL,
+  `selling_price` double NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sellings`
+--
+
+INSERT INTO `sellings` (`id`, `code`, `factory_name`, `container_number`, `car_number`, `send_date`, `unloading_date`, `gross`, `cut_off`, `selling_price`, `created_at`, `updated_at`) VALUES
+(2, 'SO_02202000001', 'KARYA AGUNG REALITI', 'TEGU 682378(9)4561', '8762 MJ', '2020-02-04', '2020-02-06', 20409, 200, 2115, '2020-02-04 02:59:47', '2020-02-04 03:29:01'),
+(3, 'SO_02202000003', 'KARYA AGUNG REALITI', 'TEGU 682378(9)4561', '8762 MJ', '2020-02-04', '2020-02-13', 20409, 2000, 2115, '2020-02-04 05:54:25', '2020-02-04 09:18:51');
 
 -- --------------------------------------------------------
 
@@ -569,6 +656,7 @@ INSERT INTO `role_user` (`user_id`, `role_id`) VALUES
 
 CREATE TABLE `transactions` (
   `id` int(10) UNSIGNED NOT NULL,
+  `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customer_id` int(10) UNSIGNED NOT NULL,
   `driver_id` int(10) UNSIGNED NOT NULL,
   `product` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -583,23 +671,12 @@ CREATE TABLE `transactions` (
 -- Dumping data for table `transactions`
 --
 
-INSERT INTO `transactions` (`id`, `customer_id`, `driver_id`, `product`, `unit`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-(5, 7, 5, 'plastik', 'kg', '4', 1000, '2020-01-19 22:39:04', '2020-01-19 22:39:04'),
-(6, 7, 5, 'Besi', 'kg', '3', 5000, '2020-01-19 22:39:04', '2020-01-19 22:39:04'),
-(7, 7, 5, 'Kardus', 'kg', '30', 4000, '2020-01-20 06:38:27', '2020-01-20 06:38:27'),
-(8, 7, 5, 'Besi', 'kg', '50', 5000, '2020-01-20 06:38:27', '2020-01-20 06:38:27'),
-(9, 7, 5, 'plastik', 'kg', '5', 1000, '2020-01-21 08:52:26', '2020-01-21 08:52:26'),
-(10, 7, 5, 'Kardus', 'kg', '60', 4000, '2020-01-21 09:06:25', '2020-01-21 09:06:25'),
-(11, 7, 5, 'plastik', 'kg', '3', 1000, '2020-01-23 07:03:53', '2020-01-23 07:03:53'),
-(12, 7, 5, 'Besi', 'kg', '4', 5000, '2020-01-23 07:03:53', '2020-01-23 07:03:53'),
-(13, 7, 5, 'plastik', 'kg', '3', 1000, '2020-01-23 07:07:01', '2020-01-23 07:07:01'),
-(14, 7, 5, 'Besi', 'kg', '4', 5000, '2020-01-23 07:07:01', '2020-01-23 07:07:01'),
-(15, 7, 6, 'plastik', 'kg', '50', 1000, '2020-01-27 06:07:45', '2020-01-27 06:07:45'),
-(16, 7, 5, 'plastik', 'kg', '3', 1000, '2020-01-31 04:10:46', '2020-01-31 04:10:46'),
-(17, 7, 5, 'Besi', 'kg', '1', 5000, '2020-01-31 04:10:46', '2020-01-31 04:10:46'),
-(18, 7, 5, 'plastik', 'kg', '2', 1000, '2020-01-31 05:11:28', '2020-01-31 05:11:28'),
-(19, 13, 5, 'Besi', 'kg', '3', 5000, '2020-01-31 05:11:40', '2020-01-31 05:11:40'),
-(20, 7, 5, 'plastik', 'kg', '10', 1000, '2020-01-31 07:24:27', '2020-01-31 07:24:27');
+INSERT INTO `transactions` (`id`, `code`, `customer_id`, `driver_id`, `product`, `unit`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+(2, 'TRANSACTION_02202000002', 17, 1, 'plastik', 'kg', '10', 1000, '2020-02-04 02:45:27', '2020-02-04 02:45:27'),
+(3, 'TRANSACTION_02202000003', 17, 1, 'plastik', 'kg', '2', 1000, '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(4, 'TRANSACTION_02202000004', 17, 1, 'Besi', 'kg', '34', 5000, '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(5, 'TRANSACTION_02202000004', 17, 1, 'Kardus', 'kg', '7', 4000, '2020-02-04 09:37:34', '2020-02-04 09:37:34'),
+(6, 'TRANSACTION_02202000004', 17, 1, 'plastik', 'kg', '20', 1000, '2020-02-04 13:18:49', '2020-02-04 13:18:49');
 
 -- --------------------------------------------------------
 
@@ -632,19 +709,25 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `password`, `photo`, `identity_photo`, `phone`, `address`, `map_point`, `remember_token`, `created_at`, `updated_at`, `userable_type`, `userable_id`) VALUES
 (6, 'muhammad Alfalah', 'alan@alan.com', 'alan@alan.com', NULL, '$2y$10$uyaV09dX4tnt/4SY36twW.FACqQdaOcXjCxiGJUt337gZT9FWTAei', '', '', '', '', '', NULL, '2020-01-07 11:46:43', '2020-01-11 07:24:11', 'a', 1),
-(8, 'alin', 'alin@alin.com', 'alin@alin.com', NULL, '$2y$10$VFXgl5BHOKJkbfyBOBNcWugmCMywhrlyk24.qwYzZqGXf9rjjiiKi', 'PROFILE_1580182493.png', 'default.jpg', '0', 'jalan jalan', '', NULL, '2020-01-11 05:25:50', '2020-01-27 19:34:53', '', NULL),
-(31, 'muhammad alfalah madukubah', 'a@a.com', 'a@a.com', NULL, '$2y$10$kLk.tQpFfNwuIrS42rm4ae44kVOSeNUCi1ouyNvWdUGl222iRYB36', 'PROFILE_1580360631.png', 'default.jpg', '1', 'jln mutiara', '0,0', NULL, '2020-01-19 22:11:38', '2020-01-29 21:03:51', 'App\\Model\\Customer', 7),
-(33, 'b alan', 'b@b.com', 'b@b.com', NULL, '$2y$10$H8X2OcEI0APNEt4vD/oJPuJzTaGLEiCUzQSjwePSPdgHnCrS/6b1W', 'default.jpg', 'default.jpg', '1234', 'qwer', '0,0', NULL, '2020-01-19 22:17:42', '2020-01-19 22:31:49', 'App\\Model\\Customer', 9),
-(34, 'c alin', 'c@c.com', 'c@c.com', NULL, '$2y$10$vYQRlrZ097bL/3vUpmSRQOFJcnaw82SdwnuLadJc9WxLtdJBVs4Cu', 'PROFILE_1580209419.PNG', 'default.jpg', '1234', 'qwer', '0,0', NULL, '2020-01-19 22:18:51', '2020-01-28 03:03:39', 'App\\Model\\Driver', 5),
-(35, 'd alin', 'd@d.com', 'd@d.com', NULL, '$2y$10$WiG.vdNRJbbRi/4YmaUbse8mnMbgreoiEOLALo5ljSrL4G7TfEcd.', 'PROFILE_1580184701.png', 'default.jpg', '1234', 'qwer', '0,0', NULL, '2020-01-19 22:20:02', '2020-01-27 20:11:41', 'App\\Model\\Driver', 6),
-(40, 'a', 'a', 'z@z.com', NULL, '$2y$10$4iUYUI5mPGe48AVrZMsyceb5DHPvJexxRaMlIQw3p9o75pHnDb/t.', 'default.jpg', 'default.jpg', '0', '-', '0,0', NULL, '2020-01-21 23:37:57', '2020-01-21 23:37:58', 'App\\Model\\Customer', 10),
-(43, 'alan madukubah', 'name', 'alan@gmail.com', NULL, '$2y$10$KiS1e55mG0a3DJrjIumS8uqifiAcdeNzRx1Ck5rWQobF9lAag8CZe', 'PROFILE_1580366479.png', 'default.jpg', '081342989100', '-', '0,0', NULL, '2020-01-25 23:59:39', '2020-01-29 22:41:19', 'App\\Model\\Customer', 13),
-(44, 'q', 'q@q.com', 'q@q.com', NULL, '$2y$10$6CsUoks7WppOvP0RhcwCVueaakIz0z5YXn0SiYuEMaEfxfegaK5KO', 'default.jpg', 'default.jpg', '1', '-', '0,0', NULL, '2020-01-27 20:07:02', '2020-01-27 20:07:02', 'App\\Model\\Customer', 15),
-(45, 'yuhu', 'name', 'r@r.com', NULL, '$2y$10$PtKUTH6uTpFzThX5Z/h4v.p5PjwYS7iY0RkNpyqV2iQcozNMNcwBq', 'PROFILE_1580371090.png', 'default.jpg', '2', 'alamat', '0,0', NULL, '2020-01-29 23:56:19', '2020-01-29 23:58:10', 'App\\Model\\Customer', 16);
+(8, 'admin', 'alin@alin.com', 'admin@admin.com', NULL, '$2y$10$dP9tWHGSgJYDys3OppzHBeL5mLgH/Ppf5KBV3XH6lgoxIS9nSVcVe', 'PROFILE_1580182493.png', 'default.jpg', '0', 'jalan jalan', '', NULL, '2020-01-11 05:25:50', '2020-02-04 09:42:49', '', NULL),
+(46, 'a', 'a@a.com', 'a@a.com', NULL, '$2y$10$GB91zZ8/GHxPJECgzCHmAuQelx9UOic.QuDd8xBLdDv6xq864SKZ.', 'PROFILE_1580808740.png', 'default.jpg', '1', 'a', '0,0', NULL, '2020-02-04 00:51:19', '2020-02-04 09:32:20', 'App\\Model\\Customer', 17),
+(47, 'c', 'c@c.com', 'c@c.com', NULL, '$2y$10$1HHROaaO1lF30Cxcb2L2JOq1V.eSB5CsYAq1IIOPHVp/S/I4e9P2K', 'default.jpg', 'default.jpg', '1', 'c', '0,0', NULL, '2020-02-04 01:05:32', '2020-02-04 01:05:32', 'App\\Model\\Driver', 1);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cash_flows`
+--
+ALTER TABLE `cash_flows`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `cash_outs`
+--
+ALTER TABLE `cash_outs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `customers`
@@ -656,6 +739,12 @@ ALTER TABLE `customers`
 -- Indexes for table `drivers`
 --
 ALTER TABLE `drivers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -711,6 +800,12 @@ ALTER TABLE `oauth_refresh_tokens`
   ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
 
 --
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pick_ups`
 --
 ALTER TABLE `pick_ups`
@@ -742,6 +837,12 @@ ALTER TABLE `role_user`
   ADD PRIMARY KEY (`user_id`,`role_id`);
 
 --
+-- Indexes for table `sellings`
+--
+ALTER TABLE `sellings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transactions`
 --
 ALTER TABLE `transactions`
@@ -758,34 +859,52 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cash_flows`
+--
+ALTER TABLE `cash_flows`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `cash_outs`
+--
+ALTER TABLE `cash_outs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `drivers`
 --
 ALTER TABLE `drivers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `mutations`
 --
 ALTER TABLE `mutations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -800,10 +919,16 @@ ALTER TABLE `oauth_personal_access_clients`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `pick_ups`
 --
 ALTER TABLE `pick_ups`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `price_lists`
@@ -815,7 +940,7 @@ ALTER TABLE `price_lists`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -824,16 +949,22 @@ ALTER TABLE `roles`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `sellings`
+--
+ALTER TABLE `sellings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- Constraints for dumped tables
