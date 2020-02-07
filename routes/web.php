@@ -64,3 +64,6 @@ Route::resource('/payments', 'User\PaymentController');
 
 Route::resource('/reports', 'User\ReportController');
 Route::post('/processData', 'User\ReportController@processData')->name('process.data');
+
+Route::post('/exportCashFlow', 'User\ReportController@exportCashFlow')->name('cash_flow.export');
+Route::post('/exportPayment', 'User\ReportController@exportPayment')->name('payment.export');

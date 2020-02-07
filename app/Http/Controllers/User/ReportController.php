@@ -11,6 +11,10 @@ use App\Model\Mutation;
 use App\Model\Payment;
 use App\Alert;
 
+use App\Exports\CashFlowExport;
+use App\Exports\PaymentExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ReportController extends UadminController
 {
     public $MONTH = [
@@ -69,6 +73,51 @@ class ReportController extends UadminController
         $modalProcessData = view('layouts.templates.modals.modal', $modalProcessData );
         $this->data[ 'modalProcessData' ]       = $modalProcessData;
 
+        // modalgetCashFlow
+        $modalgetCashFlow['modalTitle']    = "Generate";
+        $modalgetCashFlow['modalId']       = "modalgetCashFlow";
+        $modalgetCashFlow['formMethod']    = "post";
+        $modalgetCashFlow['formUrl']       = route('cash_flow.export') ;
+        $modalgetCashFlow['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+            'month' => [
+                'type'      => 'select',
+                'label'     => 'Bulan',
+                'options'   => $this->MONTH,
+                'value'     => date('m'),
+
+            ],
+            'year' => [
+                'type'      => 'select',
+                'label'     => 'Tahun',
+                'options'   => $this->YEAR,
+                'value'     => date('Y'),
+            ],
+        ] ] );
+        $modalgetCashFlow = view('layouts.templates.modals.modal', $modalgetCashFlow );
+        $this->data[ 'modalgetCashFlow' ]       = $modalgetCashFlow;
+
+        // modalgetPayment
+        $modalgetPayment['modalTitle']    = "Generate";
+        $modalgetPayment['modalId']       = "modalgetPayment";
+        $modalgetPayment['formMethod']    = "post";
+        $modalgetPayment['formUrl']       = route('payment.export') ;
+        $modalgetPayment['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+            'month' => [
+                'type'      => 'select',
+                'label'     => 'Bulan',
+                'options'   => $this->MONTH,
+                'value'     => date('m'),
+            ],
+            'year' => [
+                'type'      => 'select',
+                'label'     => 'Tahun',
+                'options'   => $this->YEAR,
+                'value'     => date('Y'),
+            ],
+        ] ] );
+        $modalgetPayment = view('layouts.templates.modals.modal', $modalgetPayment );
+        $this->data[ 'modalgetPayment' ]       = $modalgetPayment;
+
 
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'page_title' ]          = 'Proses Data dan Laporan';
@@ -105,6 +154,30 @@ class ReportController extends UadminController
         CashFlow::insert($data);
         return redirect()->back()->with(['message' => Alert::setAlert( Alert::SUCCESS, "data berhasil di proses" ) ]);
     }
+
+    public function exportCashFlow( Request $request )
+	{
+        $this->validate($request, [
+            'month'             => 'required',
+            'year'              => 'required',
+        ]);
+        $month =  $request->input( 'month' );
+        $year =  $request->input( 'year' );
+
+		return Excel::download(new CashFlowExport( $month, $year ), 'cashflow.xlsx');
+    }
+    
+    public function exportPayment( Request $request )
+	{
+        $this->validate($request, [
+            'month'             => 'required',
+            'year'              => 'required',
+        ]);
+        $month =  $request->input( 'month' );
+        $year =  $request->input( 'year' );
+
+		return Excel::download(new PaymentExport( $month, $year ), 'pembayaran.xlsx');
+	}
 
     /**
      * Show the form for creating a new resource.

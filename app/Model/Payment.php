@@ -48,7 +48,6 @@ class Payment extends Model
     public static function toCashFlow( $month, $year )
     {
 		$count_days = cal_days_in_month(CAL_GREGORIAN, $month, $year );
-
         //find withdrawal
         $payments = Payment::whereBetween( 'date', [ $year.'-'.$month.'-01' , $year.'-'.$month.'-'.$count_days ] );
 
