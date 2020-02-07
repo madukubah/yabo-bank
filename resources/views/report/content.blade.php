@@ -50,18 +50,7 @@
             </div>
         </div>
           <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title m-0">Data Pembelian</h5>
-              </div>
-              <div class="card-body">
-                <p class="card-text">Lakukan Proses Data terlebih dahulu sebelum meng-generate laporan.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
+          <div class="col-lg-12">
             <div class="card">
               <div class="card-header">
                 <h5 class="card-title m-0">Data Pembayaran</h5>

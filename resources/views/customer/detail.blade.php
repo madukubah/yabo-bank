@@ -119,8 +119,8 @@
                                 <div class="row">
                                     <div class="col-2"></div>
                                     <div class="col-10">
-                                        <div class="float-right mr-5">
-                                           
+                                        <div class="float-right ">
+                                            <?php echo ( isset( $linkCreateTransaction )  ) ? $linkCreateTransaction : '' ;  ?>
                                         </div>
                                     </div>
                                 </div>

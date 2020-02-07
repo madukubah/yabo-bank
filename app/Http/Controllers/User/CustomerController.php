@@ -205,7 +205,12 @@ class CustomerController extends UadminController
                                         ]] );
         $modalUploadIdentity = view('layouts.templates.modals.modal', $modalUploadIdentity );
         $this->data[ 'modalUploadIdentity' ]    = $modalUploadIdentity;
-        #notations
+        // linkCreateTransaction
+        $linkCreateTransaction['url']              = url('customers/create');
+        $linkCreateTransaction['linkName']         = 'Buat Transaksi';
+        $linkCreateTransaction                     = view('layouts.templates.tables.actions.link', $linkCreateTransaction);
+        $this->data[ 'linkCreateTransaction' ]  = $linkCreateTransaction;
+        #mutations
         $mutationsTable[ 'header' ]  = [ 
             'created_at'    => 'Tanggal',
             'description'   => 'Keterangan',

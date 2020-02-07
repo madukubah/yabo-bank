@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,17 +10,17 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{url('adminlte/plugins/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="{{url('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{url('adminlte/dist/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/dist/css/adminlte.min.css')}}">
     <!-- table css -->
-    <link rel="stylesheet" href="{{url('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="{{url('adminlte/plugins/table-css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/table-css/style.css')}}">
     @section('css')
     @show
     <!-- Google Font: Source Sans Pro -->
@@ -47,17 +46,17 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="{{url('adminlte/plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('adminlte/plugins/jquery/jquery.min.js')}}"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="{{url('adminlte/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+    <script src="{{asset('adminlte/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <!-- Bootstrap 4 -->
-    <script src="{{url('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{url('adminlte/plugins/jquery-knob/jquery.knob.min.js')}}"></script>
+    <script src="{{asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('adminlte/plugins/jquery-knob/jquery.knob.min.js')}}"></script>
     <!-- overlayScrollbars -->
-    <script src="{{url('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+    <script src="{{asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
-    <script src="{{url('adminlte/dist/js/adminlte.js')}}"></script>
+    <script src="{{asset('adminlte/dist/js/adminlte.js')}}"></script>
     @section('js')
     @show
     <?php if( Auth::user()->hasRole( 'uadmin' ) ): ?>
