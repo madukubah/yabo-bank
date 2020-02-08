@@ -106,7 +106,7 @@ class InvoiceController extends UserController
         $request->validate( [
             'product' => ['required'],
             'quantity' => ['required'],
-            // 'pickUpId' => ['required'],
+            'pickUpId' => ['required'],
         ] );
         $pickup = Auth::user()->userable->pickUps->find( $request->input('pickUpId') );
         $quantities                         = $request->input('quantity');
@@ -147,7 +147,6 @@ class InvoiceController extends UserController
         }
 
         return redirect()->route('pickups.index')->with(['message' => Alert::setAlert( 1, "transaksi Berhasil berhasil di buat" ) ]);
-        // dd( $request->input() );die;
     }
 
     /**
