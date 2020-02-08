@@ -130,10 +130,10 @@ class InvoiceController extends UserController
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
-                'description'       => 'transaction to customer '.  $pickup->request->customer->code  . ': '
-                                        .$product_->name.','.$product_->price
-                                        .','.$product_->unit.',qty:'.$quantities[ $ind ]
-                                        .'driver:'.Auth::user()->name,
+                'description'       => 'Transaksi : '
+                                        .$product_->name.' ('.$product_->price
+                                        .' / '.$product_->unit.') , qty:'.$quantities[ $ind ]
+                                        .', Driver : '.Auth::user()->name,
             ]);
         endforeach;
         if( $request->input('pickUpId') != NULL )
