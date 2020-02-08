@@ -68,11 +68,11 @@ class AuthController extends BaseController
             'code' => 'Customer_'.time()
         ] );
         $previlege->user()->save( $user );
-        Mutation::create([
+        Mutation::createMutaion([
             'customer_id'       => $previlege->id,
             'transaction_id'    => 0 ,
             'nominal'           => 0,
-            'position'          => 1,
+            'position'          => 2,
             'description'       => 'initial',
         ]);
         // customer
