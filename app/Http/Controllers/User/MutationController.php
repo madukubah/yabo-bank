@@ -134,7 +134,7 @@ class MutationController extends UserController
 
         $this->data[ 'modalConfirm' ]       = $modalConfirm;
 
-        $this->data[ 'page_title' ]          = 'Pencairan';
+        $this->data[ 'page_title' ]          = 'Penarikan';
         return $this->render( 'mutation.withdrawal' );
     }
 
