@@ -166,7 +166,7 @@ class MutationController extends UserController
             'transaction_id'    => 0,
             'nominal'           => $nominal,
             'position'          => 1, // credit
-            'description'       => 'withdrawal to customer '.  $customer->code ,
+            'description'       => 'Penarikan ',
         ]);
         return redirect()->route('customers.show', $request->input('user_id') )->with(['message' => Alert::setAlert( Alert::SUCCESS, "Pencairan Berhasil" ) ]);
     }

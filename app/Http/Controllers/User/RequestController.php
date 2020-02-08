@@ -191,7 +191,6 @@ class RequestController extends UserController
         $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
         // unlink( RequestModel::PHOTO_PATH."/".$fileName );
         // die;
-        
         RequestModel::create([
             'code'          => $request->input('code') ,
             'info'          => $request->input('info') ,

@@ -426,9 +426,8 @@ class CustomerController extends UadminController
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
-                'description'       => 'direct transaction to customer '.  $customer->code  . ': '
-                                        .$product_->name.','.$product_->price
-                                        .','.$product_->unit.',qty:'.$quantities[ $ind ],
+                'description'       => 'Transaksi Langsung '.$product_->name.' ('.$product_->price
+                                        .' / '.$product_->unit.') , qty:'.$quantities[ $ind ],
             ]);
         endforeach;
         
