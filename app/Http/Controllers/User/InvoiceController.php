@@ -28,7 +28,7 @@ class InvoiceController extends UserController
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -113,7 +113,7 @@ class InvoiceController extends UserController
 
         foreach( $request->input('product') as $ind => $product ):
             $product_ = PriceList::findOrFail( $product );
-            
+
             $transaction = Transaction::createTransaction([
                 'customer_id'   => $pickup->request->customer_id,
                 'driver_id'     => Auth::user()->userable->id,
@@ -145,7 +145,7 @@ class InvoiceController extends UserController
                 'status' => 2
             ]);
         }
-        
+
         return redirect()->route('pickups.index')->with(['message' => Alert::setAlert( 1, "transaksi Berhasil berhasil di buat" ) ]);
         // dd( $request->input() );die;
     }

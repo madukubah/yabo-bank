@@ -26,7 +26,7 @@ class SellingController extends UadminController
      */
     public function index()
     {
-        $table[ 'header' ]  = [ 
+        $table[ 'header' ]  = [
             'code'              => 'Kode',
             'factory_name'      => 'Nama Pabrik',
             'container_car'     => 'No. Kontainer/ No. Mobil',
@@ -39,9 +39,9 @@ class SellingController extends UadminController
             'total'             => 'Total',
          ];
         $table[ 'number' ]  = 1;
-        
+
         $sellings = Selling::getData()->get();
-        
+
 
         $table[ 'rows' ]    = $sellings;
         $table[ 'action' ]  = [
@@ -82,7 +82,7 @@ class SellingController extends UadminController
         $dataForm->code = Selling::getCode(  );
         $form[ 'content' ]      = view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields, 'data' => $dataForm ] );
         $form                   = view('layouts.templates.forms.form', $form );
-        
+
         $this->data[ 'contents' ]            = $form ;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
@@ -163,11 +163,11 @@ class SellingController extends UadminController
         $linkCreate                     = view('layouts.templates.tables.actions.link', $linkCreate);
         if( $selling->invoice == null )
             $this->data[ 'header_button' ]  = $linkCreate;
-        
+
         // modal Pembayaran
         if( $selling->invoice != null ){
             // payment table
-            $table[ 'header' ]  = [ 
+            $table[ 'header' ]  = [
                 'code'          => 'Kode',
                 'date'          => 'Tanggal',
                 'bill'          => 'Tagihan',
@@ -179,7 +179,7 @@ class SellingController extends UadminController
             $table[ 'billTotal' ]       = ( $selling->gross - $selling->cut_off ) * $selling->selling_price;
             $table = view('selling.payment_history_table', $table);
             $this->data[ 'payment_history' ]            = $table;
-            
+
             $modalPayment['modalTitle']    = "Buat Pembayaran";
             $modalPayment['modalId']       = "create_payment";
             $modalPayment['formMethod']    = "post";
@@ -209,7 +209,7 @@ class SellingController extends UadminController
     public function createInvoice($id)
     {
         $selling            = Selling::findOrFail( $id );
-        if( $selling->invoice != null ) 
+        if( $selling->invoice != null )
             return redirect()->route('sellings.index' )->with(['message' => Alert::setAlert( 0, "Sudah Punya Invoice" ) ]);
 
         $selling->selling_id= $selling->id;
@@ -256,7 +256,7 @@ class SellingController extends UadminController
         $request->validate( $validationConfig );
 
         $selling            = Selling::findOrFail( $request->input('selling_id') );
-        if( $selling->invoice != null ) 
+        if( $selling->invoice != null )
             return redirect()->route('sellings.index' )->with(['message' => Alert::setAlert( 0, "Sudah Punya Invoice" ) ]);
 
 
@@ -288,7 +288,7 @@ class SellingController extends UadminController
         ];
         $form[ 'content' ]      = view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields, 'data' => $selling ] );
         $form                   = view('layouts.templates.forms.form', $form );
-        
+
         $this->data[ 'contents' ]            = $form ;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
@@ -345,6 +345,6 @@ class SellingController extends UadminController
         $selling = Selling::findOrFail( $id );
         $selling->delete();
         return redirect()->route('sellings.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di Hapus" ) ]);
-        
+
     }
 }

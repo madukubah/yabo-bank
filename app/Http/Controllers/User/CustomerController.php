@@ -31,13 +31,13 @@ class CustomerController extends UadminController
      */
     public function index()
     {
-        $table[ 'header' ]  = [ 
+        $table[ 'header' ]  = [
             'customer_code' => 'Kode',
             'name' => 'Customer',
             'total' => 'Saldo',
          ];
         $table[ 'number' ]  = 1;
-        
+
         $customers = Mutation::getAccumulations()->get();
 
         $table[ 'rows' ]    = $customers;
@@ -89,7 +89,7 @@ class CustomerController extends UadminController
         ] ] );
         $form[ 'content' ]      .= view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields ] );
         $form                   = view('layouts.templates.forms.form', $form );
-        
+
         $this->data[ 'contents' ]            = $form ;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
@@ -169,13 +169,13 @@ class CustomerController extends UadminController
         ] ] );
         $formFields = User::getFormData( FALSE );
         unset( $formFields['role_name'] );
-        
+
         $detail     .= view('layouts.templates.forms.form_fields_readonly', [ 'formFields' => $formFields, 'data'=> $user ] );
 
         $linkEdit['url']        = url('customers').'/'. $user->id.'/edit';
         $linkEdit['linkName']   = 'Edit';
         $linkEdit               = view('layouts.templates.tables.actions.link', $linkEdit);
-        
+
         $this->data[ 'contents' ]            = $detail.'<br>'.$linkEdit;
         # modal upload photo
         $modalUploadPhoto['modalTitle']    = "Upload Foto";
@@ -211,7 +211,7 @@ class CustomerController extends UadminController
         $linkCreateTransaction                     = view('layouts.templates.tables.actions.link', $linkCreateTransaction);
         $this->data[ 'linkCreateTransaction' ]  = $linkCreateTransaction;
         #mutations
-        $mutationsTable[ 'header' ]  = [ 
+        $mutationsTable[ 'header' ]  = [
             'created_at'    => 'Tanggal',
             'description'   => 'Keterangan',
             'credit_total' => 'Kredit',
@@ -282,16 +282,16 @@ class CustomerController extends UadminController
                                         ]] );
         $modalwithdrawal = view('layouts.templates.modals.modal', $modalwithdrawal );
         $this->data[ 'modalwithdrawal' ]             = $modalwithdrawal;
-        
+
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'page_title' ]          = 'Customer';
         $this->data[ 'header' ]              = 'Detail Customer';
         $this->data[ 'sub_header' ]          = '';
-        
+
         return $this->render( 'customer.detail' );
     }
 
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -304,7 +304,7 @@ class CustomerController extends UadminController
         $user       = User::findOrFail( $id );
         $user->role = $user->roles[0]->id;
         $user->role_name = $user->roles[0]->role_name;
-      
+
         $form[ 'formUrl' ]      = url('customers').'/'. $user->id;
         $form[ 'formMethod' ]   = 'post';
         $form[ 'blank' ]        = 'blank';
@@ -317,7 +317,7 @@ class CustomerController extends UadminController
         $form[ 'content' ]      = view('layouts.templates.forms.form_fields', [ 'formFields' => $formFields , 'data'=> $user ] );
         $form                   = view('layouts.templates.forms.form', $form );
         $this->data[ 'contents' ]            = $form ;
-        
+
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'header' ]              = 'edit customer';
         $this->data[ 'sub_header' ]          = '';
@@ -339,7 +339,7 @@ class CustomerController extends UadminController
             'phone' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
         ];
-       
+
         $user       = User::findOrFail( $id );
         if( $request->input('email') != $user->email )
             $validationConfig[ 'email' ] []= 'unique:users';
@@ -349,7 +349,7 @@ class CustomerController extends UadminController
             $validationConfig[ '_password' ] = ['required', 'string', 'min:4', 'confirmed'];
         }
         $request->validate( $validationConfig );
-        
+
         $data = [
             'name'          =>  $request->input('name'),
             'email'         =>  $request->input('email'),
@@ -378,7 +378,7 @@ class CustomerController extends UadminController
             'photo' => 'required|file|max:1024',
         ] );
         $fileName = "IDENTITY_".time().".".$request->photo->getClientOriginalExtension();
-        
+
         if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
         {
             $oldPhoto   = $customer->identity_photo;
