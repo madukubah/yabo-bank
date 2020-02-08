@@ -258,7 +258,7 @@ class CustomerController extends UadminController
         $this->data['debit']                  = ( $debit != NULL ) ? abs( $debit->total ) : 0 ;
 
         // modal pencairan
-        $modalwithdrawal['modalTitle']    = "Buat Pencairan";
+        $modalwithdrawal['modalTitle']    = "Buat Penarikan";
         $modalwithdrawal['modalId']       = "create";
         $modalwithdrawal['formMethod']    = "post";
         $modalwithdrawal['buttonColor']   = "success";
