@@ -23,7 +23,6 @@ class PickUpController extends UserController
         $this->middleware( [ 'role:uadmin' ], ['only' => ['store'] ] );
         $this->data[ 'page_title' ]          = 'Penjemputan';
         $this->data[ 'menu_id' ] = "pickups";
-
     }
     /**
      * Display a listing of the resource.

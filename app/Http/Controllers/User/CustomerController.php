@@ -9,11 +9,13 @@ use Session;
 use App\User;
 use App\Model\Role;
 use App\Model\Mutation;
+use App\Model\Transaction;
 use App\Alert;
 use Auth;
 use DB;
 use App\Model\Customer;
 use App\Model\Driver;
+use App\Model\PriceList;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -206,10 +208,11 @@ class CustomerController extends UadminController
         $modalUploadIdentity = view('layouts.templates.modals.modal', $modalUploadIdentity );
         $this->data[ 'modalUploadIdentity' ]    = $modalUploadIdentity;
         // linkCreateTransaction
-        $linkCreateTransaction['url']              = url('customers/create');
+        $linkCreateTransaction['url']              = route('customer.create_transaction', $user->userable->id );
         $linkCreateTransaction['linkName']         = 'Buat Transaksi';
         $linkCreateTransaction                     = view('layouts.templates.tables.actions.link', $linkCreateTransaction);
-        $this->data[ 'linkCreateTransaction' ]  = $linkCreateTransaction;
+        $this->data[ 'linkCreateTransaction' ]     = $linkCreateTransaction;
+
         #mutations
         $mutationsTable[ 'header' ]  = [ 
             'created_at'    => 'Tanggal',
@@ -291,7 +294,146 @@ class CustomerController extends UadminController
         return $this->render( 'customer.detail' );
     }
 
-    
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createTransaction($customer_id)
+    {
+        $customer = Customer::findOrFail( $customer_id );
+        $this->data[ 'customer' ]            = $customer;
+
+        $formProduct = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                'product[]' => [
+                    'type' => 'select',
+                    'label' => 'Role Name',
+                    'labeled' => false,
+                    'options' => DB::table('price_lists')->pluck( 'name', 'id' ) ,
+                    'value' => '',
+                ],
+        ]] );
+        $this->data[ 'formProduct' ]            = $formProduct;
+        $this->data[ 'products' ]               = DB::table('price_lists')->pluck( 'price', 'id' );
+        $this->data[ 'units' ]                  = DB::table('price_lists')->pluck( 'unit', 'id' );
+        // dd( $this->data[ 'products' ] );die;
+
+        $this->data[ 'message_alert' ]       = Session::get('message');
+        $this->data[ 'page_title' ]          = 'Buat Transaksi';
+        $this->data[ 'header' ]              = '';//$pickup->request->code;
+        $this->data[ 'sub_header' ]          = '';
+
+        return $this->render( 'customer.create_transaction' );
+    }
+
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkoutTransantion( Request $request )
+    {
+        // dd( $request->input() );die;
+        $request->validate( [
+            'product'       => ['required'],
+            'quantity'      => ['required'],
+            'customer_id'   => ['required'],
+        ] );
+
+        $customer = Customer::findOrFail( $request->input('customer_id') );
+        $this->data[ 'customer' ]            = $customer;
+
+        $this->data[ 'products' ]           = $request->input('product');
+        $quantities                         = $request->input('quantity');
+        $tableData = [];
+        $total = 0;
+
+        $confirmFormFields = [];
+        foreach( $request->input('product') as $ind => $product ):
+            $product_ = PriceList::findOrFail( $product );
+            $total += $product_->price * $quantities[ $ind ];
+            $tableData[]= (object) [
+                'product_name' => $product_->name,
+                'product_price_per_unit' => $product_->price." / ".$product_->unit,
+                'quantity' => $quantities[ $ind ],
+                'sub_total' => $product_->price * $quantities[ $ind ] ,
+            ];
+            $confirmFormFields [ 'product['.$ind.']' ]= [
+                'type' => 'hidden',
+                'value' => $product,
+            ];
+            $confirmFormFields [ 'quantity['.$ind.']' ]= [
+                'type' => 'hidden',
+                'value' => $quantities[ $ind ],
+            ];
+        endforeach;
+
+        $this->data[ 'tableData' ]       = $tableData;
+        $this->data[ 'total' ]           = $total;
+        ################
+        # modal
+        ################
+        $confirmFormFields [ 'customer_id' ]= [
+            'type' => 'hidden',
+            'value' =>  $request->input('customer_id') ,
+        ];
+        $modalConfirm['modalTitle']    = "Konfirmasi";
+        $modalConfirm['modalId']       = "confirm";
+        $modalConfirm['formMethod']    = "post";
+        $modalConfirm['formUrl']       = route('customer.confirm_transaction') ;
+        $modalConfirm['modalBody']     =  "<div class='alert alert-success alert-dismissible'>
+                                            <h5>Anda Yakin ?</h5></div>";
+        $modalConfirm['modalBody']     .= view('layouts.templates.forms.form_fields', [ 'formFields' => $confirmFormFields ] );
+        $modalConfirm = view('layouts.templates.modals.modal', $modalConfirm );
+
+        $this->data[ 'modalConfirm' ]       = $modalConfirm;
+        return $this->render( 'customer.checkout_transaction' );
+    }
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmTransaction(Request $request)
+    {
+        $request->validate( [
+            'product' => ['required'],
+            'quantity' => ['required'],
+            'customer_id' => ['required'],
+        ] );
+        $customer = Customer::findOrFail( $request->input('customer_id') );
+
+        $quantities                         = $request->input('quantity');
+
+        foreach( $request->input('product') as $ind => $product ):
+            $product_ = PriceList::findOrFail( $product );
+            
+            $transaction = Transaction::createTransaction([
+                'customer_id'   => $customer->id,
+                'driver_id'     => 0,
+                'product'       => $product_->name,
+                'unit'          => $product_->unit,
+                'price'         => $product_->price,
+                'quantity'      => $quantities[ $ind ]  ,
+            ]);
+            // nominal
+            // 1 = credit // uang keluar
+            // 2 = debit // uang masuk
+            Mutation::createMutaion([
+                'customer_id'       => $customer->id,
+                'transaction_id'    => $transaction->id,
+                'nominal'           => $product_->price * $quantities[ $ind ] ,
+                'position'          => 2,
+                'description'       => 'direct transaction to customer '.  $customer->code  . ': '
+                                        .$product_->name.','.$product_->price
+                                        .','.$product_->unit.',qty:'.$quantities[ $ind ],
+            ]);
+        endforeach;
+        
+        return redirect()->route('customers.show', $customer->user->id )->with(['message' => Alert::setAlert( 1, "transaksi Berhasil berhasil di buat" ) ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
