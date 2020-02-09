@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Yabo Bank
+                    SISA
                 </div>
             </div>
         </div>

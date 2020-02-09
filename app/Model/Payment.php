@@ -9,11 +9,11 @@ use DB;
 class Payment extends Model
 {
     protected $fillable = [
-		'id', 
-		'code', 
-		'invoice_id', 
-		'date', 
-		'amount', 
+		'id',
+		'code',
+		'invoice_id',
+		'date',
+		'amount',
     ];
     public function invoice()
     {
@@ -75,7 +75,7 @@ class Payment extends Model
                 'type' => 'hidden',
             ],
             'invoice_id' => [
-                'type' => 'text',
+                'type' => 'hidden',
             ],
             'code' => [
                 'type' => 'text',
