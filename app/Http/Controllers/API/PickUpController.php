@@ -29,6 +29,7 @@ class PickUpController extends BaseController
                 $item->customer_address = $item->request->customer->user->address; 
                 $item->request_info     = $item->request->info;
                 $item->customer_id      = $item->request->customer_id;
+                $item->customer_phone   = $item->request->customer->user->phone;
                 $item->request_date     = date( 'Y-m-d H:i:s', strtotime( $item->request->created_at ) ) ;
                 $data[]= $item;
             }
