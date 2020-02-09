@@ -159,7 +159,6 @@ class MutationController extends UserController
         }
 
         $customer = Customer::findOrFail( $request->input('customer_id') );
-
         // dd( $request->input() );die;
         Mutation::createMutaion([
             'customer_id'       => $customer->id,
