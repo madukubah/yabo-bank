@@ -21,6 +21,7 @@ class AuthController extends BaseController
             if( Auth::user()->hasRole('customer') )
             {
                 $user->identity_photo =  $user->userable->identity_photo;
+                $user->status         =  $user->userable->status;
             }
             $success['user'] =  $user;
 
@@ -39,12 +40,12 @@ class AuthController extends BaseController
     public function register( Request $request )
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'phone' => 'required|unique:users',
-            'address' => 'required',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+            'name'          => 'required',
+            'email'         => 'required|email|unique:users',
+            'phone'         => 'required|unique:users',
+            'address'       => 'required',
+            'password'      => 'required',
+            'c_password'    => 'required|same:password',
         ]);
 
         if($validator->fails()){

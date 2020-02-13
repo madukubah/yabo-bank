@@ -44,6 +44,7 @@ class Mutation extends Model
         ->selectRaw('
             ( mutations.debit_total - mutations.credit_total   ) as total,
             customers.id as customer_id,
+            customers.status as customer_status,
             CONCAT( customers.code, " " )  as customer_code,
             users.id as user_id,
             users.name,

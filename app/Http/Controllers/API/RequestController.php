@@ -70,10 +70,13 @@ class RequestController extends BaseController
      */
     public function store(Request $request)
     {
+        if( Auth::user()->userable->status == 0 )
+            return $this->sendError( NULL, 'akun belum di verifikasi' );
+
         $validator = Validator::make($request->all(), [
             'photo' => 'required|file|max:1024',
             'info' => 'required',
-        ]  );
+        ] );
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -82,11 +85,13 @@ class RequestController extends BaseController
         $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
 
         $req = RequestModel::create([
-            'code'=> 'Request_'.time(),
-            'info'=> $request->input('info'),
+            'code'          => 'Request_'.time(),
+            'info'          => $request->input('info'),
             'photo'         => $fileName ,
-            'customer_id' => Auth::user()->userable->id ,
-            'status'    => 0,
+            'customer_id'   => Auth::user()->userable->id ,
+            'status'        => 0,
+            'latitude'      => 0 ,
+            'longitude'     => 0 ,
         ]);
         return $this->sendResponse( $req, 'request berhasil di buat' );
 

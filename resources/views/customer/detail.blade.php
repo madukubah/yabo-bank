@@ -33,14 +33,17 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header ">
                         <div class="col-12">
                                 <?= $message_alert = ( isset( $message_alert ) ) ? $message_alert : ''  ?>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <h5>
                                     <?= $header = ( isset( $header ) ) ? strtoupper( $header ) : ''  ?>
+                                    &nbsp
+                                    <?= ( $user->userable->status == 0 ) ? '<span class="right badge badge-danger">Not Verified</span>' : '<span class="right badge badge-success">Verified</span>' ;?>
                                     <p class="text-secondary"><small><?= $sub_header = ( isset( $sub_header ) ) ? $sub_header : ''  ?></small></p>
                                 </h5>
                             </div>
@@ -49,7 +52,7 @@
                                     <div class="col-2"></div>
                                     <div class="col-10">
                                         <div class="float-right">
-                                            <?php echo (isset( $header_button )) ? $header_button : '';  ?>
+                                            <?php echo (isset( $modalActive )) ? $modalActive : '';  ?>
                                         </div>
                                     </div>
                                 </div>

@@ -41,7 +41,7 @@ class CustomerController extends UadminController
         $table[ 'number' ]  = 1;
 
         $customers = Mutation::getAccumulations()->get();
-
+        
         $table[ 'rows' ]    = $customers;
         $table[ 'action' ]  = [
             "link" => [
@@ -51,7 +51,8 @@ class CustomerController extends UadminController
                 "buttonColor"   => "primary",
             ],//link
         ];
-        $table = view('layouts.templates.tables.plain_table', $table);
+
+        $table = view('customer.table', $table);
 
         $linkCreate['url']              = url('customers/create');
         $linkCreate['linkName']         = 'Tambah Customer';
@@ -193,6 +194,25 @@ class CustomerController extends UadminController
                                         ]] );
         $modalUploadPhoto = view('layouts.templates.modals.modal', $modalUploadPhoto );
         $this->data[ 'modalUploadPhoto' ]    = $modalUploadPhoto;
+        
+        #modal activation
+        $modalActive['modalTitle']    = ( $user->userable->status == 0 ) ? "Aktifkan" : "Non Aktifkan" ;
+        $modalActive['modalId']       = "changeStatus";
+        $modalActive['buttonColor']   = ( $user->userable->status == 0 ) ? "success" : "danger";
+        $modalActive['formMethod']    = "post";
+        $modalActive['formUrl']       = route('customer.change.status', $user->userable->id) ;
+        $modalActive['modalBody']     =  "<div class='alert alert-".$modalActive['buttonColor']." alert-dismissible'>
+                                            <h5>Anda Yakin ?</h5></div>";
+        $modalActive['modalBody']     .= view('layouts.templates.forms.form_fields', [ 'formFields' => [
+            'status' => [
+                'type' => 'hidden',
+                'value' =>  $user->userable->status ^ 1
+            ],
+        ] ] );
+        $modalActive = view('layouts.templates.modals.modal', $modalActive );
+
+        $this->data[ 'modalActive' ]       = $modalActive;
+
         # modal upload identity photo
         $modalUploadIdentity['modalTitle']    = "Upload Foto KTP";
         $modalUploadIdentity['modalId']       = "customers_upload";
@@ -531,6 +551,26 @@ class CustomerController extends UadminController
             // dd( $customer->identity_photo );die;
 
         }
+        return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changeStatus( $id, Request $request )
+    {
+        // dd( $request->input() );die;
+        $customer       = Customer::findOrFail( $id );
+        $request->validate( [
+            'status' => 'required',
+        ] );
+        
+        $customer->status = $request->input( 'status' );
+        $customer->save();
+
         return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
     }
     /**

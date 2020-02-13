@@ -50,6 +50,7 @@ Route::resource('/transactions', 'User\TransactionController');
 
 Route::resource('/customers', 'User\CustomerController');
 Route::post('/customers_photo/{customerId}', 'User\CustomerController@uploadIdendityPhoto')->name('customers.upload_photo');
+Route::post('/changeStatus/{customerId}', 'User\CustomerController@changeStatus')->name('customer.change.status');
 
 Route::resource('/drivers', 'User\DriverController');
 

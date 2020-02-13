@@ -180,7 +180,9 @@ class RequestController extends UserController
      */
     public function store(Request $request)
     {
-
+        if( Auth::user()->userable->status == 0 )
+            return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 0, "akun belum di verifikasi" ) ]);
+            
         $request->validate( [
             'code' => 'required',
             'photo' => 'required|file|max:1024',
@@ -197,6 +199,8 @@ class RequestController extends UserController
             'photo'         => $fileName ,
             'customer_id'   => Auth::user()->userable->id ,
             'status'        => 0 ,
+            'latitude'      => 0 ,
+            'longitude'     => 0 ,
         ]);
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di buat" ) ]);
     }
