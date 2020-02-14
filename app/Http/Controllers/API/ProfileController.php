@@ -26,6 +26,7 @@ class ProfileController extends BaseController
         if( Auth::user()->hasRole('customer') )
         {
             $user->identity_photo =  $user->userable->identity_photo;
+            $user->status         =  $user->userable->status;
         }
         $success['user'] =  $user;
 
@@ -47,7 +48,7 @@ class ProfileController extends BaseController
             'phone' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
         ];
-       
+
         $user       = Auth::user() ;
         if( $request->input('email') != $user->email )
             $validationConfig[ 'email' ] []= 'unique:users';
@@ -60,9 +61,9 @@ class ProfileController extends BaseController
         $validator = Validator::make($request->all(), $validationConfig );
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors());
         }
-        
+
         $user->name     = $request->input('name');
         $user->email    = $request->input('email');
         $user->phone    = $request->input('phone');
@@ -93,11 +94,11 @@ class ProfileController extends BaseController
         ]  );
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors());
         }
         // var_dump( $request->photo );die;
         $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
-        
+
         if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
         {
             $user = Auth::user();
@@ -130,15 +131,15 @@ class ProfileController extends BaseController
         // dd( $request->input() );die;
         $customer       = Auth::user()->userable ;
         $validator = Validator::make($request->all(), [
-            'photo' => 'required|file|max:1024', 
+            'photo' => 'required|file|max:1024',
         ]  );
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors());
         }
 
         $fileName = "IDENTITY_".time().".".$request->photo->getClientOriginalExtension();
-        
+
         if( $request->photo->move( Customer::PHOTO_PATH, $fileName ) )
         {
             $oldPhoto   = $customer->identity_photo;
@@ -156,5 +157,5 @@ class ProfileController extends BaseController
         $data['user'] = $user;
         return $this->sendResponse( $data, 'berhasil upload foto' );
     }
- 
+
 }
