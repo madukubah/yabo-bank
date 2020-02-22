@@ -38,12 +38,14 @@ class RequestController extends UserController
             ################
             # uadmin
             ################
-            $tableForm[ 'header' ]  = [ 
+            $tableForm[ 'header' ]  = [
                 // 'customer->code' => 'Kode Customer',
                 'code'                      => 'Kode Request',
                 'customer->user->name'      => 'Nama Customer',
                 'customer->user->address'   => 'Alamat',
                 'photo'                     => 'Gambar',
+                'latitude'                  => 'Lat Long',
+                // 'longitude'                 => 'Longitude',
                 'info'                      => 'Keterangan',
                 'created_at'                => 'Waktu Request',
              ];
@@ -53,7 +55,7 @@ class RequestController extends UserController
                                                 select([ '*','requests.id as request_id' ])
                                                 ->where( 'status', 0 )
                                                 ->get();
-            
+
             $tableForm[ 'number' ]        = 1;
             $drivers = Driver::all();
             $driverSelect = array();
@@ -70,14 +72,14 @@ class RequestController extends UserController
                                                     ],
                                             ]] );
             $table = view('request.table_form', $tableForm );
-            
+
         }
         else
         {
             ################
             # Customer
             ################
-            $table[ 'header' ]  = [ 
+            $table[ 'header' ]  = [
                 'code'          => 'Kode Request',
                 'created_at'    => 'Waktu Request',
                 'photo'         => 'Gambar',
@@ -153,7 +155,7 @@ class RequestController extends UserController
             $modalCreate = view('layouts.templates.modals.modal', $modalCreate );
             $this->data[ 'header_button' ]       = $modalCreate;
         }
-       
+
         $this->data[ 'contents' ]            = $table;
 
         $this->data[ 'message_alert' ]       = Session::get('message');
@@ -182,7 +184,7 @@ class RequestController extends UserController
     {
         if( Auth::user()->userable->status == 0 )
             return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 0, "akun belum di verifikasi" ) ]);
-            
+
         $request->validate( [
             'code' => 'required',
             'photo' => 'required|file|max:1024',

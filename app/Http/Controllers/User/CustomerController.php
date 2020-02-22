@@ -41,7 +41,7 @@ class CustomerController extends UadminController
         $table[ 'number' ]  = 1;
 
         $customers = Mutation::getAccumulations()->get();
-        
+
         $table[ 'rows' ]    = $customers;
         $table[ 'action' ]  = [
             "link" => [
@@ -132,7 +132,8 @@ class CustomerController extends UadminController
         ]);
         $user->putRole( 'customer' );
         $previlege = Customer::create( [
-            'code' => $request->input('customer_code')
+            'code'      => $request->input('customer_code'),
+            'status'    => 0
         ] );
         $previlege->user()->save( $user );
         Mutation::createMutaion([
@@ -194,7 +195,7 @@ class CustomerController extends UadminController
                                         ]] );
         $modalUploadPhoto = view('layouts.templates.modals.modal', $modalUploadPhoto );
         $this->data[ 'modalUploadPhoto' ]    = $modalUploadPhoto;
-        
+
         #modal activation
         $modalActive['modalTitle']    = ( $user->userable->status == 0 ) ? "Aktifkan" : "Non Aktifkan" ;
         $modalActive['modalId']       = "changeStatus";
@@ -446,8 +447,8 @@ class CustomerController extends UadminController
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
-                'description'       => 'Transaksi Langsung '.$product_->name.' ('.$product_->price
-                                        .' / '.$product_->unit.') , qty:'.$quantities[ $ind ],
+                'description'       => 'Transaksi Langsung '.strtoupper( $product_->name ).' ('.$product_->price
+                                        .' / '.$product_->unit.') , '.$quantities[ $ind ].' '.$product_->unit,
             ]);
         endforeach;
 
@@ -567,7 +568,7 @@ class CustomerController extends UadminController
         $request->validate( [
             'status' => 'required',
         ] );
-        
+
         $customer->status = $request->input( 'status' );
         $customer->save();
 

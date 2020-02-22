@@ -30,7 +30,7 @@ class RequestController extends BaseController
         $processed_request = Auth::user()->userable->requests->where( 'status', 1 );
         foreach( $processed_request as $item )
         {
-            $item->driver_name  = $item->pickUp->driver->user->name; 
+            $item->driver_name  = $item->pickUp->driver->user->name;
             $item->confirm_at   = date('Y-m-d H:i:s', strtotime( $item->pickUp->created_at ) );
             $data['processed_request'] []= $item;
         }
@@ -49,7 +49,7 @@ class RequestController extends BaseController
                                     ->where( 'status', 0 )->count();
         $data['processed_request'] = PickUp::where( 'status',  0 )->count();
         return $this->sendResponse( $data );
-        
+
     }
 
     /**
@@ -76,10 +76,12 @@ class RequestController extends BaseController
         $validator = Validator::make($request->all(), [
             'photo' => 'required|file|max:1024',
             'info' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ] );
 
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors());
         }
         $fileName = "REQUEST_".time().".".$request->photo->getClientOriginalExtension();
         $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
@@ -90,8 +92,8 @@ class RequestController extends BaseController
             'photo'         => $fileName ,
             'customer_id'   => Auth::user()->userable->id ,
             'status'        => 0,
-            'latitude'      => 0 ,
-            'longitude'     => 0 ,
+            'latitude'      => $request->input('latitude') ,
+            'longitude'     => $request->input('longitude') ,
         ]);
         return $this->sendResponse( $req, 'request berhasil di buat' );
 

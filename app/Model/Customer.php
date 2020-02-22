@@ -9,8 +9,9 @@ class Customer extends Model
     public const PHOTO_PATH = "uploads/identity_photo";
 
     protected $fillable = [
-        'id', 
+        'id',
         'code' ,
+        'status' ,
     ];
     //
     public function user()
