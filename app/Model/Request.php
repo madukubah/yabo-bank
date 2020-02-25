@@ -8,14 +8,16 @@ class Request extends Model
 {
     public const PHOTO_PATH = "uploads/requests";
     protected $fillable = [
-		'id', 
-		'customer_id', 
-		'code', 
-		'status', 
+		'id',
+		'customer_id',
+		'code',
+		'status',
 		'info',
 		'photo',
+		'latitude',
+		'longitude',
     ];
-    
+
     public function customer()
     {
         return $this->belongsTo('App\Model\Customer');

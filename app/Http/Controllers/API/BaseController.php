@@ -53,7 +53,7 @@ class BaseController extends Controller
                 }
                 else
                 {
-                    $message .= "asdffd \n";//$message_;
+                    $message .= $message_."\n";//$message_;
                 }
             }
         }

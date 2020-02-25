@@ -16,7 +16,11 @@ class AuthController extends BaseController
 {
     public function login(){
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+
             $user = Auth::user();
+            if( $user->userable == null )
+                return $this->sendError( NULL , 'Terjadi kesalahan, mohon registrasi ulang' );
+
             $user->token =  $user->createToken('YABO_BANK')->accessToken;
             if( Auth::user()->hasRole('customer') )
             {
@@ -25,10 +29,18 @@ class AuthController extends BaseController
             }
             $success['user'] =  $user;
 
-            return $this->sendResponse( $success , 'login success');
+            if(  request('driver') != NULL ) //driver login
+            {
+                if( Auth::user()->hasRole('driver') )
+                    return $this->sendResponse( $success , 'login success');
+            }else{
+                if( Auth::user()->hasRole('customer') )
+                return $this->sendResponse( $success , 'login success');
+            }
+            return $this->sendError( NULL , 'Nama Pengguna / Kata Sandi Salah !');
         }
         else{
-            return $this->sendError( NULL , 'login failed');
+            return $this->sendError( NULL , 'Nama Pengguna / Kata Sandi Salah !');
         }
     }
 
@@ -49,7 +61,7 @@ class AuthController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError( 'Validation Error.', $validator->errors());       
+            return $this->sendError( 'Validation Error.', $validator->errors());
         }
 
         $input = $request->all();
@@ -66,7 +78,8 @@ class AuthController extends BaseController
         $user->putRole('customer');
         // customer
         $previlege = Customer::create( [
-            'code' => 'Customer_'.time()
+            'code'      => 'Customer_'.time(),
+            'status'    => 0
         ] );
         $previlege->user()->save( $user );
         Mutation::createMutaion([
@@ -74,15 +87,14 @@ class AuthController extends BaseController
             'transaction_id'    => 0 ,
             'nominal'           => 0,
             'position'          => 2,
-            'description'       => 'initial',
+            'description'       => 'Pendaftaran',
         ]);
-        // customer
         // $success['token'] =  $user->createToken('YABO_BANK')->accessToken;
         $user->token =  $user->createToken('YABO_BANK')->accessToken;
         $success['user'] =  $user;
 
         return $this->sendResponse( $success , 'register success');
-        
+
     }
 
     public function logout(Request $request)

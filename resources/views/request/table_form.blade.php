@@ -33,14 +33,15 @@
                                 </div>
                             </div>
                         </td>
+                        <td> <?= $row->latitude.','.$row->longitude ?> </td>
                         <td> <?= $row->info ?> </td>
                         <td> <?= $row->created_at ?> </td>
-                        
+
                         <td>
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" name="request_id[]" id="customCheckbox<?= $ind?>" value="<?= $row->id ?>">
                                 <label for="customCheckbox<?= $ind?>" class="custom-control-label"></label>
-                            </div>  
+                            </div>
                         </td>
                     </tr>
                 <?php

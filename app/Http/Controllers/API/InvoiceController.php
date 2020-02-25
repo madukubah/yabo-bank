@@ -20,7 +20,7 @@ class InvoiceController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response  
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -52,11 +52,11 @@ class InvoiceController extends BaseController
         ] );
 
         if($validator->fails()){
-            return $this->sendError( 'Validation Error.', $validator->errors());       
+            return $this->sendError( 'Validation Error.', $validator->errors());
         }
 
-        // return $this->sendError( $request->all(), $validator->errors()); 
-        // die;      
+        // return $this->sendError( $request->all(), $validator->errors());
+        // die;
 
         $quantities = $request->input('quantity');
         $customer = Customer::find( $request->input('customer_id') );
@@ -80,8 +80,8 @@ class InvoiceController extends BaseController
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
                 'description'       => 'Transaksi : '
-                                        .$product_->name.' ('.$product_->price
-                                        .' / '.$product_->unit.') , qty:'.$quantities[ $ind ]
+                                        .ucfirst( strtolower($product_->name) ).' ('.$product_->price
+                                        .' / '.$product_->unit.') , '.$quantities[ $ind ]." ".$product_->unit
                                         .', Driver : '.Auth::user()->name,
             ]);
         endforeach;
