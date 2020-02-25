@@ -80,7 +80,7 @@ class InvoiceController extends BaseController
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
                 'description'       => 'Transaksi : '
-                                        .strtoupper($product_->name).' ('.$product_->price
+                                        .ucfirst( strtolower($product_->name) ).' ('.$product_->price
                                         .' / '.$product_->unit.') , '.$quantities[ $ind ]." ".$product_->unit
                                         .', Driver : '.Auth::user()->name,
             ]);

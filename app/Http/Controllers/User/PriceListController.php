@@ -51,11 +51,11 @@ class PriceListController extends UadminController
                                                 ],
                                         ]] );
         $modalCreate = view('layouts.templates.modals.modal', $modalCreate );
-        
+
         ################
         # table
         ################
-        $table[ 'header' ]  = [ 
+        $table[ 'header' ]  = [
             'name'  => 'Produk',
             'price' => 'Harga',
             'unit'  => 'Satuan',
@@ -118,11 +118,11 @@ class PriceListController extends UadminController
         $this->data[ 'contents' ]            = $table;
 
         $this->data[ 'message_alert' ] = Session::get('message');
-        $this->data[ 'page_title' ]          = 'role';
-        $this->data[ 'header' ]              = 'role';
+        // $this->data[ 'page_title' ]          = 'role';
+        // $this->data[ 'header' ]              = 'role';
         $this->data[ 'sub_header' ]          = '';
         return $this->render(  );
-        
+
     }
 
     /**

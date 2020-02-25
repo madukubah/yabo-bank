@@ -29,10 +29,18 @@ class AuthController extends BaseController
             }
             $success['user'] =  $user;
 
-            return $this->sendResponse( $success , 'login success');
+            if(  request('driver') != NULL ) //driver login
+            {
+                if( Auth::user()->hasRole('driver') )
+                    return $this->sendResponse( $success , 'login success');
+            }else{
+                if( Auth::user()->hasRole('customer') )
+                return $this->sendResponse( $success , 'login success');
+            }
+            return $this->sendError( NULL , 'Nama Pengguna / Kata Sandi Salah !');
         }
         else{
-            return $this->sendError( NULL , 'login failed');
+            return $this->sendError( NULL , 'Nama Pengguna / Kata Sandi Salah !');
         }
     }
 

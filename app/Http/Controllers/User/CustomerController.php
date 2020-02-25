@@ -447,7 +447,7 @@ class CustomerController extends UadminController
                 'transaction_id'    => $transaction->id,
                 'nominal'           => $product_->price * $quantities[ $ind ] ,
                 'position'          => 2,
-                'description'       => 'Transaksi Langsung '.strtoupper( $product_->name ).' ('.$product_->price
+                'description'       => 'Transaksi Langsung '.ucfirst( strtolower($product_->name) ).' ('.$product_->price
                                         .' / '.$product_->unit.') , '.$quantities[ $ind ].' '.$product_->unit,
             ]);
         endforeach;

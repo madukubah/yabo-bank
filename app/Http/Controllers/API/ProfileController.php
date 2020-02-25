@@ -147,6 +147,7 @@ class ProfileController extends BaseController
                 unlink( Customer::PHOTO_PATH."/".$oldPhoto );
 
             $customer->identity_photo = $fileName;
+            // $customer->status = 1;
             $customer->save();
             // dd( $customer->identity_photo );die;
 
