@@ -42,10 +42,27 @@ class ProfileController extends BaseController
      */
     public function rubbishSummary()
     {
-        $data['plastic']    =  Auth::user()->userable->transactions->where('product', 'Plastik')->sum('quantity');
-        $data['iron']       =  Auth::user()->userable->transactions->where('product', 'Besi')->sum('quantity');
-        $data['carton']     =  Auth::user()->userable->transactions->where('product', 'Kardus')->sum('quantity');
-        $data['organic']    =  Auth::user()->userable->transactions->where('product', 'Organik')->sum('quantity');
+        $data[]    =  (object)[
+            'qty'   => Auth::user()->userable->transactions->where('product', 'Organik')->sum('quantity'),
+            'name'  => 'organic',
+            'image' => 'assets/images/organic.jpg',
+        ];
+        $data[]    =  (object)[
+            'qty'   => Auth::user()->userable->transactions->where('product', 'Plastik')->sum('quantity'),
+            'name'  => 'plastic',
+            'image' => 'assets/images/plastic.jpg',
+        ];
+        $data[]       =  (object)[
+            'qty'   => Auth::user()->userable->transactions->where('product', 'Besi')->sum('quantity'),
+            'name'  => 'iron',
+            'image' => 'assets/images/iron.jpg',
+        ];
+        $data[]     =  (object)[
+            'qty'   => Auth::user()->userable->transactions->where('product', 'Kardus')->sum('quantity'),
+            'name'  => 'carton',
+            'image' => 'assets/images/carton.jpg',
+        ];
+        rsort( $data );
         return $this->sendResponse( $data );
     }
 
