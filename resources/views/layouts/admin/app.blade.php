@@ -62,7 +62,6 @@
     <?php if( Auth::user()->hasRole( 'uadmin' ) ): ?>
     <script>
         $(document).ready(function() {
-            console.log('aa');
             $( "#notif_pickups" ).removeClass();
             $( "#notif_pickups" ).addClass( 'right badge badge-info' );
             function countRequest(){
@@ -78,7 +77,6 @@
                         setTimeout( function(){ countRequest() }, 2000);
                 });
             }
-
             countRequest();
         });
     </script>

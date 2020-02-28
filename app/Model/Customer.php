@@ -28,4 +28,9 @@ class Customer extends Model
     {
         return $this->hasMany('App\Model\Mutation');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany('App\Model\Transaction');
+    }
 }

@@ -31,16 +31,46 @@ class CustomerController extends UadminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request )
     {
+        $userStatus = $request->input('userStatus');
+        $userStatus =  ( $userStatus == NULL ) ? -1 : $userStatus ;
+        $page = $request->input('page');
+        $page || $page = 1;
+        $search = $request->input('search');
+
+        #filter
+        $filter[ 'formUrl' ]      = url('customers/' );
+        $filter[ 'content' ] = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                'userStatus' => [
+                    'type' => 'select',
+                    'labeled' => false,
+                    'options' => [
+                        -1 => 'Semua',
+                        1 => 'Terverifikasi',
+                        0 => 'Belum Terverifikasi',
+                    ],
+                    'value' => $userStatus
+                ],
+        ]] );
+        $filter             = view('layouts.templates.forms.form_horizontal', $filter );
+
         $table[ 'header' ]  = [
             'customer_code' => 'Kode',
             'name' => 'Customer',
             'total' => 'Saldo',
          ];
-        $table[ 'number' ]  = 1;
+        $number_perpage = 50;
+        $table[ 'number' ]  = $number_perpage * ( $page - 1 )  + 1 ;
 
-        $customers = Mutation::getAccumulations()->get();
+        // $customers = Mutation::getAccumulations()->get();
+        if( $userStatus != -1 ){
+            $customers = Mutation::getAccumulations()->get();
+            $customers = $customers->where('customer_status', $userStatus );
+        }else{
+            $customers = Mutation::getAccumulations();
+            $customers = $customers->paginate($number_perpage);
+        }
 
         $table[ 'rows' ]    = $customers;
         $table[ 'action' ]  = [
@@ -57,10 +87,27 @@ class CustomerController extends UadminController
         $linkCreate['url']              = url('customers/create');
         $linkCreate['linkName']         = 'Tambah Customer';
         $linkCreate                     = view('layouts.templates.tables.actions.link', $linkCreate);
-        $this->data[ 'header_button' ]  = $linkCreate;
 
-        $this->data[ 'contents' ]            = $table;
+        $this->data[ 'contents' ]            = $filter.$table;
+        if( $userStatus == -1 )
+            $this->data[ 'contents' ]        .= '<br>'.$customers->links();
 
+        ################
+        # modal search
+        ################
+        $modalSearch['modalTitle']    = "Cari";
+        $modalSearch['modalId']       = "create";
+        $modalSearch['buttonColor']   = "success";
+        $modalSearch['formUrl']       = url('customers/' );
+        $modalSearch['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
+                                                'search' => [
+                                                    'type' => 'text',
+                                                    'label' => 'Nama / Kode',
+                                                ],
+                                        ]] );
+        $modalSearch = view('layouts.templates.modals.modal', $modalSearch );
+
+        $this->data[ 'header_button' ]       = $modalSearch.$linkCreate;
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'page_title' ]          = 'Customer';
         $this->data[ 'header' ]              = 'List Customer';
@@ -218,7 +265,7 @@ class CustomerController extends UadminController
         $modalUploadIdentity['modalTitle']    = "Upload Foto KTP";
         $modalUploadIdentity['modalId']       = "customers_upload";
         $modalUploadIdentity['formMethod']    = "post";
-        $modalUploadIdentity['formEnctype']    = "multipart";
+        $modalUploadIdentity['formEnctype']   = "multipart";
         $modalUploadIdentity['formUrl']       = route('customers.upload_photo', $user->userable->id) ;
         $modalUploadIdentity['modalBody']     = view('layouts.templates.forms.form_fields', [ 'formFields' => [
                                                 'photo' => [
