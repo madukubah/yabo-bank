@@ -98,7 +98,7 @@ class ProfileController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        // var_dump( $request->photo );die;
+        var_dump( $request->photo );die;
         $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
 
         if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
