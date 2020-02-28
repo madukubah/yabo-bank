@@ -25,6 +25,8 @@ Route::group(['middleware' => [ 'auth:api'] ], function(){
     Route::resource('profiles', 'API\ProfileController');
 });
 Route::post('/upload_photo', 'API\ProfileController@uploadProfilPhoto')->middleware('auth:api');
+Route::get('/rubbish_summary', 'API\ProfileController@rubbishSummary')->middleware( [ 'auth:api', 'role:customer' ] );
+
 Route::post('/upload_identity', 'API\ProfileController@uploadIdendityPhoto')->middleware([ 'auth:api', 'role:customer' ]);
 
 
@@ -44,6 +46,7 @@ Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
 Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
     Route::get('pickups', 'API\PickUpController@index');
 });
+Route::resource('/promotions', 'API\PromotionController');
 
 // Route::middleware('auth:api')->group( function () {
 // 	Route::resource('products', 'API\ProductController');

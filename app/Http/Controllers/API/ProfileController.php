@@ -36,6 +36,20 @@ class ProfileController extends BaseController
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rubbishSummary()
+    {
+        $data['plastic']    =  Auth::user()->userable->transactions->where('product', 'Plastik')->sum('quantity');
+        $data['iron']       =  Auth::user()->userable->transactions->where('product', 'Besi')->sum('quantity');
+        $data['carton']     =  Auth::user()->userable->transactions->where('product', 'Kardus')->sum('quantity');
+        $data['organic']    =  Auth::user()->userable->transactions->where('product', 'Organik')->sum('quantity');
+        return $this->sendResponse( $data );
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
