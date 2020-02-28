@@ -27,6 +27,8 @@ class ProfileController extends BaseController
         {
             $user->identity_photo =  $user->userable->identity_photo;
             $user->status         =  $user->userable->status;
+            $balance              = Mutation::getAccumulations( Auth::user()->userable->id, $position = 0 )->first();
+            $user->balance        = ( $balance != NULL ) ? ( $balance->total ) : 0 ;
         }
         $success['user'] =  $user;
 
