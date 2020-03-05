@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{asset('adminlte/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
     <!-- iCheck -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <!-- Theme style -->
@@ -21,6 +23,8 @@
     <link rel="stylesheet" href="{{asset('adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/table-css/style.css')}}">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/summernote/summernote-bs4.css')}}">
     @section('css')
     @show
     <!-- Google Font: Source Sans Pro -->
@@ -57,8 +61,20 @@
     <script src="{{asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('adminlte/dist/js/adminlte.js')}}"></script>
+    <!-- Summernote -->
+    <script src="{{asset('adminlte/plugins/summernote/summernote-bs4.min.js')}}"></script>
     @section('js')
     @show
+    <script>
+    $(function () {
+        // Summernote
+        $('.summernote').summernote(
+        {
+            height: 500,
+            // focus: true
+        });
+    })
+    </script>
     <?php if( Auth::user()->hasRole( 'uadmin' ) ): ?>
     <script>
         $(document).ready(function() {
