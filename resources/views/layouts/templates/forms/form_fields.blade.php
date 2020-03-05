@@ -86,6 +86,20 @@
                         placeholder="{{$placeholder}}" ><?= $value?></textarea>
                     <?php
                     break;
+                case 'summernote':
+                    ?>
+                    <textarea 
+                        id="{{$id}}" 
+                        type="{{$type}}" 
+                        class=" summernote" 
+                        name="{{$name}}" 
+                        value="{{$value}}" 
+                            rows='3'
+                        <?= $readonly ?>
+                        autocomplete="{{$name}}" 
+                        placeholder="{{$placeholder}}" ><?= $value?></textarea>
+                    <?php
+                    break;
                 case 'multiple_file':
                     ?>
                     <input 
