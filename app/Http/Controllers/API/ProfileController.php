@@ -44,22 +44,22 @@ class ProfileController extends BaseController
     {
         $data[]    =  (object)[
             'qty'   => Auth::user()->userable->transactions->where('product', 'Organik')->sum('quantity'),
-            'name'  => 'organic',
+            'name'  => 'Organik',
             'image' => 'assets/images/organic.jpg',
         ];
         $data[]    =  (object)[
             'qty'   => Auth::user()->userable->transactions->where('product', 'Plastik')->sum('quantity'),
-            'name'  => 'plastic',
+            'name'  => 'Plastik',
             'image' => 'assets/images/plastic.jpg',
         ];
         $data[]       =  (object)[
             'qty'   => Auth::user()->userable->transactions->where('product', 'Besi')->sum('quantity'),
-            'name'  => 'iron',
+            'name'  => 'Besi',
             'image' => 'assets/images/iron.jpg',
         ];
         $data[]     =  (object)[
             'qty'   => Auth::user()->userable->transactions->where('product', 'Kardus')->sum('quantity'),
-            'name'  => 'carton',
+            'name'  => 'Kardus',
             'image' => 'assets/images/carton.jpg',
         ];
         rsort( $data );
@@ -129,7 +129,6 @@ class ProfileController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        var_dump( $request->photo );die;
         $fileName = "PROFILE_".time().".".$request->photo->getClientOriginalExtension();
 
         if( $request->photo->move( User::PHOTO_PATH, $fileName ) )
