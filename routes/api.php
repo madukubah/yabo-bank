@@ -47,6 +47,7 @@ Route::group(['middleware' => [ 'auth:api', 'role:driver'] ], function(){
     Route::get('pickups', 'API\PickUpController@index');
 });
 Route::resource('/promotions', 'API\PromotionController');
+Route::resource('/news', 'API\NewsController');
 
 // Route::middleware('auth:api')->group( function () {
 // 	Route::resource('products', 'API\ProductController');
