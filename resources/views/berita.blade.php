@@ -20,15 +20,15 @@
             <div class="row" >
                 <div class="col-12" >
                     <img src="<?= asset('uploads/news').'/'.$news->image ?>" class="d-block img-fluid">
-                    
+
                 </div>
             </div>
             <div class="row p-2" >
                 <div class="col-12" >
-                        <h5><?= $news->title ?></h5>
+                        <h5><b><?= $news->title ?></b></h5>
                 </div>
                 <div class="col-12" >
-                        <h5><?= $news->file_content ?></h5>
+                        <?= $news->file_content ?>
                 </div>
             </div>
         </div>
