@@ -18,7 +18,7 @@
                 ?>
                 <tr>
                     <td> <?php echo $no++ ?> </td>
-                    <td> <?= $row->title ?> </td>
+                    <td> <a href="{{route('berita', $row->id )}}"> <?= $row->title ?> </a>  </td>
                     <td>
                         <a href="" data-toggle="modal" data-target="#image<?php echo  $row->id ; ?>">
                             <img class=" img-fluid" src="<?php echo $imageUrl.$row->image  ?>" alt="" height="auto" width="100">

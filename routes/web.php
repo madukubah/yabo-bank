@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("/berita", "BeritaController@index"  )->name( 'berita' );
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -73,3 +72,5 @@ Route::post('/exportPayment', 'User\ReportController@exportPayment')->name('paym
 Route::get('/createTransaction/{customer_id}', 'User\CustomerController@createTransaction')->name('customer.create_transaction');
 Route::post('/checkoutTransantion', 'User\CustomerController@checkoutTransantion')->name('customer.checkout_transantion');
 Route::post('/confirmTransaction', 'User\CustomerController@confirmTransaction')->name('customer.confirm_transaction');
+
+Route::get("/berita/{customer_id}", "Guest\NewsController@show" )->name( 'berita' );
