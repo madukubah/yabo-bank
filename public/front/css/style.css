@@ -35,6 +35,10 @@
     background: transparent !important;
 }
 
+.navbar-scrolled {
+    background: #f9fdfd !important;
+}
+
 .navbar-toggler {
     border: none !important;
 }
@@ -63,6 +67,11 @@
     color: #333333;
     font-size: 45px;
     text-transform: uppercase;
+    display: block;
+}
+
+.carousel-caption img {
+    height: 90px;
 }
 
 .carousel-item {

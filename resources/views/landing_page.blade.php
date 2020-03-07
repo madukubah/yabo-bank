@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{asset('front/css/style.css')}}">
 
     <title>SISA - SISTEM INFROMASI SAMPAH</title>
+    <link rel="shortcut icon" type="image/png" href="{{asset('front/img/favicon.ico')}}" />
+
 </head>
 
 <body>
@@ -65,10 +67,13 @@
                 <li data-target="#headerSlider" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{asset('front/img/jumbotron-bg1-01.jpg')}}" class="d-block img-fluid">
-                    <div class="carousel-caption">
-                        <!-- <h5>How To Make A Website</h5> -->
+            <div class="carousel-item active">
+                    <img src="{{asset('front/img/slide-12-01.png')}}" class="d-block img-fluid">
+                    <div class="carousel-caption text-left">
+                        <h5>Sudah Kita <span>Tabung mi</span></h5>
+                        <h5>sampah ta <span>hari ini?</span></h5>
+                        <br>
+                        <img src="{{asset('front/img/google-play.png')}}" alt="workingspace1" class="img-fluid photo">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -103,11 +108,13 @@
                 <div class="col-md-6">
                     <h2>Tentang</h2>
                     <div class="about-content">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe suscipit assumenda rem temporibus. Cum rem dolorem pariatur quam earum eveniet provident inventore suscipit atque. Quaerat distinctio facere minus enim minima?
+                        SISA adalah Sistem Informasi Sampah atau Bank Sampah, tujuan kami adalah membantu nasabah SISA terdaftar untuk mengelola sampah menjadi lebih mudah. Kami, sebagai organisasi yang peduli terhadap kelestarian lingkungan, membuat aplikasi ini untuk menciptakan
+                        bentuk sistem daur ulang yang efisien sehingga mudah diakses dimana saja dan kapan saja, Harapan kami adalah untuk menghubungkan orang - orang dalam membentuk fondasi yang kokoh bagi lingkungan serta berusaha untuk menjadikan dunia
+                        ini tempat yang lebih baik. Kami dengan senang hati menyambut semua orang yang ingin berpartisipasi dalam gerakan ini.
                     </div>
-                    <button type="button" class="btn btn-primary">
-                        Read More>>
-                    </button>
+                    <a href="https://play.google.com/store/apps/details?id=com.sisa.customer" <button type="button" class="btn btn-primary">
+                        Lihat Lebih Lengkap>>
+                    </a></button>
                 </div>
                 <div class="col-md-6">
                     <img src="{{asset('front/img/tentang-01.png')}}" class="img-fluid">
@@ -159,27 +166,27 @@
     <section id="testimonials">
         <div class="container">
             <h1>Testimoni</h1>
-            <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+            <!-- <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p> -->
             <div class="row">
                 <div class="col-md-4 text-center">
                     <div class="profile">
-                        <img src="{{asset('front/img/img1.png')}}" class="user">
-                        <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <!-- <h3>Anita Aprilia <span>Co-Founder at XYZ</span></span> -->
+                        <img src="{{asset('front/img/img4-01.png')}}" class="user">
+                        <blockquote>"Aplikasi yang sangat bermanfaat baik untuk kita sendiri serta lingkungan."</blockquote>
+                        <h3>Shavira Pratiwi <span>User SISA</span></span>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <div class="profile">
-                        <img src="{{asset('front/img/img2.png')}}" class="user">
-                        <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <!-- <h3>Reski Putri <span>Manager at XYZ</span></span> -->
+                        <img src="{{asset('front/img/img4-01.png')}}" class="user">
+                        <blockquote>"Sangat berguna barang" tak terpakai seperti dos ataupun kertas bisa di jadikan uang"</blockquote>
+                        <h3>Kumbohu 07 <span>User SISA</span></span>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <div class="profile">
-                        <img src="{{asset('front/img/img3.png')}}" class="user">
-                        <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <!-- <h3>Isabella D <span>Founder / CEO at XYZ</span></span> -->
+                        <img src="{{asset('front/img/img4-01.png')}}" class="user">
+                        <blockquote>"Salah satu aplikasi yang consern terhadap lingkungan......keren"</blockquote>
+                        <h3>Andiidsan Ilyas <span>User SISA</span></span>
                     </div>
                 </div>
             </div>
@@ -210,9 +217,9 @@
                     </form>
                 </div>
                 <div class="col-md-6 contact-info">
-                    <div class="follow"><b>Alamat:</b> <i class="fa fa-map-marker"></i>XYZ Road, Bangalore, IN</div>
-                    <div class="follow"><b>No. Telepon:</b> <i class="fa fa-phone"></i>+6285178125551</div>
-                    <div class="follow"><b>Email:</b> <i class="fa fa-envelope-o"></i>examplae@gmail.com</div>
+                    <div class="follow"><b>Alamat:</b> <i class="fa fa-map-marker"></i></div>
+                    <div class="follow"><b>No. Telepon:</b> <i class="fa fa-phone"></i></div>
+                    <div class="follow"><b>Email:</b> <i class="fa fa-envelope-o"></i>support@technoindo.com</div>
                     <div class="follow"><label>
                         <b>Sosial Media:</b>
                         <a href=""><i class="fa fa-facebook"></i></a>

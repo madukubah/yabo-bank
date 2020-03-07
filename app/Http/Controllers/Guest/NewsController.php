@@ -51,7 +51,8 @@ class NewsController extends Controller
         $news               = News::findOrFail( $id );
         $news->imageUrl     = News::PHOTO_PATH."/".$news->image;
 
-        return view('berita', [ 'news' => $news ] );
+        // return view('berita', [ 'news' => $news ] );
+        return view('berita_2', [ 'news' => $news ] );
     }
 
     /**

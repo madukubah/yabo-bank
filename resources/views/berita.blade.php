@@ -28,7 +28,7 @@
                         <h5><?= $news->title ?></h5>
                 </div>
                 <div class="col-12" >
-                        <h5><?= $news->file_content ?></h5>
+                        <?= $news->file_content ?>
                 </div>
             </div>
         </div>
