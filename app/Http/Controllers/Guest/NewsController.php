@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Guest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\News;
+
 
 class NewsController extends Controller
 {
@@ -46,7 +48,10 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        echo 'dalam pengembangan';
+        $news               = News::findOrFail( $id );
+        $news->imageUrl     = News::PHOTO_PATH."/".$news->image;
+
+        return view('berita', [ 'news' => $news ] );
     }
 
     /**
