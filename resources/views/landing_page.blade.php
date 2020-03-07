@@ -68,19 +68,19 @@
                 <div class="carousel-item active">
                     <img src="{{asset('front/img/jumbotron-bg1-01.jpg')}}" class="d-block img-fluid">
                     <div class="carousel-caption">
-                        <h5>How To Make A Website</h5>
+                        <!-- <h5>How To Make A Website</h5> -->
                     </div>
                 </div>
                 <div class="carousel-item">
                     <img src="{{asset('front/img/jumbotron-bg1-01.jpg')}}" class="d-block img-fluid">
                     <div class="carousel-caption">
-                        <h5 class="text-left">How To Make A Website</h5>
+                        <!-- <h5 class="text-left">How To Make A Website</h5> -->
                     </div>
                 </div>
                 <div class="carousel-item">
                     <img src="{{asset('front/img/jumbotron-bg2-01.jpg')}}" class="d-block img-fluid">
                     <div class="carousel-caption">
-                        <h5 class="text-right">How To Make A Website</h5>
+                        <!-- <h5 class="text-right">How To Make A Website</h5> -->
                     </div>
                 </div>
             </div>
@@ -127,28 +127,28 @@
                         <i class="fa fa-trash"></i>
                     </div>
                     <h3>Kumpulkan Sampahmu</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p> -->
                 </div>
                 <div class="col-md-3 text-center">
                     <div class="icon">
                         <i class="fa fa-truck"></i>
                     </div>
                     <h3>Penjemputan Langsung</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p> -->
                 </div>
                 <div class="col-md-3 text-center">
                     <div class="icon">
                         <i class="fa fa-map-marker"></i>
                     </div>
                     <h3>Sesuai Lokasi</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p> -->
                 </div>
                 <div class="col-md-3 text-center">
                     <div class="icon">
                         <i class="fa fa-mobile"></i>
                     </div>
                     <h3>Akses Melalui Mobile</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p> -->
                 </div>
             </div>
         </div>
@@ -165,21 +165,21 @@
                     <div class="profile">
                         <img src="{{asset('front/img/img1.png')}}" class="user">
                         <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <h3>Anita Aprilia <span>Co-Founder at XYZ</span></span>
+                        <!-- <h3>Anita Aprilia <span>Co-Founder at XYZ</span></span> -->
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <div class="profile">
                         <img src="{{asset('front/img/img2.png')}}" class="user">
                         <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <h3>Reski Putri <span>Manager at XYZ</span></span>
+                        <!-- <h3>Reski Putri <span>Manager at XYZ</span></span> -->
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
                     <div class="profile">
                         <img src="{{asset('front/img/img3.png')}}" class="user">
                         <blockquote>"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, fugit rerum sed esse laudantium modi unde est autem debitis recusandae dolor, fugiat sit, similique delectus optio adipisci dignissimos eveniet."</blockquote>
-                        <h3>Isabella D <span>Founder / CEO at XYZ</span></span>
+                        <!-- <h3>Isabella D <span>Founder / CEO at XYZ</span></span> -->
                     </div>
                 </div>
             </div>
