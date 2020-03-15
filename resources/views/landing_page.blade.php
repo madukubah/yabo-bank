@@ -70,9 +70,9 @@
             <div class="carousel-item active">
                     <img src="{{asset('front/img/slide-12-01.png')}}" class="d-block img-fluid">
                     <div class="carousel-caption text-left">
-                        <h5>Sudah Kita <span>Tabung mi</span></h5>
+                        {{-- <h5>Sudah Kita <span>Tabung mi</span></h5>
                         <h5>sampah ta <span>hari ini?</span></h5>
-                        <br>
+                        <br> --}}
                         <img src="{{asset('front/img/google-play.png')}}" alt="workingspace1" class="img-fluid photo">
                     </div>
                 </div>

@@ -83,9 +83,22 @@ class RequestController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
+
+        $req_infos = explode(" ", $request->input('info'));
+        foreach( $req_infos as $req_info )
+        {
+            if( is_numeric( $req_info ) )
+            {
+                if( $req_info <= 10 )
+                {
+                    return $this->sendError( NULL, 'Berat minimal penjemputan 10 kg' );
+                }
+            }
+        }
+
         $fileName = "REQUEST_".time().".".$request->photo->getClientOriginalExtension();
         $request->photo->move( RequestModel::PHOTO_PATH, $fileName );
-
+        
         $req = RequestModel::create([
             'code'          => 'Request_'.time(),
             'info'          => $request->input('info'),

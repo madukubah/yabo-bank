@@ -68,8 +68,16 @@ class CustomerController extends UadminController
             $customers = Mutation::getAccumulations()->get();
             $customers = $customers->where('customer_status', $userStatus );
         }else{
-            $customers = Mutation::getAccumulations();
+            $customers = Mutation::getAccumulations()->orderBy('customer_id', 'desc');
             $customers = $customers->paginate($number_perpage);
+        }
+
+        if( $search != NULL )
+        {
+            $userStatus = 0;
+            $customers = Mutation::getAccumulations();
+            $customers = $customers->where('name', 'like', "%".$search."%" )->get();
+            // dd( "%{$search}%" );
         }
 
         $table[ 'rows' ]    = $customers;
@@ -619,7 +627,7 @@ class CustomerController extends UadminController
         $customer->status = $request->input( 'status' );
         $customer->save();
 
-        return redirect()->back()->with(['message' => Alert::setAlert( 1, "Foto Berhasil di upload" ) ]);
+        return redirect()->back()->with(['message' => Alert::setAlert( 1, "berhasil" ) ]);
     }
     /**
      * Remove the specified resource from storage.

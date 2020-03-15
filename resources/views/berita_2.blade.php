@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('front/css/blog.css')}}">
     <title>Blog SISA</title>
+    <link rel="shortcut icon" type="image/png" href="{{asset('front/img/favicon.ico')}}" />
+
 </head>
 
 <body>
@@ -20,7 +22,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
         </div>
     </nav>
     <!-- akhir navbar -->
@@ -30,8 +32,9 @@
         <div class="row">
             <!-- Blog Entries Column -->
             <div class="col-lg-8">
+                <br>
                 <!-- Title -->
-                <h1 class="mt-4"><?= $news->title ?></h1>
+                <h3 class="mt-5"><?= $news->title ?></h3>
                 <!-- Author -->
                 <p class="lead">
                     by
