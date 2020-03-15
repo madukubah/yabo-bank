@@ -72,6 +72,25 @@ class PickUpController extends UserController
                 'driver->user->name'            => 'Driver Penjemput',
             ];
             $table[ 'number' ]  = 1;
+            $table[ 'action' ]  = [
+                "modal_delete" => [
+                    "modalId"       => "delete",
+                    "dataParam"     => "id",
+                    "modalTitle"    => "Tarik Proses",
+                    "formUrl"       => url('pickups'),
+                    "formMethod"    => "post",
+                    "buttonColor"   => "danger",
+                    "formFields"    => [
+                        '_method' => [
+                            'type' => 'hidden',
+                            'value'=> 'PUT'
+                        ],
+                        'id' => [
+                            'type' => 'hidden',
+                        ],
+                    ],
+                ],//modal_delete
+            ];
             // customer
             $table[ 'rows' ]    = PickUp::where( 'status',  0 )->get();
         }
@@ -187,7 +206,22 @@ class PickUpController extends UserController
      */
     public function update(Request $request, $id)
     {
-        //
+    #tarik process
+        $request->validate( [
+            'id' => ['required'],
+        ] );
+        $pickUp = PickUp::findOrFail( $id );
+        if( $pickUp->status != 0 )
+        {
+            return redirect()->route('requests.index')->with(['message' => Alert::setAlert( Alert::DANGER, "tidak dapat Menarik" ) ]);
+        }
+        $pickUp->request->update([
+            'status'    => 0,
+        ]);
+        $pickUp->delete();
+        // dd( $req );die;
+
+        return redirect()->route('pickups.index')->with(['message' => Alert::setAlert( 1, "data berhasil di Tarik" ) ]);
     }
 
     /**

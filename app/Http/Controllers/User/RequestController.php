@@ -72,6 +72,48 @@ class RequestController extends UserController
                                                     ],
                                             ]] );
             $table = view('request.table_form', $tableForm );
+            
+            ####################
+            # cancelling request
+            ####################
+
+            $table2[ 'header' ]  = [
+                'code'                      => 'Kode Request',
+                'customer->user->name'      => 'Nama Customer',
+                'customer->user->address'   => 'Alamat',
+                'photo'                     => 'Gambar',
+                
+                'info'                      => 'Keterangan',
+                'created_at'                => 'Waktu Request',
+            ];
+            $table2[ 'action' ]  = [
+                "modal_delete" => [
+                    "modalId"       => "delete",
+                    "dataParam"     => "id",
+                    "modalTitle"    => "Hapus",
+                    "formUrl"       => url('requests'),
+                    "formMethod"    => "post",
+                    "buttonColor"   => "danger",
+                    "formFields"    => [
+                        '_method' => [
+                            'type' => 'hidden',
+                            'value'=> 'DELETE'
+                        ],
+                        'id' => [
+                            'type' => 'hidden',
+                        ],
+                    ],
+                ],//modal_delete
+            ];
+            $table2[ 'number' ]      = 1;
+            $table2[ 'rows' ]        = RequestModel::select([ '*','requests.id as request_id' ])
+                                        ->where( 'status', 0 )
+                                        ->get();
+            $table2[ 'imageUrl' ]    = RequestModel::PHOTO_PATH."/";
+            
+            $table2 = view('layouts.templates.tables.plain_table', $table2);
+
+            $this->data[ 'cancelled_contents' ]            = $table2;
 
         }
         else
@@ -161,7 +203,10 @@ class RequestController extends UserController
         $this->data[ 'message_alert' ]       = Session::get('message');
         $this->data[ 'header' ]              = 'Daftar Request Penjemputan Sampah ';
         $this->data[ 'sub_header' ]          = '';
-        return $this->render(  );
+        if( Auth::user()->hasRole( 'uadmin' )  )
+            return $this->render( 'request.content' );
+        else
+            return $this->render( );
     }
 
     /**
@@ -264,13 +309,18 @@ class RequestController extends UserController
      */
     public function destroy($id)
     {
+        // die;
         $req = RequestModel::find( $id );
         if( $req->status != 0 )
         {
             return redirect()->route('requests.index')->with(['message' => Alert::setAlert( Alert::DANGER, "tidak dapat menghapus" ) ]);
 
         }
-        unlink( RequestModel::PHOTO_PATH."/".$req->photo );
+        try {
+            unlink( RequestModel::PHOTO_PATH."/".$req->photo );
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         $req->delete();
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di hapus" ) ]);
 
