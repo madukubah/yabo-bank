@@ -322,7 +322,7 @@ class DriverController extends UadminController
         $driver     = Driver::findOrFail( $driver_id );
         $user->forgetRole();
         $user->delete();
-        // $driver->delete();
+        $driver->delete();
         return redirect()->route('drivers.index' )->with(['message' => Alert::setAlert( 1, "data berhasil di Hapus" ) ]);
     }
 }

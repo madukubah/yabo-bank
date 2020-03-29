@@ -170,9 +170,7 @@ class PickUpController extends UserController
                 'status'    => 1,
             ]);
         endforeach;
-        
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di buat" ) ]);
-        
     }
 
     /**

@@ -170,7 +170,6 @@ class CustomerController extends UadminController
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-
         ];
         $request->validate( $validationConfig );
         // dd( $request->input() );die;
