@@ -8,6 +8,7 @@ use Auth;
 use App\Alert;
 use App\User;
 use App\Model\PickUp;
+use App\Model\Driver;
 use App\Model\Request as RequestModel ;
 
 use Session;
@@ -155,6 +156,9 @@ class PickUpController extends UserController
      */
     public function store(Request $request)
     {
+        $driver     = Driver::findOrFail( $request->input('driver_id') );
+        // $this->sendNotif( $driver->user->id, 'Penjemputan', 'Masuk Ke Aplikasi Untuk Melihat Detail' );
+        dd($this->sendNotif( $driver->user->id, 'Penjemputan', 'Masuk Ke Aplikasi Untuk Melihat Detail' ));die;
         $request->validate( [
             'request_id' => ['required', 'unique:pick_ups'],
             'driver_id' => ['required'],
@@ -170,7 +174,30 @@ class PickUpController extends UserController
                 'status'    => 1,
             ]);
         endforeach;
+
+        $driver     = Driver::findOrFail( $request->input('driver_id') );
+        $this->sendNotif( $driver->user->id, 'Penjemputan', 'Masuk Ke Aplikasi Untuk Melihat Detail' );
+        // dd($this->sendNotif( $driver->user->id, 'Penjemputan', 'Masuk Ke Aplikasi Untuk Melihat Detail' ));die;
         return redirect()->route('requests.index')->with(['message' => Alert::setAlert( 1, "data berhasil di buat" ) ]);
+    }
+
+    private function sendNotif( $userId, $title = 'title', $body = 'body' )
+    {
+        $data_string = '{"notification":{"body":"'.$body.'","title":"'.$title.'"},"priority":"high","to":"/topics/driver_'.$userId.'"}';
+        // $data_string = '{"notification":{"body":"this is a body","title":"this is a title"},"priority":"high","data":{"name":"Yudi Setiawan","age":25},"to":"dEdE5xAoVwM:APA91bFoOHYT3TC4elge7fe32KV4V7ET4PHmPv3JlPahsZGKscDxskGbJCZ-eUt5UVORd5rL2UGQ4CwwMk_aip0X_u8zqBxOJf5JccbOMz0Gifsbs0rczDkZckwIvbbOd0TagdCttf_3"}';
+        // dd($data_string);
+        $ch = curl_init('https://fcm.googleapis.com/fcm/send');                                                                      
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);                                                                  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+            'Content-Type: application/json',                                                                           
+            'Content-Length: ' . strlen($data_string),
+            'Authorization: key=AAAAuGA1fVM:APA91bEMwFn7WyI75L7QUBh_9q91CZHNHF5i_iAA_GR45L0tl-OD2tk7jyrg35E2rr3zazr2zR-zpjbf5I6-WQU9csnypG3ro61vpVFa4bNer41tQnQQijTKCPfEjdM3I_2IzreTATVO'
+            )
+        );                                                                                                                   
+                                                                                                                            
+        return $result = curl_exec($ch);
     }
 
     /**

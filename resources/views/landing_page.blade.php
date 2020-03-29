@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{asset('front/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('front/css/blog.css')}}">
 
     <title>SISA - SISTEM INFROMASI SAMPAH</title>
     <link rel="shortcut icon" type="image/png" href="{{asset('front/img/favicon.ico')}}" />
@@ -19,7 +20,7 @@
 <body>
     <!-- navbar -->
     <section id="nav-bar">
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <nav class="navbar scrolled navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="#"><img src="{{asset('front/img/logo-fix.png')}}"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -68,12 +69,14 @@
             </ol>
             <div class="carousel-inner">
             <div class="carousel-item active">
-                    <img src="{{asset('front/img/slide-12-01.png')}}" class="d-block img-fluid">
+                    <img src="{{asset('front/img/slide-1-01.png')}}" class="d-block img-fluid">
                     <div class="carousel-caption text-left">
                         {{-- <h5>Sudah Kita <span>Tabung mi</span></h5>
                         <h5>sampah ta <span>hari ini?</span></h5>
                         <br> --}}
-                        <img src="{{asset('front/img/google-play.png')}}" alt="workingspace1" class="img-fluid photo">
+                        <a href="https://play.google.com/store/apps/details?id=com.sisa.customer" >
+                            <img src="{{asset('front/img/google-play.png')}}" alt="workingspace1" class="img-fluid photo">
+                        </a>
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -242,6 +245,25 @@
     <script src="{{asset('front/js/smooth-scroll.js')}}"></script>
     <script>
         var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
+    <script>
+        window.onscroll = function() {scrollFunction()};
+        function scrollFunction() {
+            var list = document.getElementsByClassName("nav-link")
+            for (var i=0; i<list.length; i++){
+                if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10) {            
+                    document.getElementById("nav-bar").style.backgroundColor = "#ffc299";
+                    document.getElementById("nav-bar").style.boxShadow = "0px 0px 15px 5px rgba(0, 0, 0, 0.2)";
+                    list[i].style.fontSize = "16px";
+                    
+
+                } else {
+                    document.getElementById("nav-bar").style.backgroundColor = "transparent";
+                    document.getElementById("nav-bar").style.boxShadow = "0px 13px 15px 5px rgba(0, 0, 0, 0)";                
+                    list[i].style.fontSize = "17px";
+                }
+            }
+        }
     </script>
 
     <!-- Optional JavaScript -->
