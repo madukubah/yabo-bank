@@ -89,7 +89,7 @@ class RequestController extends BaseController
         {
             if( is_numeric( $req_info ) )
             {
-                if( $req_info <= 10 )
+                if( $req_info < 10 )
                 {
                     return $this->sendError( NULL, 'Berat minimal penjemputan 10 kg' );
                 }

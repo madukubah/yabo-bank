@@ -217,14 +217,13 @@
                     </form>
                 </div>
                 <div class="col-md-6 contact-info">
-                    <div class="follow"><b>Alamat:</b> <i class="fa fa-map-marker"></i></div>
-                    <div class="follow"><b>No. Telepon:</b> <i class="fa fa-phone"></i></div>
-                    <div class="follow"><b>Email:</b> <i class="fa fa-envelope-o"></i>support@technoindo.com</div>
+                    <div class="follow"><b>Alamat:</b> <i class="fa fa-map-marker"></i>Jl.buburanda no 88 kel.korumba kec.mandonga kota kendari</div>
+                    <div class="follow"><b>No. Telepon:</b> <i class="fa fa-phone"></i>0811 40 5154</div>
+                    <div class="follow"><b>Email:</b> <i class="fa fa-envelope-o"></i> support@technoindo.com</div>
                     <div class="follow"><label>
                         <b>Sosial Media:</b>
-                        <a href=""><i class="fa fa-facebook"></i></a>
-                        <a href=""><i class="fa fa-youtube-play"></i></a>
-                        <a href=""><i class="fa fa-instagram"></i></a>
+                        <a href="https://m.facebook.com/sisa"><i class="fa fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/sisaindonesia/?hl=id" target="_blank"><i class="fa fa-instagram"></i></a>
                     </label></div>
                 </div>
             </div>

@@ -61,6 +61,11 @@ class RequestController extends UserController
             $driverSelect = array();
             foreach( $drivers as $driver )
             {
+                // if( $driver->user == NULL ) 
+                // {
+                //     $driver->delete();
+                //     continue;
+                // }
                 $driverSelect[ $driver->id ] = $driver->code ." | ".$driver->user->name;
             }
             // dd( $driver );die;
